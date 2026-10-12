@@ -52,7 +52,8 @@ export function CardContent({
   className = "",
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
-  return <div className={`p-6 pt-0 ${className}`} {...props} />
+  const hasCustomPadding = className.includes("pt-") || className.includes("p-");
+  return <div className={`p-6 ${hasCustomPadding ? "" : "pt-0"} ${className}`} {...props} />
 }
 
 export function CardFooter({

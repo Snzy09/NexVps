@@ -171,7 +171,7 @@ export default function UserProfileWithStats({
   const initials = (user.displayName || user.email.split("@")[0]).substring(0, 2).toUpperCase();
 
   return (
-    <div className="space-y-6 w-full max-w-7xl mx-auto pb-12">
+    <div className="space-y-6 w-full max-w-7xl mx-auto pb-12 pt-2 sm:pt-4">
       {/* Top Header matching user screenshot */}
       <div className="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
         <div>
@@ -215,118 +215,116 @@ export default function UserProfileWithStats({
       <div className="grid gap-6 grid-cols-1 lg:grid-cols-12 items-start">
         {/* Left Sidebar Card matching user screenshot */}
         <div className="lg:col-span-4 xl:col-span-4">
-          <Card className="p-0 border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden">
-            <CardContent className="p-6">
-              <div className="flex flex-col items-center text-center">
-                <div className="relative group">
-                  <Avatar className="size-24 border-2 border-cyan-500/40 shadow-lg">
-                    <AvatarImage
-                      src={user.photoURL || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80"}
-                      alt={user.displayName || "User Avatar"}
-                    />
-                    <AvatarFallback className="bg-gradient-to-br from-cyan-500 to-blue-600 text-white font-extrabold text-xl">
-                      {initials}
-                    </AvatarFallback>
-                  </Avatar>
+          <Card className="border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden rounded-3xl bg-white dark:bg-slate-900/90">
+            <div className="p-6 pt-8 pb-6 flex flex-col items-center text-center">
+              <div className="relative group">
+                <Avatar className="size-24 border-2 border-cyan-400/50 shadow-xl">
+                  <AvatarImage
+                    src={user.photoURL || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80"}
+                    alt={user.displayName || "User Avatar"}
+                  />
+                  <AvatarFallback className="bg-gradient-to-br from-cyan-500 to-blue-600 text-white font-extrabold text-xl">
+                    {initials}
+                  </AvatarFallback>
+                </Avatar>
 
-                  {/* Quick Change Photo Button */}
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsEditing(true);
-                      setActiveTab("settings");
-                    }}
-                    className="absolute inset-0 rounded-full bg-black/60 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center text-white text-[10px] font-semibold transition-opacity cursor-pointer backdrop-blur-[2px]"
-                    title="Ganti Foto Profil"
-                  >
-                    <Camera className="size-5 mb-0.5" />
-                    <span>Ubah Foto</span>
-                  </button>
-                </div>
-
-                <h2 className="mt-4 text-lg font-bold text-slate-900 dark:text-white truncate max-w-full">
-                  {user.displayName || "John Doe"}
-                </h2>
-                
-                <p className="text-slate-500 dark:text-slate-400 text-xs font-mono mt-0.5 truncate max-w-full">
-                  @{user.username || user.email.split("@")[0].toLowerCase()}
-                </p>
-
-                <p className="text-slate-600 dark:text-slate-300 text-xs mt-1 font-medium">
-                  {user.title || (user.isAdmin ? "Super Administrator" : "Product Designer")}
-                </p>
-
-                <Badge 
-                  className="mt-2.5 font-mono text-[11px]" 
-                  variant={user.isAdmin ? "cyan" : "secondary"}
+                {/* Quick Change Photo Button */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsEditing(true);
+                    setActiveTab("settings");
+                  }}
+                  className="absolute inset-0 rounded-full bg-black/60 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center text-white text-[10px] font-semibold transition-opacity cursor-pointer backdrop-blur-[2px]"
+                  title="Ganti Foto Profil"
                 >
-                  {user.isAdmin ? "Admin Verified" : (user.role || "Pro Member")}
-                </Badge>
-
-                {/* Message / Support Button */}
-                <Button 
-                  className="mt-4 w-full bg-white text-slate-950 hover:bg-slate-100 dark:bg-white dark:text-slate-950 dark:hover:bg-slate-200 font-bold text-xs py-2 rounded-xl shadow-md cursor-pointer flex items-center justify-center gap-2 transition-all" 
-                  size="sm"
-                  onClick={() => window.open(`https://wa.me/6281234567890?text=Halo%20Admin%20NexVps,%20saya%20${encodeURIComponent(user.displayName || user.email)}`, '_blank')}
-                >
-                  <Mail className="size-3.5" />
-                  Hubungi Support
-                </Button>
+                  <Camera className="size-5 mb-0.5" />
+                  <span>Ubah Foto</span>
+                </button>
               </div>
 
-              {/* User Metadata list matching screenshot */}
-              <div className="mt-6 pt-5 border-t border-slate-200 dark:border-slate-800/80 space-y-3.5">
-                <div className="flex justify-between items-center text-xs">
-                  <span className="text-slate-500 dark:text-slate-400">Member since</span>
-                  <span className="font-semibold text-slate-800 dark:text-slate-200">{user.memberSince || "Jan 2026"}</span>
-                </div>
-                <div className="flex justify-between items-center text-xs">
-                  <span className="text-slate-500 dark:text-slate-400">Last active</span>
-                  <span className="inline-flex items-center gap-1.5 font-semibold text-emerald-500 dark:text-emerald-400">
-                    <span className="size-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                    Online Now
-                  </span>
-                </div>
-                <div className="flex justify-between items-center text-xs">
-                  <span className="text-slate-500 dark:text-slate-400">Role</span>
-                  <span className="font-semibold text-slate-800 dark:text-slate-200">
-                    {user.isAdmin ? "Super Admin" : "Customer / Developer"}
-                  </span>
-                </div>
-                <div className="flex justify-between items-center text-xs pt-1">
-                  <span className="text-slate-500 dark:text-slate-400">Email</span>
-                  <button
-                    type="button"
-                    onClick={() => copyToClipboard(user.email, "email")}
-                    className="font-mono text-[11px] text-cyan-500 dark:text-cyan-400 hover:underline flex items-center gap-1.5 cursor-pointer"
-                    title="Klik untuk salin email"
-                  >
-                    <span>{user.email}</span>
-                    {copiedField === "email" ? (
-                      <Check className="size-3 text-emerald-400 shrink-0" />
-                    ) : (
-                      <Copy className="size-3 opacity-70 hover:opacity-100 shrink-0" />
-                    )}
-                  </button>
-                </div>
-                <div className="flex justify-between items-center text-xs">
-                  <span className="text-slate-500 dark:text-slate-400">UID Akun</span>
-                  <button
-                    type="button"
-                    onClick={() => copyToClipboard(user.uid, "uid")}
-                    className="font-mono text-[11px] text-slate-400 hover:text-cyan-400 flex items-center gap-1 cursor-pointer"
-                    title="Klik untuk salin UID"
-                  >
-                    <span>{user.uid.length > 14 ? `${user.uid.substring(0, 10)}...` : user.uid}</span>
-                    {copiedField === "uid" ? (
-                      <Check className="size-3 text-emerald-400 shrink-0" />
-                    ) : (
-                      <Copy className="size-3 opacity-70 hover:opacity-100 shrink-0" />
-                    )}
-                  </button>
-                </div>
+              <h2 className="mt-4 text-xl font-bold text-slate-900 dark:text-white truncate max-w-full tracking-tight">
+                {user.displayName || "John Doe"}
+              </h2>
+              
+              <p className="text-slate-500 dark:text-slate-400 text-xs font-mono mt-0.5 truncate max-w-full">
+                @{user.username || user.email.split("@")[0].toLowerCase()}
+              </p>
+
+              <p className="text-slate-600 dark:text-slate-300 text-xs mt-1.5 font-medium">
+                {user.title || (user.isAdmin ? "Lead Cloud Architect" : "Product Designer")}
+              </p>
+
+              <Badge 
+                className="mt-2.5 font-mono text-[11px]" 
+                variant={user.isAdmin ? "cyan" : "secondary"}
+              >
+                {user.isAdmin ? "Admin Verified" : (user.role || "Pro Member")}
+              </Badge>
+
+              {/* Message / Support Button */}
+              <Button 
+                className="mt-5 w-full bg-white text-slate-950 hover:bg-slate-100 dark:bg-white dark:text-slate-950 dark:hover:bg-slate-200 font-bold text-xs py-2.5 rounded-xl shadow-md cursor-pointer flex items-center justify-center gap-2 transition-all" 
+                size="sm"
+                onClick={() => window.open(`https://wa.me/6281234567890?text=Halo%20Admin%20NexVps,%20saya%20${encodeURIComponent(user.displayName || user.email)}`, '_blank')}
+              >
+                <Mail className="size-3.5" />
+                Hubungi Support
+              </Button>
+            </div>
+
+            {/* User Metadata list matching screenshot */}
+            <div className="px-6 pb-6 pt-5 border-t border-slate-200 dark:border-slate-800/80 space-y-3.5">
+              <div className="flex justify-between items-center text-xs">
+                <span className="text-slate-500 dark:text-slate-400">Member since</span>
+                <span className="font-semibold text-slate-800 dark:text-slate-200">{user.memberSince || "Jan 2026"}</span>
               </div>
-            </CardContent>
+              <div className="flex justify-between items-center text-xs">
+                <span className="text-slate-500 dark:text-slate-400">Last active</span>
+                <span className="inline-flex items-center gap-1.5 font-semibold text-emerald-500 dark:text-emerald-400">
+                  <span className="size-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  Online Now
+                </span>
+              </div>
+              <div className="flex justify-between items-center text-xs">
+                <span className="text-slate-500 dark:text-slate-400">Role</span>
+                <span className="font-semibold text-slate-800 dark:text-slate-200">
+                  {user.isAdmin ? "Super Admin" : "Customer / Developer"}
+                </span>
+              </div>
+              <div className="flex justify-between items-center text-xs pt-1">
+                <span className="text-slate-500 dark:text-slate-400">Email</span>
+                <button
+                  type="button"
+                  onClick={() => copyToClipboard(user.email, "email")}
+                  className="font-mono text-[11px] text-cyan-500 dark:text-cyan-400 hover:underline flex items-center gap-1.5 cursor-pointer"
+                  title="Klik untuk salin email"
+                >
+                  <span>{user.email}</span>
+                  {copiedField === "email" ? (
+                    <Check className="size-3 text-emerald-400 shrink-0" />
+                  ) : (
+                    <Copy className="size-3 opacity-70 hover:opacity-100 shrink-0" />
+                  )}
+                </button>
+              </div>
+              <div className="flex justify-between items-center text-xs">
+                <span className="text-slate-500 dark:text-slate-400">UID Akun</span>
+                <button
+                  type="button"
+                  onClick={() => copyToClipboard(user.uid, "uid")}
+                  className="font-mono text-[11px] text-slate-400 hover:text-cyan-400 flex items-center gap-1 cursor-pointer"
+                  title="Klik untuk salin UID"
+                >
+                  <span>{user.uid.length > 14 ? `${user.uid.substring(0, 10)}...` : user.uid}</span>
+                  {copiedField === "uid" ? (
+                    <Check className="size-3 text-emerald-400 shrink-0" />
+                  ) : (
+                    <Copy className="size-3 opacity-70 hover:opacity-100 shrink-0" />
+                  )}
+                </button>
+              </div>
+            </div>
           </Card>
         </div>
 
@@ -533,69 +531,63 @@ export default function UserProfileWithStats({
 
           {/* Stats Cards matching user screenshot */}
           <div className="grid gap-4 sm:grid-cols-3">
-            {/* Card 1: 128 Projects Completed / Cloud VPS Deployments */}
-            <Card className="p-0 border border-slate-200 dark:border-slate-800 shadow-md hover:border-slate-700 transition-all">
-              <CardContent className="p-6">
-                <div className="flex items-center gap-4">
-                  <div className="bg-cyan-500/10 text-cyan-400 rounded-xl p-3 shrink-0 border border-cyan-500/20">
-                    <Star className="size-5" />
-                  </div>
-                  <div>
-                    <p className="text-2xl font-black text-slate-900 dark:text-white">
-                      {128 + activeServersCount}
-                    </p>
-                    <p className="text-slate-500 dark:text-slate-400 text-xs font-medium">
-                      Projects Completed
-                    </p>
-                  </div>
+            {/* Card 1: 129 Projects Completed */}
+            <Card className="border border-slate-200 dark:border-slate-800 shadow-md hover:border-slate-700 transition-all rounded-2xl bg-white dark:bg-slate-900/80">
+              <div className="p-5 sm:p-6 flex items-center gap-4">
+                <div className="size-12 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 flex items-center justify-center shrink-0">
+                  <Star className="size-5 text-cyan-400" />
                 </div>
-              </CardContent>
+                <div className="min-w-0">
+                  <p className="text-2xl font-black text-slate-900 dark:text-white leading-none tracking-tight">
+                    {128 + activeServersCount}
+                  </p>
+                  <p className="text-slate-500 dark:text-slate-400 text-xs font-medium pt-2 truncate">
+                    Projects Completed
+                  </p>
+                </div>
+              </div>
             </Card>
 
-            {/* Card 2: 8.5k Team Members / MaxIOPS Performance */}
-            <Card className="p-0 border border-slate-200 dark:border-slate-800 shadow-md hover:border-slate-700 transition-all">
-              <CardContent className="p-6">
-                <div className="flex items-center gap-4">
-                  <div className="bg-blue-500/10 text-blue-400 rounded-xl p-3 shrink-0 border border-blue-500/20">
-                    <Users className="size-5" />
-                  </div>
-                  <div>
-                    <p className="text-2xl font-black text-slate-900 dark:text-white">
-                      8.5k
-                    </p>
-                    <p className="text-slate-500 dark:text-slate-400 text-xs font-medium">
-                      Team Members
-                    </p>
-                  </div>
+            {/* Card 2: 8.5k Team Members */}
+            <Card className="border border-slate-200 dark:border-slate-800 shadow-md hover:border-slate-700 transition-all rounded-2xl bg-white dark:bg-slate-900/80">
+              <div className="p-5 sm:p-6 flex items-center gap-4">
+                <div className="size-12 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center shrink-0">
+                  <Users className="size-5 text-blue-400" />
                 </div>
-              </CardContent>
+                <div className="min-w-0">
+                  <p className="text-2xl font-black text-slate-900 dark:text-white leading-none tracking-tight">
+                    8.5k
+                  </p>
+                  <p className="text-slate-500 dark:text-slate-400 text-xs font-medium pt-2 truncate">
+                    Team Members
+                  </p>
+                </div>
+              </div>
             </Card>
 
-            {/* Card 3: 99% Satisfaction Rate / SLA */}
-            <Card className="p-0 border border-slate-200 dark:border-slate-800 shadow-md hover:border-slate-700 transition-all">
-              <CardContent className="p-6">
-                <div className="flex items-center gap-4">
-                  <div className="bg-emerald-500/10 text-emerald-400 rounded-xl p-3 shrink-0 border border-emerald-500/20">
-                    <Star className="size-5" />
-                  </div>
-                  <div>
-                    <p className="text-2xl font-black text-slate-900 dark:text-white">
-                      99%
-                    </p>
-                    <p className="text-slate-500 dark:text-slate-400 text-xs font-medium">
-                      Satisfaction Rate
-                    </p>
-                  </div>
+            {/* Card 3: 99% Satisfaction Rate */}
+            <Card className="border border-slate-200 dark:border-slate-800 shadow-md hover:border-slate-700 transition-all rounded-2xl bg-white dark:bg-slate-900/80">
+              <div className="p-5 sm:p-6 flex items-center gap-4">
+                <div className="size-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
+                  <Star className="size-5 text-emerald-400" />
                 </div>
-              </CardContent>
+                <div className="min-w-0">
+                  <p className="text-2xl font-black text-slate-900 dark:text-white leading-none tracking-tight">
+                    99%
+                  </p>
+                  <p className="text-slate-500 dark:text-slate-400 text-xs font-medium pt-2 truncate">
+                    Satisfaction Rate
+                  </p>
+                </div>
+              </div>
             </Card>
           </div>
 
           {/* Recent Activity Card matching user screenshot */}
-          <Card className="p-0 border border-slate-200 dark:border-slate-800 shadow-md overflow-hidden">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+          <Card className="border border-slate-200 dark:border-slate-800 shadow-md overflow-hidden rounded-2xl bg-white dark:bg-slate-900/80">
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-5">
+                <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
                   <Activity className="size-4 text-cyan-400" />
                   <span>Recent Activity</span>
                 </h3>
@@ -677,7 +669,7 @@ export default function UserProfileWithStats({
                   </div>
                 ))}
               </div>
-            </CardContent>
+            </div>
           </Card>
         </div>
       </div>
