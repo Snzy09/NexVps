@@ -1,0 +1,14 @@
+{
+  "name": "nexvps",
+  "version": "1.0.0",
+  "description": "NexVps - VPS Cloud Webstore integrated with UpCloud API & BuatQRIS Payment Gateway",
+  "scripts": {
+    "dev": "npm run dev --prefix server & npm run dev --prefix client",
+    "server:dev": "npm run dev --prefix server",
+    "client:dev": "npm run dev --prefix client",
+    "build": "npm run build --prefix client && npm run build --prefix server"
+  },
+  "keywords": ["vps", "hosting", "webstore", "upcloud", "buatqris", "qris", "cloud"],
+  "author": "NexVps Team",
+  "license": "MIT"
+}

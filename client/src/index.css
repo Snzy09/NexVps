@@ -1,0 +1,224 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  body {
+    @apply bg-slate-950 text-slate-100 antialiased selection:bg-cyan-500 selection:text-black;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    min-height: 100vh;
+  }
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0f172a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+.gradient-radial {
+  background: radial-gradient(circle at 50% 0%, rgba(6, 182, 212, 0.15) 0%, rgba(15, 23, 42, 0) 70%);
+}
+
+.glow-card {
+  box-shadow: 0 0 25px -5px rgba(6, 182, 212, 0.1);
+}
+
+.glow-card-active {
+  box-shadow: 0 0 30px -2px rgba(6, 182, 212, 0.35);
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 1.8s infinite ease-in-out;
+}
+
+.skeleton-box {
+  background-color: rgba(30, 41, 59, 0.75);
+}
+
+html.light .skeleton-box {
+  background-color: rgba(226, 232, 240, 0.95);
+}
+
+.skeleton-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-shimmer::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  animation: shimmer 1.8s infinite ease-in-out;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+  pointer-events: none;
+}
+
+html.light .skeleton-shimmer::before {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.65), transparent);
+}
+
+/* Remove default number input spin arrows across all browsers */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+/* Global input transition & clean focus outlines */
+input, textarea, select {
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+input::placeholder, textarea::placeholder {
+  color: #64748b;
+}
+
+/* ========================================================
+   LIGHT MODE OVERRIDES
+   ======================================================== */
+html.light {
+  color-scheme: light;
+}
+
+html.light body {
+  background-color: #f8fafc;
+  color: #0f172a;
+}
+
+html.light ::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+html.light ::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+}
+
+html.light ::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Light mode backgrounds & surfaces (excluding elements explicitly inside .dark containers) */
+html.light .bg-slate-950:not(.dark):not(.dark *):not([data-force-dark]):not(button.dark-bg) {
+  background-color: #f8fafc;
+}
+
+html.light .bg-slate-950\/95:not(.dark):not(.dark *),
+html.light .bg-slate-950\/90:not(.dark):not(.dark *),
+html.light .bg-slate-950\/80:not(.dark):not(.dark *),
+html.light .bg-slate-950\/70:not(.dark):not(.dark *) {
+  background-color: rgba(248, 250, 252, 0.95);
+}
+
+html.light .bg-slate-900:not(.dark):not(.dark *):not([data-force-dark]):not(button[role="switch"]) {
+  background-color: #ffffff;
+}
+
+html.light .bg-slate-900\/95:not(.dark):not(.dark *),
+html.light .bg-slate-900\/90:not(.dark):not(.dark *),
+html.light .bg-slate-900\/80:not(.dark):not(.dark *),
+html.light .bg-slate-900\/70:not(.dark):not(.dark *),
+html.light .bg-slate-900\/60:not(.dark):not(.dark *),
+html.light .bg-slate-900\/50:not(.dark):not(.dark *),
+html.light .bg-slate-900\/40:not(.dark):not(.dark *),
+html.light .bg-slate-900\/30:not(.dark):not(.dark *) {
+  background-color: rgba(255, 255, 255, 0.95);
+}
+
+html.light .bg-slate-800:not(.dark):not(.dark *):not([data-force-dark]) {
+  background-color: #f1f5f9;
+}
+
+html.light .bg-slate-800\/80:not(.dark):not(.dark *),
+html.light .bg-slate-800\/60:not(.dark):not(.dark *),
+html.light .bg-slate-800\/50:not(.dark):not(.dark *),
+html.light .bg-slate-800\/40:not(.dark):not(.dark *),
+html.light .bg-slate-800\/30:not(.dark):not(.dark *) {
+  background-color: #f1f5f9;
+}
+
+/* Light mode borders */
+html.light .border-slate-800:not(.dark):not(.dark *),
+html.light .border-slate-800\/80:not(.dark):not(.dark *),
+html.light .border-slate-800\/60:not(.dark):not(.dark *),
+html.light .border-slate-800\/50:not(.dark):not(.dark *),
+html.light .border-slate-800\/40:not(.dark):not(.dark *),
+html.light .border-slate-850:not(.dark):not(.dark *),
+html.light .border-slate-700\/60:not(.dark):not(.dark *),
+html.light .border-slate-700\/40:not(.dark):not(.dark *) {
+  border-color: #e2e8f0;
+}
+
+/* Light mode text hierarchy */
+html.light .text-slate-100:not(.dark):not(.dark *),
+html.light .text-slate-200:not(.dark):not(.dark *) {
+  color: #0f172a;
+}
+
+html.light .text-slate-300:not(.dark):not(.dark *) {
+  color: #1e293b;
+}
+
+html.light .text-slate-400:not(.dark):not(.dark *) {
+  color: #475569;
+}
+
+html.light .text-slate-500:not(.dark):not(.dark *) {
+  color: #64748b;
+}
+
+html.light h1.text-white:not(.dark):not(.dark *),
+html.light h2.text-white:not(.dark):not(.dark *),
+html.light h3.text-white:not(.dark):not(.dark *),
+html.light h4.text-white:not(.dark):not(.dark *),
+html.light span.text-white:not(.dark):not(.dark *):not([class*="bg-"]):not([class*="from-"]):not([class*="ring-"]):not(button *),
+html.light p.text-white:not(.dark):not(.dark *),
+html.light div.text-white:not(.dark):not(.dark *):not(button *) {
+  color: #0f172a;
+}
+
+/* Card and container shadows in light mode */
+html.light .shadow-2xl:not(.dark):not(.dark *) {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.06), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+}
+
+html.light .glow-card:not(.dark):not(.dark *) {
+  box-shadow: 0 4px 20px -2px rgba(6, 182, 212, 0.12), 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+html.light .hover\:bg-slate-800:hover:not(.dark):not(.dark *) {
+  background-color: #f1f5f9 !important;
+}
+
+html.light .hover\:bg-slate-900:hover:not(.dark):not(.dark *) {
+  background-color: #f8fafc !important;
+}
