@@ -61,7 +61,7 @@ export default function Footer({ onNavigateTab, onOpenAuth }: FooterProps) {
         aria-hidden="true"
       />
       <div 
-        className="pointer-events-none absolute top-0 left-1/2 -z-10 h-[320px] w-[850px] -translate-x-1/2 rounded-[100%] bg-cyan-600/10 blur-[130px]" 
+        className="pointer-events-none absolute top-0 left-1/2 -z-10 h-[320px] w-[850px] -translate-x-1/2 rounded-[100%] bg-cyan-600/10 blur-[130px] hidden dark:block" 
         aria-hidden="true"
       />
 

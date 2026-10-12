@@ -50,14 +50,14 @@ export function HeroSection({ onExploreClick }: HeroSectionProps) {
   };
 
   return (
-    <section className="relative overflow-hidden pt-8 pb-12 text-white">
+    <section className="relative overflow-hidden pt-8 pb-12 text-slate-900 dark:text-white">
       {/* Background Multi-layer Radial Glow */}
       <div 
-        className="pointer-events-none absolute top-1/3 left-1/2 h-[450px] w-[750px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-600/15 blur-[140px]" 
+        className="pointer-events-none absolute top-1/3 left-1/2 h-[450px] w-[750px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-600/15 blur-[140px] hidden dark:block" 
         aria-hidden="true" 
       />
       <div 
-        className="pointer-events-none absolute top-1/2 left-1/2 h-[350px] w-[550px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-indigo-600/15 blur-[120px]" 
+        className="pointer-events-none absolute top-1/2 left-1/2 h-[350px] w-[550px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-indigo-600/15 blur-[120px] hidden dark:block" 
         aria-hidden="true" 
       />
 
@@ -127,7 +127,7 @@ export function HeroSection({ onExploreClick }: HeroSectionProps) {
         {/* Mockup UI Showcase (Glassmorphic + Spotlight) */}
         <div className="relative mt-2 w-full max-w-4xl">
           {/* Ambient Multi-layer Glow Behind Mockup */}
-          <div className="pointer-events-none absolute -inset-4 rounded-3xl bg-gradient-to-tr from-cyan-600/30 via-indigo-500/20 to-blue-600/30 opacity-70 blur-2xl" />
+          <div className="pointer-events-none absolute -inset-4 rounded-3xl bg-gradient-to-tr from-cyan-600/30 via-indigo-500/20 to-blue-600/30 opacity-70 blur-2xl hidden dark:block" />
 
           {/* Floating Metric Badge 1 (Top Right) */}
           <motion.div
@@ -189,7 +189,7 @@ export function HeroSection({ onExploreClick }: HeroSectionProps) {
             transition={{ duration: 0.6, delay: 0.3 }}
             onMouseMove={handleMouseMove}
             data-force-dark="true"
-            className="dark group relative z-10 w-full overflow-hidden rounded-2xl border border-white/15 bg-[#0B0F19]/60 text-left shadow-[0_20px_60px_rgba(0,0,0,0.6)] ring-1 ring-white/10 backdrop-blur-2xl transition-colors hover:border-cyan-500/40"
+            className="dark group relative z-10 w-full overflow-hidden rounded-2xl border border-slate-300 dark:border-white/15 bg-[#0B0F19] text-left shadow-2xl shadow-slate-900/15 dark:shadow-[0_20px_60px_rgba(0,0,0,0.6)] ring-1 ring-slate-300/50 dark:ring-white/10 backdrop-blur-2xl transition-colors hover:border-cyan-500/40"
           >
             {/* Interactive Spotlight Radial Glow */}
             <motion.div

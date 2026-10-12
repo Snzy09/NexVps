@@ -748,7 +748,7 @@ export const VpsConfigurator: React.FC<VpsConfiguratorProps> = ({
 
           {/* STEP 4: KONFIGURASI SERVER ACCESS */}
           <section className="bg-white dark:bg-slate-900/80 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-xl shadow-slate-200/50 dark:shadow-2xl dark:shadow-black/40 relative overflow-hidden transition-all">
-            <div className="absolute top-0 right-0 w-72 h-72 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute top-0 right-0 w-72 h-72 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none hidden dark:block" />
 
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 relative">
@@ -1056,7 +1056,7 @@ export const VpsConfigurator: React.FC<VpsConfiguratorProps> = ({
 
           {/* STEP 5: DATA PEMBELI */}
           <section className="bg-white dark:bg-slate-900/80 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-xl shadow-slate-200/50 dark:shadow-2xl dark:shadow-black/40 relative overflow-hidden transition-all">
-            <div className="absolute top-0 right-0 w-72 h-72 bg-indigo-500/5 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute top-0 right-0 w-72 h-72 bg-indigo-500/5 rounded-full blur-3xl pointer-events-none hidden dark:block" />
 
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 relative">
@@ -1240,7 +1240,7 @@ export const VpsConfigurator: React.FC<VpsConfiguratorProps> = ({
             className="w-full shadow-2xl"
           >
             <div className="p-6 sm:p-7 relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+              <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none hidden dark:block"></div>
 
               <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-5 flex items-center justify-between">
                 <span>Ringkasan Order</span>

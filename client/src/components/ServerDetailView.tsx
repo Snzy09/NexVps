@@ -343,7 +343,7 @@ export const ServerDetailView: React.FC<ServerDetailViewProps> = ({
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* CARD 1: CPU USAGE */}
           <div className="relative overflow-hidden rounded-2xl border border-slate-800/80 bg-slate-900/80 p-5 text-white shadow-xl backdrop-blur-md">
-            <div className="pointer-events-none absolute -top-10 -right-10 h-32 w-32 rounded-full opacity-40 blur-2xl bg-cyan-500/10" />
+            <div className="pointer-events-none absolute -top-10 -right-10 h-32 w-32 rounded-full opacity-40 blur-2xl bg-cyan-500/10 hidden dark:block" />
             <div className="relative z-10 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-cyan-500/30 bg-cyan-600/25 p-2 text-cyan-400 shadow-md">
@@ -381,7 +381,7 @@ export const ServerDetailView: React.FC<ServerDetailViewProps> = ({
 
           {/* CARD 2: RAM USAGE */}
           <div className="relative overflow-hidden rounded-2xl border border-slate-800/80 bg-slate-900/80 p-5 text-white shadow-xl backdrop-blur-md">
-            <div className="pointer-events-none absolute -top-10 -right-10 h-32 w-32 rounded-full opacity-40 blur-2xl bg-blue-500/10" />
+            <div className="pointer-events-none absolute -top-10 -right-10 h-32 w-32 rounded-full opacity-40 blur-2xl bg-blue-500/10 hidden dark:block" />
             <div className="relative z-10 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-blue-500/30 bg-blue-600/25 p-2 text-blue-400 shadow-md">
@@ -421,7 +421,7 @@ export const ServerDetailView: React.FC<ServerDetailViewProps> = ({
 
           {/* CARD 3: STORAGE & IOPS */}
           <div className="relative overflow-hidden rounded-2xl border border-slate-800/80 bg-slate-900/80 p-5 text-white shadow-xl backdrop-blur-md">
-            <div className="pointer-events-none absolute -top-10 -right-10 h-32 w-32 rounded-full opacity-40 blur-2xl bg-purple-500/10" />
+            <div className="pointer-events-none absolute -top-10 -right-10 h-32 w-32 rounded-full opacity-40 blur-2xl bg-purple-500/10 hidden dark:block" />
             <div className="relative z-10 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-purple-500/30 bg-purple-600/25 p-2 text-purple-400 shadow-md">
@@ -454,7 +454,7 @@ export const ServerDetailView: React.FC<ServerDetailViewProps> = ({
 
           {/* CARD 4: NETWORK & LATENCY */}
           <div className="relative overflow-hidden rounded-2xl border border-slate-800/80 bg-slate-900/80 p-5 text-white shadow-xl backdrop-blur-md">
-            <div className="pointer-events-none absolute -top-10 -right-10 h-32 w-32 rounded-full opacity-40 blur-2xl bg-emerald-500/10" />
+            <div className="pointer-events-none absolute -top-10 -right-10 h-32 w-32 rounded-full opacity-40 blur-2xl bg-emerald-500/10 hidden dark:block" />
             <div className="relative z-10 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-emerald-500/30 bg-emerald-600/25 p-2 text-emerald-400 shadow-md">

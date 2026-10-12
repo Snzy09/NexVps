@@ -121,7 +121,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   return (
     <>
       {/* ----------------- TOP NAVBAR HEADER ----------------- */}
-      <header className="sticky top-0 z-40 flex h-16 w-full shrink-0 items-center justify-between gap-2 border-b border-slate-800/80 bg-slate-950/85 px-3 sm:px-6 backdrop-blur-xl">
+      <header className="sticky top-0 z-40 flex h-16 w-full shrink-0 items-center justify-between gap-2 border-b border-slate-200 dark:border-slate-800/80 bg-white/90 dark:bg-slate-950/85 px-3 sm:px-6 backdrop-blur-xl">
         
         {/* Left Section: Sidebar Trigger & Search Bar */}
         <div className="flex items-center gap-2 sm:gap-3">

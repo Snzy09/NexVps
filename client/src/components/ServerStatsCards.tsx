@@ -59,7 +59,7 @@ export const ServerStatsCards: React.FC<ServerStatsCardsProps> = ({ servers }) =
           ======================================================== */}
       <div className="bg-white dark:bg-[#0b101d] rounded-3xl p-6 sm:p-7 border border-slate-200 dark:border-slate-800/90 shadow-xl shadow-slate-200/50 dark:shadow-blue-950/20 flex flex-col justify-between transition-all hover:border-slate-300 dark:hover:border-slate-700/80 group relative overflow-hidden">
         {/* Glow accent */}
-        <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-2xl pointer-events-none"></div>
+        <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-2xl pointer-events-none hidden dark:block"></div>
 
         <div>
           {/* Header */}
@@ -109,7 +109,7 @@ export const ServerStatsCards: React.FC<ServerStatsCardsProps> = ({ servers }) =
           ======================================================== */}
       <div className="bg-white dark:bg-[#0b101d] rounded-3xl p-6 sm:p-7 border border-slate-200 dark:border-slate-800/90 shadow-xl shadow-slate-200/50 dark:shadow-blue-950/20 flex flex-col justify-between transition-all hover:border-slate-300 dark:hover:border-slate-700/80 group relative overflow-hidden">
         {/* Glow accent */}
-        <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-2xl pointer-events-none"></div>
+        <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-2xl pointer-events-none hidden dark:block"></div>
 
         <div>
           {/* Header */}
@@ -187,7 +187,7 @@ export const ServerStatsCards: React.FC<ServerStatsCardsProps> = ({ servers }) =
           ======================================================== */}
       <div className="bg-white dark:bg-[#0b101d] rounded-3xl p-6 sm:p-7 border border-slate-200 dark:border-slate-800/90 shadow-xl shadow-slate-200/50 dark:shadow-blue-950/20 flex flex-col justify-between transition-all hover:border-slate-300 dark:hover:border-slate-700/80 group relative overflow-hidden">
         {/* Glow accent */}
-        <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-2xl pointer-events-none"></div>
+        <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-2xl pointer-events-none hidden dark:block"></div>
 
         <div>
           {/* Header */}

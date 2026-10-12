@@ -170,7 +170,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         />
         {/* Drawer Content */}
         <div 
-          className={`relative z-10 flex h-full w-72 max-w-[85vw] flex-col bg-slate-950 border-r border-slate-800 p-4 shadow-2xl animate-in slide-in-from-left duration-200 ${className}`}
+          className={`relative z-10 flex h-full w-72 max-w-[85vw] flex-col bg-white dark:bg-slate-950 border-r border-slate-200 dark:border-slate-800 p-4 shadow-2xl animate-in slide-in-from-left duration-200 ${className}`}
           {...props}
         >
           {children}
@@ -568,7 +568,7 @@ export const SidebarNav: React.FC<React.HTMLAttributes<HTMLElement>> = ({
   children,
   ...props
 }) => (
-  <nav className={`sticky top-0 z-30 flex h-16 w-full shrink-0 items-center justify-between border-b border-slate-800/80 bg-slate-950/80 px-4 backdrop-blur-xl sm:px-6 ${className}`} {...props}>
+  <nav className={`sticky top-0 z-30 flex h-16 w-full shrink-0 items-center justify-between border-b border-slate-200 dark:border-slate-800/80 bg-white/80 dark:bg-slate-950/80 px-4 backdrop-blur-xl sm:px-6 ${className}`} {...props}>
     {children}
   </nav>
 );

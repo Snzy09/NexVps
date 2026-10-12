@@ -182,7 +182,7 @@ export const AdminMetricsCharts: React.FC<AdminMetricsChartsProps> = ({
       <div className="lg:col-span-7 flex flex-col">
         <div className="h-full bg-white dark:bg-slate-900/80 rounded-3xl border border-slate-200 dark:border-slate-800 p-5 sm:p-6 shadow-sm dark:shadow-xl flex flex-col justify-between relative overflow-hidden backdrop-blur-md transition-all">
           {/* Subtle Ambient Glow */}
-          <div className="pointer-events-none absolute -top-10 -right-10 w-44 h-44 rounded-full bg-cyan-500/10 blur-3xl" />
+          <div className="pointer-events-none absolute -top-10 -right-10 w-44 h-44 rounded-full bg-cyan-500/10 blur-3xl hidden dark:block" />
 
           {/* Header & Range Filters */}
           <div>
@@ -312,7 +312,7 @@ export const AdminMetricsCharts: React.FC<AdminMetricsChartsProps> = ({
       <div className="lg:col-span-5 flex flex-col">
         <div className="h-full bg-white dark:bg-slate-900/80 rounded-3xl border border-slate-200 dark:border-slate-800 p-5 sm:p-6 shadow-sm dark:shadow-xl flex flex-col justify-between relative overflow-hidden backdrop-blur-md transition-all">
           {/* Subtle Ambient Glow */}
-          <div className="pointer-events-none absolute -top-12 -left-10 w-44 h-44 rounded-full bg-indigo-500/10 blur-3xl" />
+          <div className="pointer-events-none absolute -top-12 -left-10 w-44 h-44 rounded-full bg-indigo-500/10 blur-3xl hidden dark:block" />
 
           {/* Header & Quick Action Menu */}
           <div className="flex items-start justify-between gap-4 mb-2">
