@@ -145,7 +145,7 @@ export const RealtimeStatsWidget: React.FC<RealtimeStatsWidgetProps> = ({
   ];
 
   return (
-    <section className="w-full my-6">
+    <section className="w-full mb-6">
       <div className="flex items-center justify-between mb-4 px-1">
         <div className="flex items-center gap-2">
           <span className="relative flex h-2.5 w-2.5">
@@ -174,7 +174,7 @@ export const RealtimeStatsWidget: React.FC<RealtimeStatsWidgetProps> = ({
             >
               {/* Top-Right Glow */}
               <div
-                className={`pointer-events-none absolute -top-10 -right-10 h-32 w-32 rounded-full opacity-30 dark:opacity-40 blur-2xl transition-opacity duration-300 group-hover:opacity-70 dark:group-hover:opacity-80 ${style.glow}`}
+                className={`pointer-events-none absolute -top-10 -right-10 h-32 w-32 rounded-full opacity-30 dark:opacity-40 blur-2xl transition-opacity duration-300 group-hover:opacity-70 dark:group-hover:opacity-80 ${style.glow} hidden dark:block`}
                 aria-hidden="true"
               />
 
