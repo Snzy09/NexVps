@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import type { Order } from '../types';
 import { api } from '../services/api';
 import { useToast } from '../contexts/ToastContext';
+import { useNotification } from '../contexts/NotificationContext';
 import confetti from 'canvas-confetti';
 import { 
   X, 
@@ -31,6 +32,7 @@ export const QrisCheckoutModal: React.FC<QrisCheckoutModalProps> = ({
   onVpsReady
 }) => {
   const toast = useToast();
+  const { notify } = useNotification();
   const [currentOrder, setCurrentOrder] = useState<Order | null>(initialOrder);
   const [copiedAmount, setCopiedAmount] = useState<boolean>(false);
   const [copiedSsh, setCopiedSsh] = useState<boolean>(false);
@@ -77,6 +79,17 @@ export const QrisCheckoutModal: React.FC<QrisCheckoutModalProps> = ({
         if (updated.paymentStatus === 'PAID') {
           setCurrentOrder(updated);
           triggerConfetti();
+          notify({
+            title: 'Pembayaran QRIS Diverifikasi! 💳',
+            desc: `Pembayaran pesanan #${updated.orderNumber || updated.id} sebesar Rp ${(updated.totalAmountIdr || 0).toLocaleString('id-ID')} sukses. Memulai pembuatan server...`,
+            category: 'payment',
+            status: 'success',
+            metadata: {
+              orderNumber: updated.orderNumber,
+              orderId: updated.id,
+              hostname: updated.hostname
+            }
+          });
         }
       } catch (e) {
         // quiet error on interval
@@ -84,7 +97,7 @@ export const QrisCheckoutModal: React.FC<QrisCheckoutModalProps> = ({
     }, 3000);
 
     return () => clearInterval(interval);
-  }, [currentOrder]);
+  }, [currentOrder, notify]);
 
   // Polling server IP and status once paid until active
   useEffect(() => {

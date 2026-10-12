@@ -258,8 +258,8 @@ export const api = {
         rootPassword: payload.rootPassword || 'P@ssword123!',
         sshKey: payload.sshKey,
         billingCycle: payload.billingCycle || 'monthly',
-        baseAmountIdr: 150000,
-        totalAmountIdr: 150000,
+        baseAmountIdr: payload.planId === 'starter' ? 75000 : payload.planId === 'business' ? 300000 : payload.planId === 'enterprise' ? 600000 : 150000,
+        totalAmountIdr: payload.planId === 'starter' ? 75000 : payload.planId === 'business' ? 300000 : payload.planId === 'enterprise' ? 600000 : 150000,
         adminFee: 0,
         paymentStatus: 'PENDING',
         vpsStatus: 'PENDING_PAYMENT',
@@ -267,6 +267,11 @@ export const api = {
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
       };
+      try {
+        const orders: Order[] = JSON.parse(localStorage.getItem('nexvps_demo_orders') || '[]');
+        orders.unshift(simulatedOrder);
+        localStorage.setItem('nexvps_demo_orders', JSON.stringify(orders));
+      } catch {}
       return simulatedOrder;
     }
   },
@@ -278,6 +283,11 @@ export const api = {
       if (!json.success) throw new Error(json.message);
       return json.data;
     } catch {
+      try {
+        const orders: Order[] = JSON.parse(localStorage.getItem('nexvps_demo_orders') || '[]');
+        const found = orders.find(o => o.id === id);
+        if (found) return found;
+      } catch {}
       return {
         id,
         orderNumber: 'NEX-882194',
@@ -314,6 +324,38 @@ export const api = {
       if (!json.success) throw new Error(json.message);
       return json.data;
     } catch {
+      try {
+        const orders: Order[] = JSON.parse(localStorage.getItem('nexvps_demo_orders') || '[]');
+        const found = orders.find(o => o.id === id);
+        if (found) {
+          found.paymentStatus = 'PAID';
+          if (found.vpsStatus === 'PENDING_PAYMENT') {
+            found.vpsStatus = 'PROVISIONING';
+          }
+
+          // Advance to ACTIVE with real IP
+          const elapsed = Date.now() - new Date(found.createdAt).getTime();
+          if (elapsed >= 3000 && found.vpsStatus !== 'ACTIVE') {
+            found.vpsStatus = 'ACTIVE';
+            found.serverState = 'started';
+            found.serverIp = `94.237.70.${Math.floor(Math.random() * 180) + 20}`;
+            found.serverUuid = `00${Math.floor(100000 + Math.random() * 900000)}-8ac8-4f74-b28d-ece7eb1542c9`;
+
+            // Insert into user servers
+            const servers: Order[] = JSON.parse(localStorage.getItem('nexvps_demo_servers') || JSON.stringify(INITIAL_SERVERS));
+            const existingIdx = servers.findIndex(s => s.id === found.id);
+            if (existingIdx >= 0) {
+              servers[existingIdx] = found;
+            } else {
+              servers.unshift(found);
+            }
+            localStorage.setItem('nexvps_demo_servers', JSON.stringify(servers));
+          }
+
+          localStorage.setItem('nexvps_demo_orders', JSON.stringify(orders));
+          return found;
+        }
+      } catch {}
       return {
         id,
         orderNumber: 'NEX-882194',
@@ -369,11 +411,25 @@ export const api = {
       if (!json.success) throw new Error(json.message);
       return json.data;
     } catch {
+      let servers: Order[] = INITIAL_SERVERS;
       const saved = localStorage.getItem('nexvps_demo_servers');
       if (saved) {
-        try { return JSON.parse(saved); } catch {}
+        try { servers = JSON.parse(saved); } catch {}
+      } else {
+        try { localStorage.setItem('nexvps_demo_servers', JSON.stringify(INITIAL_SERVERS)); } catch {}
       }
-      return INITIAL_SERVERS;
+
+      const isAdmin = activeAdminEmail?.toLowerCase() === 'sanzzydev@gmail.com';
+      if (!isAdmin) {
+        if (email || userId) {
+          return servers.filter(s => 
+            (email && s.customerEmail?.toLowerCase() === email.toLowerCase()) ||
+            (userId && s.userId === userId)
+          );
+        }
+        return [];
+      }
+      return servers;
     }
   },
 

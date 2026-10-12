@@ -3,6 +3,7 @@ import type { Order } from '../types';
 import { api } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 import { useToast } from '../contexts/ToastContext';
+import { useNotification } from '../contexts/NotificationContext';
 import { 
   Server, 
   Terminal, 
@@ -61,6 +62,7 @@ interface ServersDashboardProps {
 export const ServersDashboard: React.FC<ServersDashboardProps> = ({ onOrderNew, onOpenAuth }) => {
   const { user, isAdmin } = useAuth();
   const { success, error: toastError } = useToast();
+  const { notify } = useNotification();
   const [servers, setServers] = useState<Order[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [syncingAll, setSyncingAll] = useState<boolean>(false);
@@ -177,6 +179,7 @@ export const ServersDashboard: React.FC<ServersDashboardProps> = ({ onOrderNew, 
         [uuid]: { text: res.message || `Aksi ${action} berhasil.`, type: 'success' }
       }));
 
+      const targetServer = servers.find(s => s.serverUuid === uuid);
       const actionTitle = 
         action === 'restart' ? 'Server Berhasil Direboot' :
         action === 'start' ? 'Server Berhasil Dinyalakan' :
@@ -185,7 +188,18 @@ export const ServersDashboard: React.FC<ServersDashboardProps> = ({ onOrderNew, 
         action === 'sync' ? 'Status Server Disinkronisasi' :
         'Server Berhasil Dimatikan';
 
-      success(actionTitle, res.message || `Perintah ${action} berhasil diproses.`);
+      notify({
+        title: actionTitle,
+        desc: `${targetServer?.hostname || 'Server'}${targetServer?.serverIp ? ` (${targetServer.serverIp})` : ''}: ${res.message || 'Perintah ' + action + ' berhasil diproses.'}`,
+        category: 'server',
+        status: 'success',
+        metadata: {
+          hostname: targetServer?.hostname,
+          serverIp: targetServer?.serverIp,
+          serverUuid: uuid,
+          action
+        }
+      });
 
       if (action === 'delete') {
         if (selectedServerDetail?.serverUuid === uuid) {
@@ -195,11 +209,22 @@ export const ServersDashboard: React.FC<ServersDashboardProps> = ({ onOrderNew, 
 
       await fetchServers(true, true);
     } catch (err: any) {
+      const targetServer = servers.find(s => s.serverUuid === uuid);
       setActionMessage(prev => ({
         ...prev,
         [uuid]: { text: `Gagal: ${err.message}`, type: 'error' }
       }));
-      toastError('Gagal Mengeksekusi Aksi', err.message);
+      notify({
+        title: 'Gagal Mengeksekusi Aksi',
+        desc: `${targetServer?.hostname || 'Server'}: ${err.message}`,
+        category: 'server',
+        status: 'error',
+        metadata: {
+          hostname: targetServer?.hostname,
+          serverUuid: uuid,
+          action
+        }
+      });
     } finally {
       setActionLoading(prev => {
         const next = { ...prev };
@@ -224,10 +249,13 @@ export const ServersDashboard: React.FC<ServersDashboardProps> = ({ onOrderNew, 
     } catch {}
     setCopiedKey(id);
     setTimeout(() => setCopiedKey(null), 2000);
-    success(
-      `${label} Berhasil Disalin`,
-      text.length > 36 ? `${text.substring(0, 36)}...` : text
-    );
+    notify({
+      title: `${label} Berhasil Disalin`,
+      desc: text.length > 36 ? `${text.substring(0, 36)}...` : text,
+      category: 'security',
+      status: 'info',
+      metadata: { action: 'copy' }
+    });
   };
 
   // Filter servers

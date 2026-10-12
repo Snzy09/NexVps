@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { ToastProvider, useToast } from './contexts/ToastContext';
+import { NotificationProvider, useNotification } from './contexts/NotificationContext';
 import { SidebarProvider, SidebarInset } from './components/ui/sidebar';
 import AppSidebar from './components/AppSidebar';
 import AppSidebarNav from './components/AppSidebarNav';
@@ -19,6 +20,7 @@ import { RefreshCw, Server, ShieldCheck } from 'lucide-react';
 const AppContent: React.FC = () => {
   const { user } = useAuth();
   const toast = useToast();
+  const { notify } = useNotification();
   const [currentTab, setCurrentTab] = useState<'store' | 'servers' | 'admin'>('store');
   const [catalog, setCatalog] = useState<CatalogData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -90,7 +92,17 @@ const AppContent: React.FC = () => {
       });
 
       setActiveOrder(newOrder);
-      toast.success('Pesanan Dibuat', 'Silakan selesaikan pembayaran QRIS untuk aktivasi server.');
+      notify({
+        title: `Pesanan Dibuat: #${newOrder.orderNumber}`,
+        desc: `Pesanan untuk ${newOrder.hostname} (${formData.billingCycle === 'annually' ? '1 Tahun' : '1 Bulan'}) siap dibayar via QRIS Dinamis.`,
+        category: 'order',
+        status: 'info',
+        metadata: {
+          orderNumber: newOrder.orderNumber,
+          orderId: newOrder.id,
+          hostname: newOrder.hostname
+        }
+      });
     } catch (err: any) {
       toast.error('Gagal Membuat Pesanan', err.message);
     } finally {
@@ -99,7 +111,17 @@ const AppContent: React.FC = () => {
   };
 
   const handleVpsReady = (_order: Order) => {
-    toast.success('VPS Aktif & Siap! 🚀', `Server ${_order.hostname}${_order.serverIp ? ` (${_order.serverIp})` : ''} telah selesai dibangun.`);
+    notify({
+      title: '🚀 VPS Siap Digunakan!',
+      desc: `Server ${_order.hostname}${_order.serverIp ? ` (${_order.serverIp})` : ''} telah selesai di-deploy dan aktif.`,
+      category: 'server',
+      status: 'success',
+      metadata: {
+        hostname: _order.hostname,
+        serverIp: _order.serverIp,
+        zoneCode: _order.zoneCode
+      }
+    });
     // refresh active servers count
     api.getServers(user?.email || undefined, user?.uid || undefined).then(servers => {
       setActiveServersCount(servers.filter(s => s.vpsStatus === 'ACTIVE').length);
@@ -217,7 +239,9 @@ export const App: React.FC = () => {
     <ThemeProvider>
       <AuthProvider>
         <ToastProvider>
-          <AppContent />
+          <NotificationProvider>
+            <AppContent />
+          </NotificationProvider>
         </ToastProvider>
       </AuthProvider>
     </ThemeProvider>
