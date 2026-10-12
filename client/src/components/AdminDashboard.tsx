@@ -43,6 +43,7 @@ import {
 interface AdminDashboardProps {
   onBackToStore?: () => void;
   onOpenAuth?: (tab?: 'login' | 'register', adminOnly?: boolean) => void;
+  onPlansUpdated?: (plans: VpsPlan[]) => void;
 }
 
 const QRIS_METHOD_OPTIONS = [
@@ -62,7 +63,7 @@ const TRANSACTION_MODE_OPTIONS = [
   { value: 'true', label: 'Sandbox (Test)', tag: 'Uji Coba' },
 ];
 
-export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, onOpenAuth }) => {
+export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, onOpenAuth, onPlansUpdated }) => {
   const { user, isAdmin, logout } = useAuth();
   const toast = useToast();
 
@@ -119,6 +120,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
       });
       setOrders(ord);
       setPlans(p);
+      if (p && Array.isArray(p)) {
+        onPlansUpdated?.(p);
+      }
     } catch (err: any) {
       console.error('Error loading admin data:', err);
     } finally {
@@ -263,6 +267,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
       setEditingPlanId(null);
       const updatedPlans = await api.getAdminPlans();
       setPlans(updatedPlans);
+      onPlansUpdated?.(updatedPlans);
     } catch (err: any) {
       toast.error('Gagal Memperbarui Harga', err.message);
     }
@@ -276,6 +281,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
       setShowAddPlanModal(false);
       const updatedPlans = await api.getAdminPlans();
       setPlans(updatedPlans);
+      onPlansUpdated?.(updatedPlans);
     } catch (err: any) {
       toast.error('Gagal Menambah Paket', err.message);
     }
@@ -288,6 +294,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
       toast.success('Paket Berhasil Dihapus', `Paket "${planName}" telah dihapus.`);
       const updatedPlans = await api.getAdminPlans();
       setPlans(updatedPlans);
+      onPlansUpdated?.(updatedPlans);
     } catch (err: any) {
       toast.error('Gagal Menghapus Paket', err.message);
     }
@@ -422,21 +429,43 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
 
                       {/* Plan Header */}
                       <div className="flex items-start justify-between">
-                        <div>
+                        <div className="flex-1 mr-2">
                           {isEditing ? (
-                            <input
-                              type="text"
-                              value={currentForm.name || ''}
-                              onChange={(e) => setPlanForm({ ...planForm, name: e.target.value })}
-                              className="text-lg font-bold text-white bg-slate-950 px-3 py-1.5 rounded-xl border border-cyan-500/50 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20 w-full"
-                              placeholder="Nama Paket"
-                            />
+                            <div className="space-y-2">
+                              <input
+                                type="text"
+                                value={currentForm.name || ''}
+                                onChange={(e) => setPlanForm({ ...planForm, name: e.target.value })}
+                                className="text-lg font-bold text-white bg-slate-950 px-3 py-1.5 rounded-xl border border-cyan-500/50 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20 w-full"
+                                placeholder="Nama Paket"
+                              />
+                              <div className="flex flex-wrap items-center gap-2">
+                                <input
+                                  type="text"
+                                  value={currentForm.upcloudPlan || ''}
+                                  onChange={(e) => setPlanForm({ ...planForm, upcloudPlan: e.target.value })}
+                                  className="text-xs text-cyan-400 font-mono bg-slate-950 px-2.5 py-1.5 rounded-xl border border-slate-700 focus:border-cyan-400 focus:outline-none w-36"
+                                  placeholder="UpCloud Plan"
+                                />
+                                <label className="flex items-center gap-1.5 text-xs text-slate-300 cursor-pointer select-none px-2.5 py-1.5 bg-slate-950 rounded-xl border border-slate-800">
+                                  <input
+                                    type="checkbox"
+                                    checked={Boolean(currentForm.popular)}
+                                    onChange={(e) => setPlanForm({ ...planForm, popular: e.target.checked })}
+                                    className="rounded border-slate-700 text-cyan-500 focus:ring-cyan-500"
+                                  />
+                                  <span>Badge Terpopuler</span>
+                                </label>
+                              </div>
+                            </div>
                           ) : (
-                            <h4 className="text-xl font-bold text-white">{p.name}</h4>
+                            <>
+                              <h4 className="text-xl font-bold text-white">{p.name}</h4>
+                              <p className="text-xs text-cyan-400 font-mono mt-0.5">
+                                UpCloud Plan: {p.upcloudPlan}
+                              </p>
+                            </>
                           )}
-                          <p className="text-xs text-cyan-400 font-mono mt-0.5">
-                            UpCloud Plan: {p.upcloudPlan}
-                          </p>
                         </div>
                       </div>
 
@@ -695,6 +724,17 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
                           </p>
                         </div>
                       </div>
+
+                      {/* Popular Toggle */}
+                      <label className="flex items-center gap-2.5 text-xs text-slate-300 cursor-pointer select-none p-3 rounded-2xl bg-slate-950/80 border border-slate-800 hover:border-slate-700 transition-all">
+                        <input
+                          type="checkbox"
+                          checked={Boolean(newPlanForm.popular)}
+                          onChange={(e) => setNewPlanForm({ ...newPlanForm, popular: e.target.checked })}
+                          className="rounded border-slate-700 text-cyan-500 focus:ring-cyan-500"
+                        />
+                        <span>Tandai sebagai Paket Rekomendasi Terpopuler (Badge Popular)</span>
+                      </label>
 
                       {/* Specs Box */}
                       <div className="p-4 rounded-2xl bg-slate-950/80 border border-slate-800/80 space-y-3">

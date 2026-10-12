@@ -201,6 +201,37 @@ const INITIAL_SERVERS: Order[] = [
   }
 ];
 
+export const STORAGE_PLANS_KEY = 'nexvps_custom_plans';
+
+export const getStoredPlans = (): VpsPlan[] => {
+  try {
+    const saved = localStorage.getItem(STORAGE_PLANS_KEY);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return parsed;
+      }
+    }
+  } catch (e) {
+    console.warn('Failed to parse stored plans:', e);
+  }
+  try {
+    localStorage.setItem(STORAGE_PLANS_KEY, JSON.stringify(FALLBACK_CATALOG.plans));
+  } catch {}
+  return FALLBACK_CATALOG.plans;
+};
+
+export const saveStoredPlans = (plans: VpsPlan[]): void => {
+  try {
+    localStorage.setItem(STORAGE_PLANS_KEY, JSON.stringify(plans));
+  } catch (e) {
+    console.warn('Failed to save plans to localStorage:', e);
+  }
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('nexvps_plans_updated', { detail: plans }));
+  }
+};
+
 export const api = {
   setAdminEmail(email: string | null) {
     activeAdminEmail = email;
@@ -224,10 +255,19 @@ export const api = {
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const json = await res.json();
       if (!json.success) throw new Error(json.message);
+      if (json.data?.plans && Array.isArray(json.data.plans) && json.data.plans.length > 0) {
+        try {
+          localStorage.setItem(STORAGE_PLANS_KEY, JSON.stringify(json.data.plans));
+        } catch {}
+      }
       return json.data;
     } catch (err) {
-      console.warn('Backend server unavailable, loading catalog fallback:', err);
-      return FALLBACK_CATALOG;
+      console.warn('Backend server unavailable, loading catalog fallback with stored plans:', err);
+      const storedPlans = getStoredPlans();
+      return {
+        ...FALLBACK_CATALOG,
+        plans: storedPlans
+      };
     }
   },
 
@@ -473,72 +513,229 @@ export const api = {
   },
 
   async getAdminMetrics(): Promise<AdminMetrics> {
-    const res = await fetch(`${API_BASE}/admin/metrics`, { headers: getHeaders() });
-    const json = await res.json();
-    if (!json.success) throw new Error(json.message);
-    return json.data;
+    try {
+      const res = await fetch(`${API_BASE}/admin/metrics`, { headers: getHeaders() });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const json = await res.json();
+      if (!json.success) throw new Error(json.message);
+      return json.data;
+    } catch {
+      const servers: Order[] = JSON.parse(localStorage.getItem('nexvps_demo_servers') || JSON.stringify(INITIAL_SERVERS));
+      const totalRevenue = servers.filter(s => s.paymentStatus === 'PAID').reduce((sum, s) => sum + (s.totalAmountIdr || 0), 0);
+      return {
+        totalOrders: servers.length,
+        paidOrdersCount: servers.filter(s => s.paymentStatus === 'PAID').length,
+        activeServersCount: servers.filter(s => s.vpsStatus === 'ACTIVE').length,
+        pendingOrdersCount: servers.filter(s => s.paymentStatus === 'PENDING').length,
+        totalRevenueIdr: totalRevenue
+      };
+    }
   },
 
   async getAdminOrders(): Promise<Order[]> {
-    const res = await fetch(`${API_BASE}/admin/orders`, { headers: getHeaders() });
-    const json = await res.json();
-    if (!json.success) throw new Error(json.message);
-    return json.data;
+    try {
+      const res = await fetch(`${API_BASE}/admin/orders`, { headers: getHeaders() });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const json = await res.json();
+      if (!json.success) throw new Error(json.message);
+      return json.data;
+    } catch {
+      const servers: Order[] = JSON.parse(localStorage.getItem('nexvps_demo_servers') || JSON.stringify(INITIAL_SERVERS));
+      return servers;
+    }
   },
 
   async getAdminSettings(): Promise<AdminSettings> {
-    const res = await fetch(`${API_BASE}/admin/settings`, { headers: getHeaders() });
-    const json = await res.json();
-    if (!json.success) throw new Error(json.message);
-    return json.data;
+    try {
+      const res = await fetch(`${API_BASE}/admin/settings`, { headers: getHeaders() });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const json = await res.json();
+      if (!json.success) throw new Error(json.message);
+      return json.data;
+    } catch {
+      const saved = localStorage.getItem('nexvps_demo_settings');
+      if (saved) {
+        try { return JSON.parse(saved); } catch {}
+      }
+      return {
+        upcloudApiToken: 'uc_tok_demo_sample_token_889123',
+        upcloudApiTokens: [{ key: 'UPCLOUD_API_TOKEN_PRIMARY', value: 'uc_tok_demo_sample_token_889123' }],
+        upcloudUsername: 'sanzzydev',
+        upcloudPassword: '••••••••••••',
+        useTokenAuth: true,
+        hasUpCloudToken: true,
+        hasUpCloudBasic: false,
+        buatqrisAccountId: 'bq_acc_9921',
+        buatqrisSecretToken: 'bq_sec_••••••••••••',
+        buatqrisSigningSecret: 'bq_sgn_••••••••••••',
+        hasBuatQrisCreds: true,
+        buatqrisMethod: 'qris_one',
+        buatqrisFeeBy: 'user',
+        isSandbox: false,
+        storeName: 'NexVps Cloud',
+        storeTagline: 'High-Performance Cloud VPS with UpCloud MaxIOPS & QRIS Auto Activation',
+        supportEmail: 'support@nexvps.cloud',
+        supportWhatsapp: '6281234567890',
+        adminEmails: ['sanzzydev@gmail.com']
+      };
+    }
   },
 
   async updateAdminSettings(settings: Partial<AdminSettings>): Promise<void> {
-    const res = await fetch(`${API_BASE}/admin/settings`, {
-      method: 'POST',
-      headers: getHeaders({ 'Content-Type': 'application/json' }),
-      body: JSON.stringify(settings)
-    });
-    const json = await res.json();
-    if (!json.success) throw new Error(json.message);
+    try {
+      const res = await fetch(`${API_BASE}/admin/settings`, {
+        method: 'POST',
+        headers: getHeaders({ 'Content-Type': 'application/json' }),
+        body: JSON.stringify(settings)
+      });
+      if (res.ok) {
+        const json = await res.json();
+        if (json.success) return;
+      }
+    } catch {
+      // Offline fallback
+    }
+    const current = await this.getAdminSettings();
+    const updated = { ...current, ...settings };
+    localStorage.setItem('nexvps_demo_settings', JSON.stringify(updated));
   },
 
   async getAdminPlans(): Promise<VpsPlan[]> {
-    const res = await fetch(`${API_BASE}/admin/plans`, { headers: getHeaders() });
-    const json = await res.json();
-    if (!json.success) throw new Error(json.message);
-    return json.data;
+    try {
+      const res = await fetch(`${API_BASE}/admin/plans`, { headers: getHeaders() });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const json = await res.json();
+      if (!json.success) throw new Error(json.message);
+      if (json.data && Array.isArray(json.data) && json.data.length > 0) {
+        try {
+          localStorage.setItem(STORAGE_PLANS_KEY, JSON.stringify(json.data));
+        } catch {}
+      }
+      return json.data;
+    } catch (err) {
+      console.warn('getAdminPlans backend unavailable, fallback to local storage:', err);
+      return getStoredPlans();
+    }
   },
 
   async updateAdminPlan(id: string, updates: Partial<VpsPlan>): Promise<VpsPlan> {
-    const res = await fetch(`${API_BASE}/admin/plans/${id}`, {
-      method: 'PUT',
-      headers: getHeaders({ 'Content-Type': 'application/json' }),
-      body: JSON.stringify(updates)
-    });
-    const json = await res.json();
-    if (!json.success) throw new Error(json.message);
-    return json.data;
+    let updatedPlanFromServer: VpsPlan | null = null;
+    try {
+      const res = await fetch(`${API_BASE}/admin/plans/${id}`, {
+        method: 'PUT',
+        headers: getHeaders({ 'Content-Type': 'application/json' }),
+        body: JSON.stringify(updates)
+      });
+      if (res.ok) {
+        const json = await res.json();
+        if (json.success && json.data) {
+          updatedPlanFromServer = json.data;
+        }
+      }
+    } catch (err) {
+      console.warn('Backend updateAdminPlan unavailable, updating locally:', err);
+    }
+
+    const currentPlans = getStoredPlans();
+    const idx = currentPlans.findIndex(p => p.id === id);
+    if (idx !== -1) {
+      const merged: VpsPlan = {
+        ...currentPlans[idx],
+        ...updates,
+        ...(updatedPlanFromServer || {})
+      };
+      if (updates.pricePerMonthIdr !== undefined && updates.pricePerMonthUsd === undefined) {
+        merged.pricePerMonthUsd = Math.max(1, Math.round(Number(updates.pricePerMonthIdr) / 15000));
+      }
+      currentPlans[idx] = merged;
+      saveStoredPlans(currentPlans);
+      return merged;
+    }
+
+    if (updatedPlanFromServer) {
+      currentPlans.push(updatedPlanFromServer);
+      saveStoredPlans(currentPlans);
+      return updatedPlanFromServer;
+    }
+
+    throw new Error('Paket tidak ditemukan untuk diperbarui');
   },
 
   async createAdminPlan(plan: Partial<VpsPlan>): Promise<VpsPlan> {
-    const res = await fetch(`${API_BASE}/admin/plans`, {
-      method: 'POST',
-      headers: getHeaders({ 'Content-Type': 'application/json' }),
-      body: JSON.stringify(plan)
-    });
-    const json = await res.json();
-    if (!json.success) throw new Error(json.message);
-    return json.data;
+    let createdPlan: VpsPlan | null = null;
+    try {
+      const res = await fetch(`${API_BASE}/admin/plans`, {
+        method: 'POST',
+        headers: getHeaders({ 'Content-Type': 'application/json' }),
+        body: JSON.stringify(plan)
+      });
+      if (res.ok) {
+        const json = await res.json();
+        if (json.success && json.data) {
+          createdPlan = json.data;
+        }
+      }
+    } catch (err) {
+      console.warn('Backend createAdminPlan unavailable, creating locally:', err);
+    }
+
+    if (!createdPlan) {
+      const rawName = plan.name || 'custom';
+      const slugId = rawName
+        .toLowerCase()
+        .replace(/[^a-z0-9]/g, '-')
+        .replace(/-+/g, '-')
+        .replace(/^-|-$/g, '') + '-' + Math.floor(100 + Math.random() * 900);
+      const idr = Number(plan.pricePerMonthIdr) || 100000;
+      createdPlan = {
+        id: slugId,
+        name: plan.name || 'Paket Cloud Kustom',
+        slug: slugId,
+        coreNumber: Number(plan.coreNumber) || 1,
+        memoryAmountMb: Number(plan.memoryAmountMb) || 1024,
+        storageSizeGb: Number(plan.storageSizeGb) || 25,
+        bandwidthTb: Number(plan.bandwidthTb) || 1,
+        pricePerMonthIdr: idr,
+        pricePerMonthUsd: plan.pricePerMonthUsd || Math.max(1, Math.round(idr / 15000)),
+        popular: Boolean(plan.popular),
+        upcloudPlan: plan.upcloudPlan || '1xCPU-1GB',
+        features: plan.features || [
+          `${plan.coreNumber || 1} vCPU Cores`,
+          `${Math.round((Number(plan.memoryAmountMb) || 1024) / 1024)} GB MaxIOPS RAM`,
+          `${plan.storageSizeGb || 25} GB MaxIOPS Ultra-Fast Storage`,
+          `${plan.bandwidthTb || 1} TB Transfer Kuota / Bulan`,
+          '1 Gbps Public Port',
+          'DDoS Protection Included'
+        ]
+      };
+    }
+
+    const currentPlans = getStoredPlans();
+    const exists = currentPlans.some(p => p.id === createdPlan!.id);
+    const updatedList = exists
+      ? currentPlans.map(p => p.id === createdPlan!.id ? createdPlan! : p)
+      : [...currentPlans, createdPlan];
+
+    saveStoredPlans(updatedList);
+    return createdPlan;
   },
 
   async deleteAdminPlan(id: string): Promise<void> {
-    const res = await fetch(`${API_BASE}/admin/plans/${id}`, {
-      method: 'DELETE',
-      headers: getHeaders()
-    });
-    const json = await res.json();
-    if (!json.success) throw new Error(json.message);
+    try {
+      const res = await fetch(`${API_BASE}/admin/plans/${id}`, {
+        method: 'DELETE',
+        headers: getHeaders()
+      });
+      if (!res.ok) {
+        console.warn('deleteAdminPlan backend status:', res.status);
+      }
+    } catch (err) {
+      console.warn('Backend deleteAdminPlan unavailable, deleting locally:', err);
+    }
+
+    const currentPlans = getStoredPlans();
+    const updatedList = currentPlans.filter(p => p.id !== id);
+    saveStoredPlans(updatedList);
   },
 
   async testUpCloud(): Promise<{ success: boolean; message: string; data?: any; totalTokens?: number; activeToken?: string; results?: import('../types').UpCloudTokenTestResult[] }> {

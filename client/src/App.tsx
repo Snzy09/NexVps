@@ -14,8 +14,8 @@ import GridChangelog from './components/GridChangelog';
 import UserProfileWithStats from './components/UserProfileWithStats';
 import { AuthModal } from './components/AuthModal';
 import Footer from './components/Footer';
-import { api } from './services/api';
-import type { CatalogData, Order } from './types';
+import { api, getStoredPlans } from './services/api';
+import type { CatalogData, Order, VpsPlan } from './types';
 import { PageSkeletonLoader } from './components/PageSkeletonLoader';
 import { RefreshCw, Server, ShieldCheck } from 'lucide-react';
 
@@ -60,6 +60,37 @@ const AppContent: React.FC = () => {
   useEffect(() => {
     fetchCatalogAndServers();
   }, [user]);
+
+  // Real-time synchronization for VPS plans catalog across store and admin settings
+  useEffect(() => {
+    const handlePlansUpdated = (e: CustomEvent<VpsPlan[]>) => {
+      const updatedPlans = e.detail;
+      if (Array.isArray(updatedPlans) && updatedPlans.length > 0) {
+        setCatalog(prev => (prev ? { ...prev, plans: updatedPlans } : prev));
+      }
+    };
+
+    window.addEventListener('nexvps_plans_updated', handlePlansUpdated as EventListener);
+    return () => {
+      window.removeEventListener('nexvps_plans_updated', handlePlansUpdated as EventListener);
+    };
+  }, []);
+
+  // Re-sync plans whenever user switches back to the store tab
+  useEffect(() => {
+    if (currentTab === 'store') {
+      const stored = getStoredPlans();
+      if (stored && stored.length > 0) {
+        setCatalog(prev => {
+          if (!prev) return prev;
+          if (JSON.stringify(prev.plans) !== JSON.stringify(stored)) {
+            return { ...prev, plans: stored };
+          }
+          return prev;
+        });
+      }
+    }
+  }, [currentTab]);
 
   const handleOpenAuth = (tab: 'login' | 'register' = 'login', adminOnly = false) => {
     setAuthModalTab(tab);
@@ -187,6 +218,9 @@ const AppContent: React.FC = () => {
               <AdminDashboard 
                 onBackToStore={() => setCurrentTab('store')}
                 onOpenAuth={handleOpenAuth}
+                onPlansUpdated={(newPlans) => {
+                  setCatalog(prev => (prev ? { ...prev, plans: newPlans } : prev));
+                }}
               />
             )}
 

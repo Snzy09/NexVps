@@ -101,6 +101,16 @@ export const VpsConfigurator: React.FC<VpsConfiguratorProps> = ({
     }
   }, [user]);
 
+  // Keep selectedPlanId valid when plans prop changes or if selected plan was removed/modified
+  useEffect(() => {
+    if (plans && plans.length > 0) {
+      if (!plans.some(p => p.id === selectedPlanId)) {
+        const popular = plans.find(p => p.popular);
+        setSelectedPlanId(popular?.id || plans[0].id);
+      }
+    }
+  }, [plans, selectedPlanId]);
+
   // Active OS Distro selection
   const [activeDistro, setActiveDistro] = useState<string>('ubuntu');
 
