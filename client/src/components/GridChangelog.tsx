@@ -12,9 +12,11 @@ import {
   Layers, 
   RotateCcw,
   SlidersHorizontal,
-  ChevronRight
+  ChevronRight,
+  ShieldCheck
 } from "lucide-react";
 import { useToast } from "@/contexts/ToastContext";
+import { useAuth } from "@/contexts/AuthContext";
 
 export interface ChangelogUpdateItem {
   id: string;
@@ -257,6 +259,7 @@ export function buildChangelogFromUpdates(updatesList: ChangelogUpdateItem[]): V
 }
 
 export default function GridChangelog() {
+  const { isAdmin } = useAuth();
   const toast = useToast();
   const [updates, setUpdates] = useState<ChangelogUpdateItem[]>(() => {
     try {
@@ -277,6 +280,13 @@ export default function GridChangelog() {
 
   const handleAddUpdate = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isAdmin) {
+      toast.error(
+        "Akses Ditolak",
+        "Hanya akun Administrator yang diizinkan menambahkan catatan changelog baru."
+      );
+      return;
+    }
     if (!newTitle.trim()) return;
 
     const todayStr = new Intl.DateTimeFormat("en-US", {
@@ -308,6 +318,13 @@ export default function GridChangelog() {
   };
 
   const handleResetDefaults = () => {
+    if (!isAdmin) {
+      toast.error(
+        "Akses Ditolak",
+        "Hanya akun Administrator yang diizinkan mereset data changelog."
+      );
+      return;
+    }
     setUpdates(INITIAL_RAW_UPDATES);
     try {
       localStorage.removeItem("nexvps_custom_changelog_updates");
@@ -330,36 +347,45 @@ export default function GridChangelog() {
           All notable changes, automated failovers, and security updates deployed to the NexVps Cloud Platform.
         </p>
 
-        {/* Action button bar */}
-        <div className="flex items-center justify-center gap-3 pt-2">
-          <button
-            type="button"
-            onClick={() => setShowAddForm(!showAddForm)}
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 text-xs font-semibold rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 transition-all cursor-pointer shadow-sm"
-          >
-            <Plus className="size-3.5" />
-            <span>{showAddForm ? "Tutup Form" : "Simulasi Tambah Update"}</span>
-          </button>
+        {/* Action button bar - Hanya ditampilkan untuk akun Admin */}
+        {isAdmin && (
+          <div className="flex flex-col items-center justify-center gap-2.5 pt-2 animate-in fade-in slide-in-from-top-2">
+            <div className="flex flex-wrap items-center justify-center gap-2.5">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-semibold rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 shadow-sm">
+                <ShieldCheck className="size-3.5 text-cyan-400" />
+                <span>Admin Mode</span>
+              </span>
 
-          <button
-            type="button"
-            onClick={handleResetDefaults}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-xl text-slate-500 hover:text-slate-300 hover:bg-slate-800 transition-all cursor-pointer"
-            title="Reset ke default"
-          >
-            <RotateCcw className="size-3" />
-            <span>Reset</span>
-          </button>
-        </div>
+              <button
+                type="button"
+                onClick={() => setShowAddForm(!showAddForm)}
+                className="inline-flex items-center gap-2 px-3.5 py-1 text-xs font-semibold rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 transition-all cursor-pointer shadow-sm"
+              >
+                <Plus className="size-3.5" />
+                <span>{showAddForm ? "Tutup Form" : "Tambah Catatan Rilis Baru"}</span>
+              </button>
 
-        {/* Live Rule Banner */}
-        <div className="inline-block mt-2 text-xs font-mono text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-1">
-          Aturan Versi: <span className="text-cyan-400 font-semibold">v1.0.0</span> ➔ 3 Fitur Baru / 2 Perbaikan / 2 Bug Fixes ➔ <span className="text-cyan-400 font-semibold">v1.2.0</span> & berulang.
-        </div>
+              <button
+                type="button"
+                onClick={handleResetDefaults}
+                className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-xl text-slate-500 hover:text-slate-300 hover:bg-slate-800 transition-all cursor-pointer"
+                title="Reset ke default"
+              >
+                <RotateCcw className="size-3" />
+                <span>Reset</span>
+              </button>
+            </div>
+
+            {/* Live Rule Banner */}
+            <div className="inline-block text-xs font-mono text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-1">
+              Aturan Versi: <span className="text-cyan-400 font-semibold">v1.0.0</span> ➔ 3 Fitur Baru / 2 Perbaikan / 2 Bug Fixes ➔ <span className="text-cyan-400 font-semibold">v1.2.0</span> & berulang.
+            </div>
+          </div>
+        )}
       </div>
 
-      {/* Interactive Form for adding new updates dynamically */}
-      {showAddForm && (
+      {/* Interactive Form for adding new updates dynamically (Hanya untuk Admin) */}
+      {isAdmin && showAddForm && (
         <form
           onSubmit={handleAddUpdate}
           className="mb-8 p-5 rounded-2xl bg-white dark:bg-slate-900 border border-cyan-500/30 max-w-xl mx-auto shadow-xl space-y-4 animate-in fade-in slide-in-from-top-4"
