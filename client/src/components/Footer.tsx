@@ -16,7 +16,7 @@ import {
 } from 'lucide-react';
 
 interface FooterProps {
-  onNavigateTab?: (tab: 'store' | 'servers' | 'admin') => void;
+  onNavigateTab?: (tab: 'store' | 'servers' | 'admin' | 'changelog') => void;
   onOpenAuth?: (tab?: 'login' | 'register') => void;
 }
 
@@ -42,7 +42,7 @@ export default function Footer({ onNavigateTab, onOpenAuth }: FooterProps) {
     },
   };
 
-  const handleNav = (tab: 'store' | 'servers' | 'admin') => {
+  const handleNav = (tab: 'store' | 'servers' | 'admin' | 'changelog') => {
     if (onNavigateTab) {
       onNavigateTab(tab);
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -266,6 +266,17 @@ export default function Footer({ onNavigateTab, onOpenAuth }: FooterProps) {
                   <span>Admin Setup</span>
                   <span className="ml-2 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/40 px-2 py-0.2 text-[9px] font-bold">
                     STAFF
+                  </span>
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => handleNav('changelog')}
+                  className="group flex items-center transition-colors hover:text-cyan-400 cursor-pointer"
+                >
+                  <span>Changelog & Roadmap</span>
+                  <span className="ml-2 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 px-2 py-0.2 text-[9px] font-bold">
+                    v2.0.0
                   </span>
                 </button>
               </li>

@@ -22,8 +22,8 @@ import SwitchAnimatedTheme from './SwitchAnimatedTheme';
 import { DropdownMenuNotifications } from './DropdownMenuNotifications';
 
 interface AppSidebarNavProps {
-  currentTab: 'store' | 'servers' | 'admin';
-  setCurrentTab: (tab: 'store' | 'servers' | 'admin') => void;
+  currentTab: 'store' | 'servers' | 'admin' | 'changelog';
+  setCurrentTab: (tab: 'store' | 'servers' | 'admin' | 'changelog') => void;
   activeServersCount: number;
   onOpenAuth: (defaultTab?: 'login' | 'register', adminOnly?: boolean) => void;
 }
@@ -61,6 +61,7 @@ export const AppSidebarNav: React.FC<AppSidebarNavProps> = ({
     { title: 'Business Cloud (2 vCPU, 4 GB)', cat: 'Paket VPS', action: () => { setCurrentTab('store'); setSearchOpen(false); } },
     { title: 'Enterprise Power (4 vCPU, 8 GB)', cat: 'Paket VPS', action: () => { setCurrentTab('store'); setSearchOpen(false); } },
     { title: 'Server Saya & Live Status', cat: 'Navigasi', action: () => { setCurrentTab('servers'); setSearchOpen(false); } },
+    { title: 'Changelog Platform & Roadmap', cat: 'Navigasi', action: () => { setCurrentTab('changelog'); setSearchOpen(false); } },
     { title: 'Admin & Pengaturan Tarif', cat: 'Admin', action: () => { setCurrentTab('admin'); setSearchOpen(false); } },
     { title: 'Dokumentasi UpCloud API 1.3', cat: 'Docs', action: () => { window.open('https://developers.upcloud.com/api/1.3', '_blank'); setSearchOpen(false); } },
   ].filter(item => item.title.toLowerCase().includes(searchQuery.toLowerCase()) || item.cat.toLowerCase().includes(searchQuery.toLowerCase()));
@@ -80,7 +81,8 @@ export const AppSidebarNav: React.FC<AppSidebarNavProps> = ({
             <span className="text-slate-600">/</span>
             <span className="text-slate-200">
               {currentTab === 'store' ? 'Katalog Paket VPS' :
-               currentTab === 'servers' ? 'Server Saya' : 'Panel Administrator'}
+               currentTab === 'servers' ? 'Server Saya' :
+               currentTab === 'changelog' ? 'Changelog Platform' : 'Panel Administrator'}
             </span>
           </nav>
         </div>

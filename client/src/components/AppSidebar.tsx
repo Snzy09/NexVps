@@ -43,8 +43,8 @@ import {
 } from './ui/sidebar';
 
 interface AppSidebarProps {
-  currentTab: 'store' | 'servers' | 'admin';
-  setCurrentTab: (tab: 'store' | 'servers' | 'admin') => void;
+  currentTab: 'store' | 'servers' | 'admin' | 'changelog';
+  setCurrentTab: (tab: 'store' | 'servers' | 'admin' | 'changelog') => void;
   activeServersCount: number;
   onOpenAuth: (defaultTab?: 'login' | 'register', adminOnly?: boolean) => void;
   collapsible?: 'hidden' | 'dock' | 'none';
@@ -146,6 +146,17 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
                 <SidebarLabel>Login Admin</SidebarLabel>
               </SidebarItem>
             )}
+
+            {/* Changelog & Catatan Rilis */}
+            <SidebarItem
+              tooltip="Changelog Platform"
+              isCurrent={currentTab === 'changelog'}
+              onClick={() => setCurrentTab('changelog')}
+              badge="v2.0.0"
+            >
+              <Sparkles className="h-4 w-4 shrink-0 text-cyan-400" />
+              <SidebarLabel>Changelog</SidebarLabel>
+            </SidebarItem>
 
             {/* Payment & Gateway */}
             <SidebarItem
