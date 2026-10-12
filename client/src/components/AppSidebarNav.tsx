@@ -186,14 +186,6 @@ export const AppSidebarNav: React.FC<AppSidebarNavProps> = ({
 
                   <div className="my-1 border-t border-slate-200 dark:border-slate-800" />
 
-                  {/* Theme Switcher in Profile Menu */}
-                  <div className="px-3 py-1.5 flex items-center justify-between">
-                    <span className="text-xs font-medium text-slate-700 dark:text-slate-300">Tema (Stretchy)</span>
-                    <SwitchAnimatedTheme variant="stretchy" size="sm" showLabel={false} />
-                  </div>
-
-                  <div className="my-1 border-t border-slate-200 dark:border-slate-800" />
-
                   <button
                     onClick={() => { logout(); setProfileOpen(false); }}
                     className="w-full text-left px-3 py-2 rounded-xl text-xs text-rose-600 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300 hover:bg-rose-50 dark:hover:bg-rose-950/30 flex items-center gap-2 cursor-pointer transition-colors"

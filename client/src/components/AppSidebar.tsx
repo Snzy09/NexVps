@@ -23,7 +23,6 @@ import {
   User
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
-import SwitchAnimatedTheme from './SwitchAnimatedTheme';
 import {
   Sidebar,
   SidebarHeader,
@@ -315,14 +314,6 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
                     <span>Panel Administrator</span>
                   </button>
                 )}
-
-                <div className="my-1 border-t border-slate-200 dark:border-slate-800" />
-
-                {/* Theme Switcher in Profile Menu */}
-                <div className="px-3 py-1.5 flex items-center justify-between">
-                  <span className="text-xs font-medium text-slate-700 dark:text-slate-300">Tema Tampilan</span>
-                  <SwitchAnimatedTheme variant="stretchy" size="sm" showLabel={false} />
-                </div>
 
                 <div className="my-1 border-t border-slate-200 dark:border-slate-800" />
 
