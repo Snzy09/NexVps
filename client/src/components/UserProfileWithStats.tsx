@@ -219,46 +219,46 @@ export default function UserProfileWithStats({
     if (totalSpending < 100000) {
       return {
         level: "Bronze",
-        badgeStyle: "bg-amber-700/20 text-amber-500 border-amber-600/30",
-        iconColor: "text-amber-500",
-        iconBg: "bg-amber-500/10 border-amber-500/20",
-        textColor: "text-amber-500",
+        badgeStyle: "bg-amber-500/15 dark:bg-amber-700/25 text-amber-700 dark:text-amber-400 border-amber-500/30 dark:border-amber-600/30",
+        iconColor: "text-amber-700 dark:text-amber-400",
+        iconBg: "bg-amber-500/15 dark:bg-amber-500/10 border-amber-500/30 dark:border-amber-500/20",
+        textColor: "text-amber-700 dark:text-amber-400",
         desc: "Belanja < Rp 100rb"
       };
     } else if (totalSpending < 200000) {
       return {
         level: "Silver",
-        badgeStyle: "bg-slate-400/20 text-slate-300 border-slate-400/30",
-        iconColor: "text-slate-300",
-        iconBg: "bg-slate-400/10 border-slate-400/20",
-        textColor: "text-slate-300",
+        badgeStyle: "bg-slate-200/80 dark:bg-slate-400/20 text-slate-800 dark:text-slate-200 border-slate-300 dark:border-slate-400/30",
+        iconColor: "text-slate-700 dark:text-slate-300",
+        iconBg: "bg-slate-200/80 dark:bg-slate-400/10 border-slate-300 dark:border-slate-400/20",
+        textColor: "text-slate-800 dark:text-slate-200",
         desc: "Belanja Rp 100rb - 200rb"
       };
     } else if (totalSpending < 500000) {
       return {
         level: "Gold",
-        badgeStyle: "bg-yellow-500/20 text-yellow-400 border-yellow-500/30",
-        iconColor: "text-yellow-400",
-        iconBg: "bg-yellow-400/10 border-yellow-400/20",
-        textColor: "text-yellow-400",
+        badgeStyle: "bg-amber-500/15 dark:bg-yellow-500/20 text-amber-800 dark:text-yellow-400 border-amber-500/30 dark:border-yellow-500/30",
+        iconColor: "text-amber-700 dark:text-yellow-400",
+        iconBg: "bg-amber-500/15 dark:bg-yellow-400/10 border-amber-500/30 dark:border-yellow-400/20",
+        textColor: "text-amber-800 dark:text-yellow-400",
         desc: "Belanja Rp 200rb - 500rb"
       };
     } else if (totalSpending < 1000000) {
       return {
         level: "Master",
-        badgeStyle: "bg-purple-500/20 text-purple-400 border-purple-500/30",
-        iconColor: "text-purple-400",
-        iconBg: "bg-purple-500/10 border-purple-500/20",
-        textColor: "text-purple-400",
+        badgeStyle: "bg-purple-500/15 dark:bg-purple-500/20 text-purple-700 dark:text-purple-400 border-purple-500/30",
+        iconColor: "text-purple-700 dark:text-purple-400",
+        iconBg: "bg-purple-500/15 dark:bg-purple-500/10 border-purple-500/30 dark:border-purple-500/20",
+        textColor: "text-purple-700 dark:text-purple-400",
         desc: "Belanja Rp 500rb - 1jt"
       };
     } else {
       return {
         level: "GrandMaster",
-        badgeStyle: "bg-rose-500/20 text-rose-400 border-rose-500/30",
-        iconColor: "text-rose-400",
-        iconBg: "bg-rose-500/10 border-rose-500/20",
-        textColor: "text-rose-400",
+        badgeStyle: "bg-rose-500/15 dark:bg-rose-500/20 text-rose-700 dark:text-rose-400 border-rose-500/30",
+        iconColor: "text-rose-700 dark:text-rose-400",
+        iconBg: "bg-rose-500/15 dark:bg-rose-500/10 border-rose-500/30 dark:border-rose-500/20",
+        textColor: "text-rose-700 dark:text-rose-400",
         desc: "Belanja > Rp 1jt"
       };
     }

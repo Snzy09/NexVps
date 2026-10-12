@@ -396,27 +396,27 @@ export default function GridChangelog() {
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-slate-300">Deskripsi / Judul Update</label>
+            <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Deskripsi / Judul Update</label>
             <input
               type="text"
               value={newTitle}
               onChange={(e) => setNewTitle(e.target.value)}
               placeholder="Contoh: Auto backup snapshot schedule..."
-              className="w-full px-3.5 py-2 text-sm rounded-xl bg-slate-950 border border-slate-800 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400"
+              className="w-full px-3.5 py-2 text-sm rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
               required
             />
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-slate-300">Kategori Perubahan</label>
+            <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Kategori Perubahan</label>
             <div className="grid grid-cols-3 gap-2">
               <button
                 type="button"
                 onClick={() => setNewType("feature")}
                 className={`py-2 px-3 rounded-xl text-xs font-semibold border transition-all cursor-pointer ${
                   newType === "feature"
-                    ? "bg-cyan-500/20 border-cyan-500 text-cyan-400 shadow-sm"
-                    : "bg-slate-950 border-slate-800 text-slate-400 hover:border-slate-700"
+                    ? "bg-cyan-500/15 border-cyan-500 text-cyan-700 dark:text-cyan-400 shadow-sm"
+                    : "bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-700"
                 }`}
               >
                 + New Feature
@@ -426,8 +426,8 @@ export default function GridChangelog() {
                 onClick={() => setNewType("improvement")}
                 className={`py-2 px-3 rounded-xl text-xs font-semibold border transition-all cursor-pointer ${
                   newType === "improvement"
-                    ? "bg-blue-500/20 border-blue-500 text-blue-400 shadow-sm"
-                    : "bg-slate-950 border-slate-800 text-slate-400 hover:border-slate-700"
+                    ? "bg-blue-500/15 border-blue-500 text-blue-700 dark:text-blue-400 shadow-sm"
+                    : "bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-700"
                 }`}
               >
                 ⚡ Improvement
@@ -437,8 +437,8 @@ export default function GridChangelog() {
                 onClick={() => setNewType("fix")}
                 className={`py-2 px-3 rounded-xl text-xs font-semibold border transition-all cursor-pointer ${
                   newType === "fix"
-                    ? "bg-rose-500/20 border-rose-500 text-rose-400 shadow-sm"
-                    : "bg-slate-950 border-slate-800 text-slate-400 hover:border-slate-700"
+                    ? "bg-rose-500/15 border-rose-500 text-rose-700 dark:text-rose-400 shadow-sm"
+                    : "bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-700"
                 }`}
               >
                 🐛 Bug Fix

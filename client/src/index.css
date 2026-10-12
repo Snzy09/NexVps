@@ -172,74 +172,221 @@ html.light .bg-slate-800\/30:not(.dark):not(.dark *) {
 }
 
 /* Light mode borders */
-html.light .border-slate-900:not(.dark):not(.dark *),
-html.light .border-slate-850:not(.dark):not(.dark *),
-html.light .border-slate-800:not(.dark):not(.dark *),
-html.light .border-slate-800\/80:not(.dark):not(.dark *),
-html.light .border-slate-800\/60:not(.dark):not(.dark *),
-html.light .border-slate-800\/50:not(.dark):not(.dark *),
-html.light .border-slate-800\/40:not(.dark):not(.dark *),
-html.light .border-slate-700:not(.dark):not(.dark *),
-html.light .border-slate-700\/80:not(.dark):not(.dark *),
-html.light .border-slate-700\/60:not(.dark):not(.dark *),
-html.light .border-slate-700\/50:not(.dark):not(.dark *),
-html.light .border-slate-700\/40:not(.dark):not(.dark *) {
-  border-color: #e2e8f0;
+html.light .border-slate-900:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light .border-slate-850:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light .border-slate-800:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light .border-slate-800\/80:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light .border-slate-800\/60:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light .border-slate-800\/50:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light .border-slate-800\/40:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light .border-slate-700:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light .border-slate-700\/80:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light .border-slate-700\/60:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light .border-slate-700\/50:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light .border-slate-700\/40:not(.dark):not(.dark *):not([data-force-dark] *) {
+  border-color: #cbd5e1;
 }
 
 /* Light mode text hierarchy with high WCAG contrast */
-html.light .text-slate-100:not(.dark):not(.dark *),
-html.light .text-slate-200:not(.dark):not(.dark *) {
+html.light .text-slate-100:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light .text-slate-200:not(.dark):not(.dark *):not([data-force-dark] *) {
   color: #0f172a;
 }
 
-html.light .text-slate-300:not(.dark):not(.dark *) {
+html.light .text-slate-300:not(.dark):not(.dark *):not([data-force-dark] *) {
   color: #1e293b;
 }
 
-html.light [class*="text-slate-300\/"]:not(.dark):not(.dark *) {
+html.light [class*="text-slate-300\/"]:not(.dark):not(.dark *):not([data-force-dark] *) {
   color: #334155;
 }
 
-html.light .text-slate-400:not(.dark):not(.dark *) {
+html.light .text-slate-400:not(.dark):not(.dark *):not([data-force-dark] *) {
   color: #475569;
 }
 
-html.light [class*="text-slate-400\/"]:not(.dark):not(.dark *) {
+html.light [class*="text-slate-400\/"]:not(.dark):not(.dark *):not([data-force-dark] *) {
   color: #475569;
 }
 
-html.light .text-slate-500:not(.dark):not(.dark *) {
+html.light .text-slate-500:not(.dark):not(.dark *):not([data-force-dark] *) {
   color: #64748b;
 }
 
-html.light [class*="text-slate-500\/"]:not(.dark):not(.dark *) {
+html.light [class*="text-slate-500\/"]:not(.dark):not(.dark *):not([data-force-dark] *) {
   color: #64748b;
 }
 
-html.light h1.text-white:not(.dark):not(.dark *),
-html.light h2.text-white:not(.dark):not(.dark *),
-html.light h3.text-white:not(.dark):not(.dark *),
-html.light h4.text-white:not(.dark):not(.dark *),
-html.light span.text-white:not(.dark):not(.dark *):not([class*="bg-"]):not([class*="from-"]):not([class*="ring-"]):not(button *),
-html.light p.text-white:not(.dark):not(.dark *),
-html.light div.text-white:not(.dark):not(.dark *):not(button *) {
-  color: #0f172a;
+/* Form Inputs, Textareas, and Selects in Light Mode */
+html.light input:not([type="button"]):not([type="submit"]):not([type="reset"]):not([type="checkbox"]):not([type="radio"]):not(.dark):not(.dark *):not([data-force-dark] *),
+html.light textarea:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light select:not(.dark):not(.dark *):not([data-force-dark] *) {
+  color: #0f172a !important;
+  background-color: #ffffff;
+  border-color: #cbd5e1;
+}
+
+html.light input::placeholder:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light textarea::placeholder:not(.dark):not(.dark *):not([data-force-dark] *) {
+  color: #94a3b8 !important;
+}
+
+html.light input:focus:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light textarea:focus:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light select:focus:not(.dark):not(.dark *):not([data-force-dark] *) {
+  border-color: #06b6d4;
+}
+
+/* Catch-all for white text elements on light backgrounds */
+html.light label.text-white:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light th.text-white:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light td.text-white:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light strong.text-white:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light b.text-white:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light h1.text-white:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light h2.text-white:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light h3.text-white:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light h4.text-white:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light h5.text-white:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light h6.text-white:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light input.text-white:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light textarea.text-white:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light select.text-white:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light p.text-white:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light span.text-white:not(.dark):not(.dark *):not([data-force-dark] *):not(button *):not([class*="bg-cyan-"]):not([class*="bg-blue-"]):not([class*="bg-purple-"]):not([class*="bg-emerald-"]):not([class*="bg-rose-"]):not([class*="bg-amber-"]):not([class*="bg-indigo-"]):not([class*="bg-gradient-"]):not([class*="badge"]),
+html.light div.text-white:not(.dark):not(.dark *):not([data-force-dark] *):not(button *):not([class*="bg-cyan-"]):not([class*="bg-blue-"]):not([class*="bg-purple-"]):not([class*="bg-emerald-"]):not([class*="bg-rose-"]):not([class*="bg-amber-"]):not([class*="bg-indigo-"]):not([class*="bg-gradient-"]) {
+  color: #0f172a !important;
+}
+
+/* High Contrast Accent Colors in Light Mode (WCAG AA Compliant >= 4.5:1) */
+html.light .text-cyan-400:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light .text-cyan-300:not(.dark):not(.dark *):not([data-force-dark] *) {
+  color: #0891b2 !important; /* cyan-600 */
+}
+
+html.light .text-emerald-400:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light .text-emerald-300:not(.dark):not(.dark *):not([data-force-dark] *) {
+  color: #059669 !important; /* emerald-600 */
+}
+
+html.light .text-blue-400:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light .text-blue-300:not(.dark):not(.dark *):not([data-force-dark] *) {
+  color: #2563eb !important; /* blue-600 */
+}
+
+html.light .text-purple-400:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light .text-purple-300:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light .text-violet-400:not(.dark):not(.dark *):not([data-force-dark] *) {
+  color: #7c3aed !important; /* purple-600 */
+}
+
+html.light .text-amber-400:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light .text-amber-300:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light .text-yellow-400:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light .text-yellow-300:not(.dark):not(.dark *):not([data-force-dark] *) {
+  color: #b45309 !important; /* amber-700 */
+}
+
+html.light .text-rose-400:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light .text-rose-300:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light .text-red-400:not(.dark):not(.dark *):not([data-force-dark] *) {
+  color: #e11d48 !important; /* rose-600 */
+}
+
+html.light .text-indigo-400:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light .text-indigo-300:not(.dark):not(.dark *):not([data-force-dark] *) {
+  color: #4f46e5 !important; /* indigo-600 */
+}
+
+/* Light Mode Chip / Pill Tint Backgrounds */
+html.light .bg-cyan-500\/10:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light .bg-cyan-500\/15:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light .bg-cyan-500\/20:not(.dark):not(.dark *):not([data-force-dark] *) {
+  background-color: rgba(8, 145, 178, 0.08) !important;
+}
+
+html.light .bg-emerald-500\/10:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light .bg-emerald-500\/15:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light .bg-emerald-500\/20:not(.dark):not(.dark *):not([data-force-dark] *) {
+  background-color: rgba(5, 150, 105, 0.08) !important;
+}
+
+html.light .bg-purple-500\/10:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light .bg-purple-500\/15:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light .bg-purple-500\/20:not(.dark):not(.dark *):not([data-force-dark] *) {
+  background-color: rgba(124, 58, 237, 0.08) !important;
+}
+
+html.light .bg-amber-500\/10:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light .bg-amber-500\/15:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light .bg-yellow-500\/10:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light .bg-yellow-500\/20:not(.dark):not(.dark *):not([data-force-dark] *) {
+  background-color: rgba(180, 83, 9, 0.08) !important;
+}
+
+html.light .bg-rose-500\/10:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light .bg-rose-500\/15:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light .bg-rose-500\/20:not(.dark):not(.dark *):not([data-force-dark] *) {
+  background-color: rgba(225, 29, 72, 0.08) !important;
+}
+
+html.light .bg-blue-500\/10:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light .bg-blue-500\/15:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light .bg-blue-500\/20:not(.dark):not(.dark *):not([data-force-dark] *) {
+  background-color: rgba(37, 99, 235, 0.08) !important;
+}
+
+/* Light mode chips borders */
+html.light .border-cyan-500\/20:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light .border-cyan-500\/30:not(.dark):not(.dark *):not([data-force-dark] *) {
+  border-color: rgba(8, 145, 178, 0.25) !important;
+}
+
+html.light .border-emerald-500\/20:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light .border-emerald-500\/30:not(.dark):not(.dark *):not([data-force-dark] *) {
+  border-color: rgba(5, 150, 105, 0.25) !important;
+}
+
+html.light .border-purple-500\/20:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light .border-purple-500\/30:not(.dark):not(.dark *):not([data-force-dark] *) {
+  border-color: rgba(124, 58, 237, 0.25) !important;
+}
+
+html.light .border-amber-500\/20:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light .border-amber-500\/30:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light .border-yellow-500\/20:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light .border-yellow-500\/30:not(.dark):not(.dark *):not([data-force-dark] *) {
+  border-color: rgba(180, 83, 9, 0.25) !important;
+}
+
+html.light .border-rose-500\/20:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light .border-rose-500\/30:not(.dark):not(.dark *):not([data-force-dark] *) {
+  border-color: rgba(225, 29, 72, 0.25) !important;
+}
+
+html.light .border-blue-500\/20:not(.dark):not(.dark *):not([data-force-dark] *),
+html.light .border-blue-500\/30:not(.dark):not(.dark *):not([data-force-dark] *) {
+  border-color: rgba(37, 99, 235, 0.25) !important;
+}
+
+/* Hover text in light mode */
+html.light .hover\:text-white:hover:not(button[class*="bg-cyan-"]):not(button[class*="bg-blue-"]):not(button[class*="bg-purple-"]):not(button[class*="bg-emerald-"]):not(button[class*="bg-rose-"]):not(button[class*="bg-indigo-"]):not([data-force-dark] *):not(.dark *) {
+  color: #0f172a !important;
 }
 
 /* Card and container shadows in light mode */
-html.light .shadow-2xl:not(.dark):not(.dark *) {
+html.light .shadow-2xl:not(.dark):not(.dark *):not([data-force-dark] *) {
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.06), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
 }
 
-html.light .glow-card:not(.dark):not(.dark *) {
+html.light .glow-card:not(.dark):not(.dark *):not([data-force-dark] *) {
   box-shadow: 0 4px 20px -2px rgba(6, 182, 212, 0.12), 0 2px 6px rgba(0, 0, 0, 0.04);
 }
 
-html.light .hover\:bg-slate-800:hover:not(.dark):not(.dark *) {
+html.light .hover\:bg-slate-800:hover:not(.dark):not(.dark *):not([data-force-dark] *) {
   background-color: #f1f5f9 !important;
 }
 
-html.light .hover\:bg-slate-900:hover:not(.dark):not(.dark *) {
+html.light .hover\:bg-slate-900:hover:not(.dark):not(.dark *):not([data-force-dark] *) {
   background-color: #f8fafc !important;
 }

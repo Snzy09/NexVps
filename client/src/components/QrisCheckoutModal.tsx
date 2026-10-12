@@ -173,26 +173,26 @@ export const QrisCheckoutModal: React.FC<QrisCheckoutModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md overflow-y-auto">
-      <div className="relative w-full max-w-2xl bg-slate-900 border border-slate-800 rounded-3xl shadow-2xl overflow-hidden my-8">
+      <div className="relative w-full max-w-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-2xl overflow-hidden my-8">
         
         {/* Modal Header */}
-        <div className="flex items-center justify-between p-6 border-b border-slate-800 bg-slate-950/50">
+        <div className="flex items-center justify-between p-6 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/50">
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 font-mono">
+              <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border border-cyan-500/20 font-mono">
                 {currentOrder.orderNumber}
               </span>
-              <span className="text-xs text-slate-400">
+              <span className="text-xs text-slate-500 dark:text-slate-400">
                 {new Date(currentOrder.createdAt).toLocaleTimeString('id-ID')}
               </span>
             </div>
-            <h3 className="text-xl font-bold text-white mt-1">
+            <h3 className="text-xl font-bold text-slate-900 dark:text-white mt-1">
               {isPaid ? 'Pembayaran Sukses — VPS Provisioning' : 'Selesaikan Pembayaran QRIS'}
             </h3>
           </div>
           <button
             onClick={onClose}
-            className="w-9 h-9 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition-colors"
+            className="w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white flex items-center justify-center transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -227,40 +227,40 @@ export const QrisCheckoutModal: React.FC<QrisCheckoutModalProps> = ({
                 </div>
 
                 {/* Expiry countdown */}
-                <div className="inline-flex items-center gap-2 mt-4 px-3 py-1.5 rounded-full bg-slate-800/80 border border-slate-700 text-xs text-slate-300">
-                  <Clock className="w-4 h-4 text-cyan-400" />
-                  <span>Sisa Waktu Pembayaran: <strong className="text-cyan-400 font-mono">{timeLeft}</strong></span>
+                <div className="inline-flex items-center gap-2 mt-4 px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-xs text-slate-700 dark:text-slate-300">
+                  <Clock className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
+                  <span>Sisa Waktu Pembayaran: <strong className="text-cyan-600 dark:text-cyan-400 font-mono">{timeLeft}</strong></span>
                 </div>
               </div>
 
               {/* Exact Amount To Pay */}
-              <div className="p-5 rounded-2xl bg-slate-950 border border-slate-800 text-center space-y-2">
-                <p className="text-xs text-slate-400 uppercase tracking-wider font-semibold">
+              <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-center space-y-2">
+                <p className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">
                   Nominal yang Harus Ditransfer (Termasuk Kode Unik):
                 </p>
                 <div className="flex items-center justify-center gap-2">
-                  <span className="text-3xl sm:text-4xl font-black text-cyan-400 font-mono">
+                  <span className="text-3xl sm:text-4xl font-black text-cyan-600 dark:text-cyan-400 font-mono">
                     Rp {currentOrder.totalAmountIdr.toLocaleString('id-ID')}
                   </span>
                   <button
                     onClick={() => copyToClipboard(currentOrder.totalAmountIdr.toString(), setCopiedAmount)}
-                    className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-all text-xs flex items-center gap-1"
+                    className="p-2 rounded-xl bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-all text-xs flex items-center gap-1 cursor-pointer"
                     title="Salin Nominal"
                   >
-                    {copiedAmount ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
+                    {copiedAmount ? <Check className="w-4 h-4 text-emerald-500 dark:text-emerald-400" /> : <Copy className="w-4 h-4" />}
                     <span>{copiedAmount ? 'Disalin' : 'Salin'}</span>
                   </button>
                 </div>
                 {currentOrder.amountUniq && (
-                  <p className="text-[11px] text-amber-400">
+                  <p className="text-[11px] text-amber-600 dark:text-amber-400 font-medium">
                     *Wajib transfer sesuai nominal hingga digit terakhir agar sistem UpCloud memproses VPS otomatis!
                   </p>
                 )}
               </div>
 
               {/* Instructions */}
-              <div className="text-left text-xs text-slate-400 bg-slate-950/60 p-4 rounded-2xl border border-slate-800 space-y-1.5">
-                <p className="font-semibold text-slate-300 mb-1">Cara Pembayaran QRIS:</p>
+              <div className="text-left text-xs text-slate-600 dark:text-slate-400 bg-slate-50 dark:bg-slate-950/60 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-1.5">
+                <p className="font-semibold text-slate-900 dark:text-slate-300 mb-1">Cara Pembayaran QRIS:</p>
                 <p>1. Buka aplikasi m-Banking (BCA, Mandiri, BRI, BNI) atau e-Wallet (GoPay, OVO, Dana, ShopeePay).</p>
                 <p>2. Pilih menu <strong>Scan QRIS</strong> dan arahkan kamera ke kode QR di atas.</p>
                 <p>3. Pastikan nominal pembayaran adalah <strong>Rp {currentOrder.totalAmountIdr.toLocaleString('id-ID')}</strong>.</p>
@@ -357,27 +357,27 @@ export const QrisCheckoutModal: React.FC<QrisCheckoutModalProps> = ({
               </div>
 
               {/* Progress Milestones */}
-              <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-3 text-xs">
-                <div className="flex items-center gap-3 text-emerald-400">
+              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-3 text-xs">
+                <div className="flex items-center gap-3 text-emerald-600 dark:text-emerald-400">
                   <CheckCircle2 className="w-4 h-4 shrink-0" />
                   <span>Pembayaran QRIS Terkonfirmasi Lunas</span>
                 </div>
-                <div className="flex items-center gap-3 text-emerald-400">
+                <div className="flex items-center gap-3 text-emerald-600 dark:text-emerald-400">
                   <CheckCircle2 className="w-4 h-4 shrink-0" />
                   <span>Request Pembuatan Server Dikirim ke UpCloud API 1.3</span>
                 </div>
                 {isVpsError ? (
-                  <div className="flex items-center gap-3 text-rose-400">
+                  <div className="flex items-center gap-3 text-rose-600 dark:text-rose-400">
                     <AlertTriangle className="w-4 h-4 shrink-0" />
                     <span>Status: Gagal — {currentOrder.errorMessage || 'UpCloud mengembalikan status error'}</span>
                   </div>
                 ) : (
                   <>
-                    <div className={`flex items-center gap-3 ${currentOrder.serverUuid ? 'text-emerald-400' : 'text-slate-500'}`}>
+                    <div className={`flex items-center gap-3 ${currentOrder.serverUuid ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-500'}`}>
                       {currentOrder.serverUuid ? <CheckCircle2 className="w-4 h-4 shrink-0" /> : <Loader2 className="w-4 h-4 animate-spin shrink-0" />}
                       <span>UUID Server UpCloud Dialokasikan: {currentOrder.serverUuid || 'Menunggu...'}</span>
                     </div>
-                    <div className={`flex items-center gap-3 ${isVpsActive ? 'text-emerald-400' : 'text-cyan-400'}`}>
+                    <div className={`flex items-center gap-3 ${isVpsActive ? 'text-emerald-600 dark:text-emerald-400' : 'text-cyan-600 dark:text-cyan-400'}`}>
                       {isVpsActive ? <CheckCircle2 className="w-4 h-4 shrink-0" /> : <Loader2 className="w-4 h-4 animate-spin shrink-0" />}
                       <span>Inisialisasi Cloud-Init & IP Publik: {currentOrder.serverIp || 'Sedang proses...'}</span>
                     </div>
@@ -387,61 +387,61 @@ export const QrisCheckoutModal: React.FC<QrisCheckoutModalProps> = ({
 
               {/* Server Access Credentials Box */}
               {currentOrder.serverIp && (
-                <div className="p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-4">
-                  <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-                    <h5 className="font-bold text-white text-sm flex items-center gap-2">
-                      <Terminal className="w-4 h-4 text-cyan-400" />
+                <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-4">
+                  <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
+                    <h5 className="font-bold text-slate-900 dark:text-white text-sm flex items-center gap-2">
+                      <Terminal className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
                       Detail Akses Server VPS
                     </h5>
-                    <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[11px] font-mono">
+                    <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 text-[11px] font-mono">
                       ONLINE
                     </span>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                    <div className="p-3 rounded-xl bg-slate-900 border border-slate-800">
-                      <span className="text-slate-400 block text-[11px]">IP Publik (IPv4):</span>
-                      <span className="text-cyan-400 font-mono font-bold text-sm">{currentOrder.serverIp}</span>
+                    <div className="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+                      <span className="text-slate-500 dark:text-slate-400 block text-[11px]">IP Publik (IPv4):</span>
+                      <span className="text-cyan-600 dark:text-cyan-400 font-mono font-bold text-sm">{currentOrder.serverIp}</span>
                     </div>
 
-                    <div className="p-3 rounded-xl bg-slate-900 border border-slate-800">
-                      <span className="text-slate-400 block text-[11px]">Username SSH:</span>
-                      <span className="text-white font-mono font-bold text-sm">root</span>
+                    <div className="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+                      <span className="text-slate-500 dark:text-slate-400 block text-[11px]">Username SSH:</span>
+                      <span className="text-slate-900 dark:text-white font-mono font-bold text-sm">root</span>
                     </div>
 
-                    <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 sm:col-span-2">
+                    <div className="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 sm:col-span-2">
                       <div className="flex items-center justify-between mb-1">
-                        <span className="text-slate-400 text-[11px]">Password Root:</span>
+                        <span className="text-slate-500 dark:text-slate-400 text-[11px]">Password Root:</span>
                         <div className="flex items-center gap-2">
                           <button
                             onClick={() => setShowPassword(!showPassword)}
-                            className="text-slate-400 hover:text-white"
+                            className="text-slate-400 hover:text-slate-700 dark:text-slate-400 dark:hover:text-white cursor-pointer"
                           >
-                            {showPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5 text-cyan-400" />}
+                            {showPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400" />}
                           </button>
                           <button
                             onClick={() => copyToClipboard(currentOrder.rootPassword, setCopiedPassword)}
-                            className="text-cyan-400 hover:text-cyan-300 flex items-center gap-1 text-[11px]"
+                            className="text-cyan-600 dark:text-cyan-400 hover:text-cyan-500 dark:hover:text-cyan-300 flex items-center gap-1 text-[11px] cursor-pointer"
                           >
-                            {copiedPassword ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                            {copiedPassword ? <Check className="w-3 h-3 text-emerald-500 dark:text-emerald-400" /> : <Copy className="w-3 h-3" />}
                             <span>{copiedPassword ? 'Tersalin' : 'Salin'}</span>
                           </button>
                         </div>
                       </div>
-                      <span className="text-white font-mono text-sm">
+                      <span className="text-slate-900 dark:text-white font-mono text-sm">
                         {showPassword ? currentOrder.rootPassword : '••••••••••••••••'}
                       </span>
                     </div>
                   </div>
 
                   {/* One-click SSH Command */}
-                  <div className="p-3.5 rounded-xl bg-slate-900 border border-slate-800 space-y-1.5">
-                    <span className="text-[11px] text-slate-400 block">Perintah Akses Terminal:</span>
+                  <div className="p-3.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-1.5">
+                    <span className="text-[11px] text-slate-500 dark:text-slate-400 block">Perintah Akses Terminal:</span>
                     <div className="flex items-center justify-between gap-2 bg-slate-950 px-3 py-2 rounded-lg font-mono text-xs text-emerald-400">
                       <span className="truncate">ssh root@{currentOrder.serverIp}</span>
                       <button
                         onClick={() => copyToClipboard(`ssh root@${currentOrder.serverIp}`, setCopiedSsh)}
-                        className="text-slate-400 hover:text-white shrink-0"
+                        className="text-slate-400 hover:text-white shrink-0 cursor-pointer"
                         title="Salin Perintah SSH"
                       >
                         {copiedSsh ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}

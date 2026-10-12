@@ -50,7 +50,7 @@ export default function Footer({ onNavigateTab, onOpenAuth }: FooterProps) {
   };
 
   return (
-    <footer className="relative z-10 overflow-hidden border-t border-white/5 bg-[#03050c] pt-24 pb-10 text-white mt-24">
+    <footer className="relative z-10 overflow-hidden border-t border-white/5 bg-[#03050c] pt-24 pb-10 text-white mt-24 dark" data-force-dark="true">
       {/* Background Enhancements */}
       <div 
         className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] [mask-image:radial-gradient(ellipse_80%_60%_at_50%_0%,#000_10%,transparent_100%)] bg-[size:4rem_4rem]" 

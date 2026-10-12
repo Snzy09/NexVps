@@ -97,23 +97,23 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md overflow-y-auto">
-      <div className="relative w-full max-w-md bg-slate-900 border border-slate-800 rounded-3xl shadow-2xl overflow-hidden my-8 animate-in fade-in zoom-in-95 duration-200">
+      <div className="relative w-full max-w-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-2xl overflow-hidden my-8 animate-in fade-in zoom-in-95 duration-200">
         
         {/* Modal Top Header */}
-        <div className="flex items-center justify-between p-6 border-b border-slate-800 bg-slate-950/60">
+        <div className="flex items-center justify-between p-6 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/60">
           <div className="flex items-center gap-3">
             <div className={`w-10 h-10 rounded-2xl flex items-center justify-center shadow-lg ${
               adminOnlyPrompt 
-                ? 'bg-purple-500/10 text-purple-400 border border-purple-500/20' 
-                : 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20'
+                ? 'bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20' 
+                : 'bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border border-cyan-500/20'
             }`}>
               {adminOnlyPrompt ? <ShieldCheck className="w-5 h-5" /> : <User className="w-5 h-5" />}
             </div>
             <div>
-              <h3 className="text-lg font-bold text-white">
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white">
                 {adminOnlyPrompt ? 'Autentikasi Administrator' : 'Akun Pengguna NexVps'}
               </h3>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-500 dark:text-slate-400">
                 {adminOnlyPrompt ? 'Login khusus akun admin untuk mengelola cloud' : 'Silakan login untuk memesan & mengelola VPS Anda'}
               </p>
             </div>
@@ -121,7 +121,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
+            className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white flex items-center justify-center transition-colors cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
@@ -130,9 +130,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         {/* Admin Prompt Notice if forced */}
         {adminOnlyPrompt ? (
           <div className="px-6 pt-4 pb-1">
-            <div className="p-3.5 rounded-2xl bg-purple-500/10 border border-purple-500/20 text-xs text-purple-300 flex items-center gap-2.5">
-              <ShieldCheck className="w-4 h-4 shrink-0 text-purple-400" />
-              <p className="text-xs text-purple-200">
+            <div className="p-3.5 rounded-2xl bg-purple-500/10 border border-purple-500/20 text-xs text-purple-700 dark:text-purple-300 flex items-center gap-2.5">
+              <ShieldCheck className="w-4 h-4 shrink-0 text-purple-600 dark:text-purple-400" />
+              <p className="text-xs text-purple-800 dark:text-purple-200">
                 Silakan masuk dengan email dan password Administrator untuk melanjutkan.
               </p>
             </div>
@@ -140,14 +140,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         ) : (
           /* Tab Switcher */
           <div className="px-6 pt-4">
-            <div className="grid grid-cols-2 p-1 rounded-xl bg-slate-950 border border-slate-800 text-xs font-semibold">
+            <div className="grid grid-cols-2 p-1 rounded-xl bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs font-semibold">
               <button
                 type="button"
                 onClick={() => { setTab('login'); setError(null); }}
                 className={`py-2 rounded-lg transition-all cursor-pointer ${
                   tab === 'login'
-                    ? 'bg-slate-800 text-cyan-400 shadow'
-                    : 'text-slate-400 hover:text-white'
+                    ? 'bg-white dark:bg-slate-800 text-cyan-600 dark:text-cyan-400 shadow-sm'
+                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
                 Masuk (Login)
@@ -157,8 +157,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 onClick={() => { setTab('register'); setError(null); }}
                 className={`py-2 rounded-lg transition-all cursor-pointer ${
                   tab === 'register'
-                    ? 'bg-slate-800 text-cyan-400 shadow'
-                    : 'text-slate-400 hover:text-white'
+                    ? 'bg-white dark:bg-slate-800 text-cyan-600 dark:text-cyan-400 shadow-sm'
+                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
                 Daftar Akun Baru
@@ -170,46 +170,46 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         {/* Form Body */}
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           {error && (
-            <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/20 text-xs text-rose-300 flex items-start gap-2 animate-in fade-in">
-              <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-rose-400" />
+            <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/20 text-xs text-rose-700 dark:text-rose-300 flex items-start gap-2 animate-in fade-in">
+              <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-rose-600 dark:text-rose-400" />
               <span>{error}</span>
             </div>
           )}
 
           {tab === 'register' && !adminOnlyPrompt && (
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
-                <User className="w-3.5 h-3.5 text-cyan-400" />
+              <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+                <User className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400" />
                 <span>Nama Lengkap:</span>
               </label>
               <div className="relative">
-                <User className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                <User className="w-4 h-4 text-slate-400 dark:text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
                 <input
                   type="text"
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Contoh: Budi Santoso"
-                  className="w-full pl-10 pr-4 py-3 rounded-2xl bg-slate-950/90 border border-slate-800 hover:border-slate-700 text-white text-xs placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all"
+                  className="w-full pl-10 pr-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-950/90 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 text-slate-900 dark:text-white text-xs placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all"
                 />
               </div>
             </div>
           )}
 
           <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
-              <Mail className="w-3.5 h-3.5 text-cyan-400" />
+            <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+              <Mail className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400" />
               <span>Alamat Email:</span>
             </label>
             <div className="relative">
-              <Mail className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <Mail className="w-4 h-4 text-slate-400 dark:text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="nama@email.com"
-                className={`w-full pl-10 pr-4 py-3 rounded-2xl bg-slate-950/90 border border-slate-800 hover:border-slate-700 text-white text-xs placeholder-slate-500 focus:outline-none font-mono transition-all ${
+                className={`w-full pl-10 pr-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-950/90 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 text-slate-900 dark:text-white text-xs placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none font-mono transition-all ${
                   adminOnlyPrompt ? 'focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20' : 'focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20'
                 }`}
               />
@@ -217,26 +217,26 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
-              <Lock className="w-3.5 h-3.5 text-cyan-400" />
+            <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+              <Lock className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400" />
               <span>Password:</span>
             </label>
             <div className="relative">
-              <Lock className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <Lock className="w-4 h-4 text-slate-400 dark:text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
                 type={showPassword ? 'text' : 'password'}
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Password akun"
-                className={`w-full pl-10 pr-11 py-3 rounded-2xl bg-slate-950/90 border border-slate-800 hover:border-slate-700 text-white text-xs placeholder-slate-500 focus:outline-none font-mono transition-all ${
+                className={`w-full pl-10 pr-11 py-3 rounded-2xl bg-slate-50 dark:bg-slate-950/90 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 text-slate-900 dark:text-white text-xs placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none font-mono transition-all ${
                   adminOnlyPrompt ? 'focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20' : 'focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20'
                 }`}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white cursor-pointer"
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 dark:text-slate-500 dark:hover:text-white cursor-pointer"
                 title={showPassword ? 'Sembunyikan password' : 'Lihat password'}
               >
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -268,9 +268,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             <>
               <div className="relative py-2 text-center">
                 <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-slate-800" />
+                  <div className="w-full border-t border-slate-200 dark:border-slate-800" />
                 </div>
-                <span className="relative px-3 bg-slate-900 text-[11px] text-slate-500">
+                <span className="relative px-3 bg-white dark:bg-slate-900 text-[11px] text-slate-500">
                   atau masuk dengan
                 </span>
               </div>
@@ -279,7 +279,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 type="button"
                 onClick={handleGoogleLogin}
                 disabled={loading}
-                className="w-full py-2.5 rounded-xl bg-slate-950 hover:bg-slate-800 border border-slate-800 text-white text-xs font-medium flex items-center justify-center gap-2.5 transition-all cursor-pointer disabled:opacity-50"
+                className="w-full py-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 dark:bg-slate-950 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-white text-xs font-medium flex items-center justify-center gap-2.5 transition-all cursor-pointer disabled:opacity-50"
               >
                 <svg className="w-4 h-4" viewBox="0 0 24 24">
                   <path
