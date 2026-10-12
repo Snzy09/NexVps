@@ -23,7 +23,9 @@ import {
   CheckCircle2,
   ExternalLink,
   User as UserIcon,
-  Fingerprint
+  Fingerprint,
+  Wallet,
+  Crown
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/contexts/ToastContext";
@@ -170,14 +172,120 @@ export default function UserProfileWithStats({
   const activeServersCount = userServers.filter((s) => s.vpsStatus === "ACTIVE").length;
   const initials = (user.displayName || user.email.split("@")[0]).substring(0, 2).toUpperCase();
 
+  // Calculate total spending from user orders / servers
+  const totalSpending = React.useMemo(() => {
+    if (!user) return 0;
+    const seenIds = new Set<string>();
+    let sum = 0;
+
+    userServers.forEach((srv) => {
+      seenIds.add(srv.id);
+      sum += srv.totalAmountIdr || srv.baseAmountIdr || 0;
+    });
+
+    try {
+      const rawOrders = localStorage.getItem("nexvps_demo_orders");
+      if (rawOrders) {
+        const orders: Order[] = JSON.parse(rawOrders);
+        orders.forEach((ord) => {
+          if (!seenIds.has(ord.id)) {
+            const matchesUser = 
+              (user.email && ord.customerEmail?.toLowerCase() === user.email.toLowerCase()) ||
+              (user.uid && ord.userId === user.uid);
+            if (matchesUser) {
+              seenIds.add(ord.id);
+              sum += ord.totalAmountIdr || ord.baseAmountIdr || 0;
+            }
+          }
+        });
+      }
+    } catch {}
+
+    // Fallback baseline for demo admin if initial server is counted
+    if (sum === 0 && user.isAdmin) {
+      sum = 150000;
+    }
+
+    return sum;
+  }, [user, userServers]);
+
+  // Determine user level based on total spending:
+  // < 100000: Bronze
+  // >= 100000 && < 200000: Silver
+  // >= 200000 && < 500000: Gold
+  // >= 500000 && < 1000000: Master
+  // >= 1000000: GrandMaster
+  const userTier = React.useMemo(() => {
+    if (totalSpending < 100000) {
+      return {
+        level: "Bronze",
+        badgeStyle: "bg-amber-700/20 text-amber-500 border-amber-600/30",
+        iconColor: "text-amber-500",
+        iconBg: "bg-amber-500/10 border-amber-500/20",
+        textColor: "text-amber-500",
+        desc: "Belanja < Rp 100rb"
+      };
+    } else if (totalSpending < 200000) {
+      return {
+        level: "Silver",
+        badgeStyle: "bg-slate-400/20 text-slate-300 border-slate-400/30",
+        iconColor: "text-slate-300",
+        iconBg: "bg-slate-400/10 border-slate-400/20",
+        textColor: "text-slate-300",
+        desc: "Belanja Rp 100rb - 200rb"
+      };
+    } else if (totalSpending < 500000) {
+      return {
+        level: "Gold",
+        badgeStyle: "bg-yellow-500/20 text-yellow-400 border-yellow-500/30",
+        iconColor: "text-yellow-400",
+        iconBg: "bg-yellow-400/10 border-yellow-400/20",
+        textColor: "text-yellow-400",
+        desc: "Belanja Rp 200rb - 500rb"
+      };
+    } else if (totalSpending < 1000000) {
+      return {
+        level: "Master",
+        badgeStyle: "bg-purple-500/20 text-purple-400 border-purple-500/30",
+        iconColor: "text-purple-400",
+        iconBg: "bg-purple-500/10 border-purple-500/20",
+        textColor: "text-purple-400",
+        desc: "Belanja Rp 500rb - 1jt"
+      };
+    } else {
+      return {
+        level: "GrandMaster",
+        badgeStyle: "bg-rose-500/20 text-rose-400 border-rose-500/30",
+        iconColor: "text-rose-400",
+        iconBg: "bg-rose-500/10 border-rose-500/20",
+        textColor: "text-rose-400",
+        desc: "Belanja > Rp 1jt"
+      };
+    }
+  }, [totalSpending]);
+
+  const formattedSpending = React.useMemo(() => {
+    return new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+      maximumFractionDigits: 0
+    }).format(totalSpending);
+  }, [totalSpending]);
+
   return (
     <div className="space-y-6 w-full max-w-7xl mx-auto pb-12 pt-2 sm:pt-4">
       {/* Top Header matching user screenshot */}
       <div className="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-            Profile
-          </h1>
+          <div className="flex items-center gap-2.5">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+              Profile
+            </h1>
+            <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border ${userTier.badgeStyle}`}>
+              <Crown className="size-3" />
+              <span>{userTier.level}</span>
+            </span>
+          </div>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
             Kelola identitas publik, foto profil, dan konfigurasi akun cloud Anda
           </p>
@@ -251,9 +359,15 @@ export default function UserProfileWithStats({
                 @{user.username || user.email.split("@")[0].toLowerCase()}
               </p>
 
-              <p className="text-slate-600 dark:text-slate-300 text-xs mt-1.5 font-medium">
-                {user.title || (user.isAdmin ? "Lead Cloud Architect" : "Product Designer")}
-              </p>
+              <div className="flex items-center justify-center gap-1.5 mt-1.5 flex-wrap">
+                <p className="text-slate-600 dark:text-slate-300 text-xs font-medium">
+                  {user.title || (user.isAdmin ? "Lead Cloud Architect" : "Product Designer")}
+                </p>
+                <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider border ${userTier.badgeStyle}`}>
+                  <Crown className="size-2.5" />
+                  <span>{userTier.level}</span>
+                </span>
+              </div>
 
               <Badge 
                 className="mt-2.5 font-mono text-[11px]" 
@@ -529,54 +643,65 @@ export default function UserProfileWithStats({
             </Card>
           ) : null}
 
-          {/* Stats Cards matching user screenshot */}
+          {/* Stats Cards: Jumlah VPS, Total Pengeluaran & Level Akun */}
           <div className="grid gap-4 sm:grid-cols-3">
-            {/* Card 1: 129 Projects Completed */}
+            {/* Card 1: Jumlah VPS yang Dimiliki */}
             <Card className="border border-slate-200 dark:border-slate-800 shadow-md hover:border-slate-700 transition-all rounded-2xl bg-white dark:bg-slate-900/80">
               <div className="p-5 sm:p-6 flex items-center gap-4">
                 <div className="size-12 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 flex items-center justify-center shrink-0">
-                  <Star className="size-5 text-cyan-400" />
+                  <Server className="size-5 text-cyan-400" />
                 </div>
                 <div className="min-w-0">
                   <p className="text-2xl font-black text-slate-900 dark:text-white leading-none tracking-tight">
-                    {128 + activeServersCount}
+                    {userServers.length} <span className="text-base font-semibold text-slate-400">VPS</span>
                   </p>
-                  <p className="text-slate-500 dark:text-slate-400 text-xs font-medium pt-2 truncate">
-                    Projects Completed
+                  <p className="text-slate-500 dark:text-slate-400 text-xs font-medium pt-2 truncate flex items-center gap-1.5">
+                    <span>VPS Dimiliki</span>
+                    <span className="inline-flex items-center px-1.5 py-0.2 rounded text-[9px] font-bold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                      {activeServersCount} Aktif
+                    </span>
                   </p>
                 </div>
               </div>
             </Card>
 
-            {/* Card 2: 8.5k Team Members */}
-            <Card className="border border-slate-200 dark:border-slate-800 shadow-md hover:border-slate-700 transition-all rounded-2xl bg-white dark:bg-slate-900/80">
-              <div className="p-5 sm:p-6 flex items-center gap-4">
-                <div className="size-12 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center shrink-0">
-                  <Users className="size-5 text-blue-400" />
-                </div>
-                <div className="min-w-0">
-                  <p className="text-2xl font-black text-slate-900 dark:text-white leading-none tracking-tight">
-                    8.5k
-                  </p>
-                  <p className="text-slate-500 dark:text-slate-400 text-xs font-medium pt-2 truncate">
-                    Team Members
-                  </p>
-                </div>
-              </div>
-            </Card>
-
-            {/* Card 3: 99% Satisfaction Rate */}
+            {/* Card 2: Total Pengeluaran */}
             <Card className="border border-slate-200 dark:border-slate-800 shadow-md hover:border-slate-700 transition-all rounded-2xl bg-white dark:bg-slate-900/80">
               <div className="p-5 sm:p-6 flex items-center gap-4">
                 <div className="size-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
-                  <Star className="size-5 text-emerald-400" />
+                  <Wallet className="size-5 text-emerald-400" />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-2xl font-black text-slate-900 dark:text-white leading-none tracking-tight">
-                    99%
+                  <p className="text-2xl font-black text-slate-900 dark:text-white leading-none tracking-tight truncate">
+                    {formattedSpending}
                   </p>
+                  <p className="text-slate-500 dark:text-slate-400 text-xs font-medium pt-2 truncate flex items-center gap-1.5">
+                    <span>Total Pengeluaran</span>
+                    <span className="inline-flex items-center px-1.5 py-0.2 rounded text-[9px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                      QRIS Paid
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </Card>
+
+            {/* Card 3: Level Akun (Bronze, Silver, Gold, Master, GrandMaster) */}
+            <Card className="border border-slate-200 dark:border-slate-800 shadow-md hover:border-slate-700 transition-all rounded-2xl bg-white dark:bg-slate-900/80">
+              <div className="p-5 sm:p-6 flex items-center gap-4">
+                <div className={`size-12 rounded-2xl ${userTier.iconBg} border flex items-center justify-center shrink-0`}>
+                  <Crown className={`size-5 ${userTier.iconColor}`} />
+                </div>
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2">
+                    <p className={`text-2xl font-black ${userTier.textColor} leading-none tracking-tight`}>
+                      {userTier.level}
+                    </p>
+                    <span className={`inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-black uppercase tracking-wider border ${userTier.badgeStyle}`}>
+                      Tier
+                    </span>
+                  </div>
                   <p className="text-slate-500 dark:text-slate-400 text-xs font-medium pt-2 truncate">
-                    Satisfaction Rate
+                    Level Member ({userTier.desc})
                   </p>
                 </div>
               </div>
