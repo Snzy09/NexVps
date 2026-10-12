@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import type { Order, AdminMetrics, VpsPlan } from '../types';
+import { useTheme } from '../contexts/ThemeContext';
 import {
   AreaChart,
   Area,
@@ -50,6 +51,7 @@ export const AdminMetricsCharts: React.FC<AdminMetricsChartsProps> = ({
   plans,
   onRefresh,
 }) => {
+  const { isDark } = useTheme();
   const [range, setRange] = useState<RangeKey>('monthly');
   const [showDropdown, setShowDropdown] = useState<boolean>(false);
 
@@ -178,7 +180,7 @@ export const AdminMetricsCharts: React.FC<AdminMetricsChartsProps> = ({
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
       {/* ----------------- CHART 1: AREA CHART (TREN PENDAPATAN) ----------------- */}
       <div className="lg:col-span-7 flex flex-col">
-        <div className="h-full bg-slate-900/80 rounded-3xl border border-slate-800 p-5 sm:p-6 shadow-xl flex flex-col justify-between relative overflow-hidden backdrop-blur-md">
+        <div className="h-full bg-white dark:bg-slate-900/80 rounded-3xl border border-slate-200 dark:border-slate-800 p-5 sm:p-6 shadow-sm dark:shadow-xl flex flex-col justify-between relative overflow-hidden backdrop-blur-md transition-all">
           {/* Subtle Ambient Glow */}
           <div className="pointer-events-none absolute -top-10 -right-10 w-44 h-44 rounded-full bg-cyan-500/10 blur-3xl" />
 
@@ -187,21 +189,21 @@ export const AdminMetricsCharts: React.FC<AdminMetricsChartsProps> = ({
             <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
               <div>
                 <div className="flex items-center gap-2">
-                  <h3 className="text-base font-bold text-white tracking-tight">
+                  <h3 className="text-base font-bold text-slate-900 dark:text-white tracking-tight">
                     Tren Pertumbuhan Omzet & QRIS
                   </h3>
-                  <span className="flex items-center gap-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 px-2 py-0.5 text-[10px] font-semibold text-cyan-300">
+                  <span className="flex items-center gap-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 px-2 py-0.5 text-[10px] font-semibold text-cyan-700 dark:text-cyan-300">
                     <Sparkles className="w-2.5 h-2.5" />
                     Live
                   </span>
                 </div>
-                <p className="text-xs text-slate-400 mt-0.5">
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                   Arus kas pembayaran UpCloud VPS otomatis
                 </p>
               </div>
 
               {/* Timeframe Range Selector Pills */}
-              <div className="inline-flex items-center gap-1 rounded-2xl bg-slate-950/80 p-1 border border-slate-800/80 shadow-inner">
+              <div className="inline-flex items-center gap-1 rounded-2xl bg-slate-100 dark:bg-slate-950/80 p-1 border border-slate-200 dark:border-slate-800/80 shadow-inner">
                 {rangeFilters.map((item) => (
                   <button
                     key={item.key}
@@ -210,7 +212,7 @@ export const AdminMetricsCharts: React.FC<AdminMetricsChartsProps> = ({
                     className={`rounded-xl px-3 py-1.5 text-xs font-semibold transition-all cursor-pointer ${
                       range === item.key
                         ? 'bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/20'
-                        : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-slate-800/60'
                     }`}
                   >
                     {item.label}
@@ -220,17 +222,17 @@ export const AdminMetricsCharts: React.FC<AdminMetricsChartsProps> = ({
             </div>
 
             {/* Headline Metric Highlight */}
-            <div className="flex items-baseline justify-between py-2 border-b border-slate-800/70 mb-4">
+            <div className="flex items-baseline justify-between py-2 border-b border-slate-100 dark:border-slate-800/70 mb-4">
               <div className="flex items-center gap-3">
-                <span className="text-2xl sm:text-3xl font-black text-white font-mono tracking-tight">
+                <span className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white font-mono tracking-tight">
                   {formatIdr(metrics.totalRevenueIdr || totalDonutAmount)}
                 </span>
-                <span className="inline-flex items-center gap-1 rounded-lg bg-emerald-500/15 border border-emerald-500/30 px-2 py-0.5 text-xs font-bold text-emerald-400">
+                <span className="inline-flex items-center gap-1 rounded-lg bg-emerald-500/15 border border-emerald-500/30 px-2 py-0.5 text-xs font-bold text-emerald-600 dark:text-emerald-400">
                   <TrendingUp className="w-3.5 h-3.5" />
                   +18.4%
                 </span>
               </div>
-              <span className="text-xs text-slate-400 hidden sm:inline">
+              <span className="text-xs text-slate-500 dark:text-slate-400 hidden sm:inline">
                 {metrics.totalOrders} total transaksi tercatat
               </span>
             </div>
@@ -251,7 +253,7 @@ export const AdminMetricsCharts: React.FC<AdminMetricsChartsProps> = ({
                 </defs>
                 <CartesianGrid
                   vertical={false}
-                  stroke="#334155"
+                  stroke={isDark ? "#334155" : "#e2e8f0"}
                   strokeDasharray="3 3"
                   opacity={0.35}
                 />
@@ -260,14 +262,14 @@ export const AdminMetricsCharts: React.FC<AdminMetricsChartsProps> = ({
                   tickLine={false}
                   axisLine={false}
                   tickMargin={10}
-                  stroke="#94a3b8"
+                  stroke={isDark ? "#94a3b8" : "#64748b"}
                   fontSize={11}
                 />
                 <YAxis
                   tickLine={false}
                   axisLine={false}
                   tickMargin={8}
-                  stroke="#94a3b8"
+                  stroke={isDark ? "#94a3b8" : "#64748b"}
                   fontSize={11}
                   tickFormatter={compactIdr}
                   width={55}
@@ -277,12 +279,12 @@ export const AdminMetricsCharts: React.FC<AdminMetricsChartsProps> = ({
                     if (active && payload && payload.length) {
                       const data = payload[0].payload;
                       return (
-                        <div className="rounded-xl border border-slate-700 bg-slate-950/95 p-3 shadow-2xl backdrop-blur-md text-xs font-mono">
-                          <p className="text-slate-400 font-sans mb-1 font-semibold">{data.label}</p>
-                          <p className="text-cyan-400 font-bold text-sm">
+                        <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950/95 p-3 shadow-2xl backdrop-blur-md text-xs font-mono">
+                          <p className="text-slate-500 dark:text-slate-400 font-sans mb-1 font-semibold">{data.label}</p>
+                          <p className="text-cyan-600 dark:text-cyan-400 font-bold text-sm">
                             {formatIdr(data.amount)}
                           </p>
-                          <p className="text-slate-400 text-[11px] mt-0.5">
+                          <p className="text-slate-500 dark:text-slate-400 text-[11px] mt-0.5">
                             {data.orders} Pesanan Masuk
                           </p>
                         </div>
@@ -308,17 +310,17 @@ export const AdminMetricsCharts: React.FC<AdminMetricsChartsProps> = ({
 
       {/* ----------------- CHART 2: DONUT CHART (DISTRIBUSI PAKET CLOUD) ----------------- */}
       <div className="lg:col-span-5 flex flex-col">
-        <div className="h-full bg-slate-900/80 rounded-3xl border border-slate-800 p-5 sm:p-6 shadow-xl flex flex-col justify-between relative overflow-hidden backdrop-blur-md">
+        <div className="h-full bg-white dark:bg-slate-900/80 rounded-3xl border border-slate-200 dark:border-slate-800 p-5 sm:p-6 shadow-sm dark:shadow-xl flex flex-col justify-between relative overflow-hidden backdrop-blur-md transition-all">
           {/* Subtle Ambient Glow */}
           <div className="pointer-events-none absolute -top-12 -left-10 w-44 h-44 rounded-full bg-indigo-500/10 blur-3xl" />
 
           {/* Header & Quick Action Menu */}
           <div className="flex items-start justify-between gap-4 mb-2">
             <div>
-              <h3 className="text-base font-bold text-white tracking-tight">
+              <h3 className="text-base font-bold text-slate-900 dark:text-white tracking-tight">
                 Pangsa Omzet per Paket
               </h3>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                 Distribusi penjualan paket UpCloud MaxIOPS
               </p>
             </div>
@@ -328,19 +330,19 @@ export const AdminMetricsCharts: React.FC<AdminMetricsChartsProps> = ({
               <button
                 type="button"
                 onClick={() => setShowDropdown(!showDropdown)}
-                className="p-1.5 rounded-xl border border-slate-800 bg-slate-950/70 text-slate-400 hover:text-white hover:border-slate-700 transition-all cursor-pointer"
+                className="p-1.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-950/70 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:border-slate-300 dark:hover:border-slate-700 transition-all cursor-pointer"
                 title="Opsi Metrik"
               >
                 <MoreVertical className="w-4 h-4" />
               </button>
 
               {showDropdown && (
-                <div className="absolute right-0 top-9 z-50 w-48 rounded-2xl border border-slate-800 bg-slate-950/95 p-1.5 shadow-2xl backdrop-blur-xl space-y-1">
+                <div className="absolute right-0 top-9 z-50 w-48 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950/95 p-1.5 shadow-2xl backdrop-blur-xl space-y-1">
                   <button
                     onClick={handleExportCsv}
-                    className="w-full flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-semibold text-slate-300 hover:bg-slate-900 hover:text-white transition-colors cursor-pointer text-left"
+                    className="w-full flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-900 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer text-left"
                   >
-                    <Download className="w-3.5 h-3.5 text-cyan-400" />
+                    <Download className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400" />
                     <span>Ekspor CSV</span>
                   </button>
                   <button
@@ -348,9 +350,9 @@ export const AdminMetricsCharts: React.FC<AdminMetricsChartsProps> = ({
                       setShowDropdown(false);
                       onRefresh?.();
                     }}
-                    className="w-full flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-semibold text-slate-300 hover:bg-slate-900 hover:text-white transition-colors cursor-pointer text-left"
+                    className="w-full flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-900 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer text-left"
                   >
-                    <RefreshCcw className="w-3.5 h-3.5 text-emerald-400" />
+                    <RefreshCcw className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                     <span>Sinkronisasi Data</span>
                   </button>
                 </div>
@@ -368,13 +370,13 @@ export const AdminMetricsCharts: React.FC<AdminMetricsChartsProps> = ({
                       const data = payload[0].payload;
                       const percentage = ((data.amount / totalDonutAmount) * 100).toFixed(1);
                       return (
-                        <div className="rounded-xl border border-slate-700 bg-slate-950/95 p-3 shadow-2xl backdrop-blur-md text-xs font-mono">
-                          <p className="text-white font-bold mb-1 flex items-center gap-1.5">
+                        <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950/95 p-3 shadow-2xl backdrop-blur-md text-xs font-mono">
+                          <p className="text-slate-900 dark:text-white font-bold mb-1 flex items-center gap-1.5">
                             <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: data.color }} />
                             {data.name}
                           </p>
-                          <p className="text-cyan-400 font-semibold">{formatIdr(data.amount)}</p>
-                          <p className="text-slate-400 text-[11px] mt-0.5">{percentage}% dari total omzet</p>
+                          <p className="text-cyan-600 dark:text-cyan-400 font-semibold">{formatIdr(data.amount)}</p>
+                          <p className="text-slate-500 dark:text-slate-400 text-[11px] mt-0.5">{percentage}% dari total omzet</p>
                         </div>
                       );
                     }
@@ -407,14 +409,14 @@ export const AdminMetricsCharts: React.FC<AdminMetricsChartsProps> = ({
                             <tspan
                               x={viewBox.cx}
                               y={(viewBox.cy ?? 0) - 12}
-                              className="fill-slate-400 text-[10px] font-semibold uppercase tracking-wider"
+                              className="fill-slate-500 dark:fill-slate-400 text-[10px] font-semibold uppercase tracking-wider"
                             >
                               Total Omzet
                             </tspan>
                             <tspan
                               x={viewBox.cx}
                               y={(viewBox.cy ?? 0) + 12}
-                              className="fill-white text-base font-black tabular-nums font-mono"
+                              className="fill-slate-900 dark:fill-white text-base font-black tabular-nums font-mono"
                             >
                               {compactIdr(totalDonutAmount)}
                             </tspan>
@@ -434,7 +436,7 @@ export const AdminMetricsCharts: React.FC<AdminMetricsChartsProps> = ({
             {donutData.map((item) => (
               <div
                 key={item.id}
-                className="group relative overflow-hidden rounded-2xl border border-slate-800/80 bg-slate-950/60 p-3 transition-all hover:-translate-y-0.5 hover:border-slate-700 hover:shadow-lg"
+                className="group relative overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800/80 bg-slate-50 dark:bg-slate-950/60 p-3 transition-all hover:-translate-y-0.5 hover:border-slate-300 dark:hover:border-slate-700 hover:shadow-md"
               >
                 {/* Subtle tinted glow */}
                 <span
@@ -443,22 +445,22 @@ export const AdminMetricsCharts: React.FC<AdminMetricsChartsProps> = ({
                   style={{ backgroundColor: item.color }}
                 />
                 <div className="flex items-center justify-between gap-1 mb-1">
-                  <span className="flex items-center gap-1.5 text-xs font-bold text-white truncate">
+                  <span className="flex items-center gap-1.5 text-xs font-bold text-slate-900 dark:text-white truncate">
                     <span
                       className="w-2 h-2 rounded-full shrink-0"
                       style={{ backgroundColor: item.color }}
                     />
                     {item.name}
                   </span>
-                  <span className="text-[10px] font-mono text-slate-400 shrink-0">
+                  <span className="text-[10px] font-mono text-slate-500 dark:text-slate-400 shrink-0">
                     {((item.amount / totalDonutAmount) * 100).toFixed(0)}%
                   </span>
                 </div>
                 <div className="flex items-baseline justify-between gap-1 mt-1">
-                  <span className="text-sm font-bold text-cyan-300 font-mono tabular-nums">
+                  <span className="text-sm font-bold text-cyan-600 dark:text-cyan-300 font-mono tabular-nums">
                     {compactIdr(item.amount)}
                   </span>
-                  <span className="inline-flex items-center gap-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 px-1.5 py-0.2 text-[9px] font-bold text-emerald-400">
+                  <span className="inline-flex items-center gap-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 px-1.5 py-0.2 text-[9px] font-bold text-emerald-600 dark:text-emerald-400">
                     <TrendingUp className="w-2.5 h-2.5" />
                     +{compactIdr(item.change)}
                   </span>

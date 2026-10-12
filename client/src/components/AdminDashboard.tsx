@@ -3,6 +3,7 @@ import type { AdminMetrics, AdminSettings, Order, VpsPlan } from '../types';
 import { api } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 import { useToast } from '../contexts/ToastContext';
+import { useTheme } from '../contexts/ThemeContext';
 import GlideSelect from './GlideSelect';
 import HoldButton from './HoldButton';
 import { AdminMetricsCharts } from './AdminMetricsCharts';
@@ -65,6 +66,7 @@ const TRANSACTION_MODE_OPTIONS = [
 
 export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, onOpenAuth, onPlansUpdated }) => {
   const { user, isAdmin, logout } = useAuth();
+  const { isDark } = useTheme();
   const toast = useToast();
 
   const [metrics, setMetrics] = useState<AdminMetrics | null>(null);
@@ -157,16 +159,16 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
   if (!user) {
     return (
       <div className="py-16 max-w-lg mx-auto text-center space-y-6">
-        <div className="p-8 bg-slate-900/80 rounded-3xl border border-slate-800 shadow-2xl space-y-5">
-          <div className="w-16 h-16 rounded-3xl bg-purple-500/10 border border-purple-500/20 text-purple-400 flex items-center justify-center mx-auto shadow-lg shadow-purple-500/10">
+        <div className="p-8 sm:p-10 bg-white dark:bg-slate-900/90 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xl space-y-5">
+          <div className="w-16 h-16 rounded-3xl bg-purple-500/10 border border-purple-500/20 text-purple-600 dark:text-purple-400 flex items-center justify-center mx-auto shadow-lg shadow-purple-500/10">
             <Lock className="w-8 h-8" />
           </div>
           <div>
-            <span className="text-[11px] font-mono uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-purple-500/10 text-purple-400 border border-purple-500/20 font-bold">
+            <span className="text-[11px] font-mono uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20 font-bold">
               Protected Admin Area
             </span>
-            <h2 className="text-2xl font-black text-white mt-2">Halaman Khusus Administrator</h2>
-            <p className="text-xs text-slate-400 mt-2 max-w-sm mx-auto">
+            <h2 className="text-2xl font-black text-slate-900 dark:text-white mt-2">Halaman Khusus Administrator</h2>
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-2 max-w-sm mx-auto">
               Panel ini memerlukan autentikasi akun Administrator NexVps untuk mengakses konfigurasi UpCloud, BuatQRIS, dan tarif paket.
             </p>
           </div>
@@ -183,7 +185,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
             {onBackToStore && (
               <button
                 onClick={onBackToStore}
-                className="w-full py-2.5 text-xs text-slate-400 hover:text-white transition-colors cursor-pointer"
+                className="w-full py-2.5 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer"
               >
                 ← Kembali ke Katalog VPS
               </button>
@@ -198,17 +200,17 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
   if (!isAdmin) {
     return (
       <div className="py-16 max-w-lg mx-auto text-center space-y-6">
-        <div className="p-8 bg-slate-900/80 rounded-3xl border border-rose-500/20 shadow-2xl space-y-5">
-          <div className="w-16 h-16 rounded-3xl bg-rose-500/10 border border-rose-500/20 text-rose-400 flex items-center justify-center mx-auto shadow-lg shadow-rose-500/10">
+        <div className="p-8 sm:p-10 bg-white dark:bg-slate-900/90 rounded-3xl border border-rose-500/20 shadow-xl space-y-5">
+          <div className="w-16 h-16 rounded-3xl bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 flex items-center justify-center mx-auto shadow-lg shadow-rose-500/10">
             <ShieldAlert className="w-8 h-8" />
           </div>
           <div>
-            <span className="text-[11px] font-mono uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20 font-bold">
+            <span className="text-[11px] font-mono uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20 font-bold">
               403 Akses Ditolak
             </span>
-            <h2 className="text-2xl font-black text-white mt-2">Bukan Akun Administrator</h2>
-            <p className="text-xs text-slate-400 mt-2 max-w-sm mx-auto">
-              Anda saat ini masuk sebagai <strong className="text-white font-mono">{user.email}</strong> (Akun Pelanggan Biasa). Halaman ini hanya dapat diakses oleh akun Administrator terdaftar.
+            <h2 className="text-2xl font-black text-slate-900 dark:text-white mt-2">Bukan Akun Administrator</h2>
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-2 max-w-sm mx-auto">
+              Anda saat ini masuk sebagai <strong className="text-slate-900 dark:text-white font-mono">{user.email}</strong> (Akun Pelanggan Biasa). Halaman ini hanya dapat diakses oleh akun Administrator terdaftar.
             </p>
           </div>
 
@@ -227,7 +229,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
             {onBackToStore && (
               <button
                 onClick={onBackToStore}
-                className="w-full py-2.5 text-xs text-slate-400 hover:text-white transition-colors cursor-pointer"
+                className="w-full py-2.5 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer"
               >
                 ← Kembali ke Katalog VPS
               </button>
@@ -330,51 +332,76 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
 
   return (
     <div className="space-y-8 max-w-6xl mx-auto">
-      {/* Top Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-800">
-        <div>
-          <h2 className="text-2xl sm:text-3xl font-black text-white flex items-center gap-3">
-            <Sliders className="w-7 h-7 text-cyan-400" />
-            <span>Admin & Kontrol VPS</span>
-          </h2>
-          <p className="text-sm text-slate-400 mt-1">
-            Kelola harga paket VPS, konfigurasi kredensial UpCloud & BuatQRIS, dan pantau seluruh transaksi.
-          </p>
+      {/* Top Header Card */}
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-slate-200 dark:border-slate-800">
+        <div className="flex items-start sm:items-center gap-4">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-cyan-500/15 via-blue-500/10 to-indigo-500/15 border border-cyan-500/25 text-cyan-600 dark:text-cyan-400 flex items-center justify-center shrink-0 shadow-sm">
+            <Sliders className="w-6 h-6" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2.5 flex-wrap">
+              <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+                Admin & Kontrol VPS
+              </h2>
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider font-mono bg-cyan-500/10 text-cyan-700 dark:text-cyan-400 border border-cyan-500/20">
+                Live Console
+              </span>
+            </div>
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1 max-w-xl">
+              Kelola harga paket VPS, konfigurasi kredensial UpCloud & BuatQRIS, dan pantau seluruh transaksi platform.
+            </p>
+          </div>
         </div>
 
-        {/* Tab switchers */}
-        <div className="flex items-center gap-1.5 bg-slate-900 p-1.5 rounded-2xl border border-slate-800 text-xs">
+        {/* Modern Segmented Navigation Tabs */}
+        <div className="flex items-center gap-1.5 p-1.5 rounded-2xl bg-slate-100 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 shadow-sm overflow-x-auto scrollbar-none">
           <button
+            type="button"
             onClick={() => setActiveTab('plans')}
-            className={`px-3.5 py-2 rounded-xl font-medium transition-all cursor-pointer ${
-              activeTab === 'plans' ? 'bg-cyan-500 text-slate-950 font-bold' : 'text-slate-400 hover:text-white'
+            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+              activeTab === 'plans'
+                ? 'bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/20 font-bold'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-slate-800/60'
             }`}
           >
-            Atur Harga & Paket
+            <Tag className="w-3.5 h-3.5" />
+            <span>Paket & Tarif</span>
           </button>
           <button
+            type="button"
             onClick={() => setActiveTab('settings')}
-            className={`px-3.5 py-2 rounded-xl font-medium transition-all cursor-pointer ${
-              activeTab === 'settings' ? 'bg-cyan-500 text-slate-950 font-bold' : 'text-slate-400 hover:text-white'
+            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+              activeTab === 'settings'
+                ? 'bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/20 font-bold'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-slate-800/60'
             }`}
           >
-            Integrasi API
+            <Key className="w-3.5 h-3.5" />
+            <span>Integrasi API</span>
           </button>
           <button
+            type="button"
             onClick={() => setActiveTab('metrics')}
-            className={`px-3.5 py-2 rounded-xl font-medium transition-all cursor-pointer ${
-              activeTab === 'metrics' ? 'bg-cyan-500 text-slate-950 font-bold' : 'text-slate-400 hover:text-white'
+            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+              activeTab === 'metrics'
+                ? 'bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/20 font-bold'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-slate-800/60'
             }`}
           >
-            Metrik
+            <DollarSign className="w-3.5 h-3.5" />
+            <span>Metrik Finansial</span>
           </button>
           <button
+            type="button"
             onClick={() => setActiveTab('orders')}
-            className={`px-3.5 py-2 rounded-xl font-medium transition-all cursor-pointer ${
-              activeTab === 'orders' ? 'bg-cyan-500 text-slate-950 font-bold' : 'text-slate-400 hover:text-white'
+            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+              activeTab === 'orders'
+                ? 'bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/20 font-bold'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-slate-800/60'
             }`}
           >
-            Pesanan ({orders.length})
+            <ShoppingBag className="w-3.5 h-3.5" />
+            <span>Pesanan ({orders.length})</span>
           </button>
         </div>
       </div>
@@ -382,30 +409,35 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
       {loading ? (
         <div className="py-20 text-center">
           <RefreshCw className="w-8 h-8 text-cyan-400 animate-spin mx-auto" />
-          <p className="text-sm text-slate-400 mt-2">Memuat data admin...</p>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">Memuat data admin...</p>
         </div>
       ) : (
         <>
           {/* TAB 1: ATUR HARGA & PAKET VPS */}
           {activeTab === 'plans' && (
             <div className="space-y-6">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-3xl bg-slate-900/80 border border-slate-800">
-                <div>
-                  <h3 className="text-xl font-bold text-white flex items-center gap-2">
-                    <Tag className="w-5 h-5 text-cyan-400" />
-                    <span>Daftar Paket & Pengaturan Harga Jual</span>
-                  </h3>
-                  <p className="text-xs text-slate-400 mt-1">
-                    Ubah harga jual IDR per bulan, spesifikasi, atau tambahkan paket cloud baru. Perubahan langsung aktif di webstore pelanggan.
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 sm:p-7 rounded-3xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-sm dark:shadow-xl transition-all">
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <span className="p-1.5 rounded-lg bg-cyan-500/10 text-cyan-600 dark:text-cyan-400">
+                      <Tag className="w-4 h-4" />
+                    </span>
+                    <h3 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
+                      Daftar Paket & Tarif Cloud VPS
+                    </h3>
+                  </div>
+                  <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 max-w-xl">
+                    Sesuaikan harga jual IDR per bulan, spesifikasi hardware, atau tambahkan paket baru. Perubahan langsung tersinkronisasi di webstore pelanggan.
                   </p>
                 </div>
 
                 <button
+                  type="button"
                   onClick={() => setShowAddPlanModal(true)}
-                  className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-950 font-bold text-xs flex items-center gap-2 shadow-lg shadow-cyan-500/20 hover:scale-105 transition-all cursor-pointer"
+                  className="px-4.5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold text-xs flex items-center justify-center gap-2 shadow-md shadow-cyan-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer shrink-0"
                 >
                   <Plus className="w-4 h-4 stroke-[3]" />
-                  <span>+ Tambah Paket Baru</span>
+                  <span>Tambah Paket Baru</span>
                 </button>
               </div>
 
@@ -418,11 +450,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
                   return (
                     <div
                       key={p.id}
-                      className="bg-slate-900/90 rounded-3xl p-6 border border-slate-800 shadow-xl space-y-5 relative overflow-hidden"
+                      className="bg-white dark:bg-slate-900/90 rounded-3xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm dark:shadow-xl space-y-5 relative overflow-hidden transition-all"
                     >
                       {/* Popular tag */}
                       {p.popular && (
-                        <div className="absolute top-4 right-4 px-3 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 text-[10px] font-bold uppercase">
+                        <div className="absolute top-4 right-4 px-3 py-0.5 rounded-full bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border border-cyan-500/20 text-[10px] font-bold uppercase tracking-wider">
                           Terpopuler
                         </div>
                       )}
@@ -436,7 +468,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
                                 type="text"
                                 value={currentForm.name || ''}
                                 onChange={(e) => setPlanForm({ ...planForm, name: e.target.value })}
-                                className="text-lg font-bold text-white bg-slate-950 px-3 py-1.5 rounded-xl border border-cyan-500/50 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20 w-full"
+                                className="text-lg font-bold text-slate-900 dark:text-white bg-slate-50 dark:bg-slate-950 px-3 py-1.5 rounded-xl border border-cyan-500/50 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20 w-full"
                                 placeholder="Nama Paket"
                               />
                               <div className="flex flex-wrap items-center gap-2">
@@ -444,15 +476,15 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
                                   type="text"
                                   value={currentForm.upcloudPlan || ''}
                                   onChange={(e) => setPlanForm({ ...planForm, upcloudPlan: e.target.value })}
-                                  className="text-xs text-cyan-400 font-mono bg-slate-950 px-2.5 py-1.5 rounded-xl border border-slate-700 focus:border-cyan-400 focus:outline-none w-36"
+                                  className="text-xs text-cyan-600 dark:text-cyan-400 font-mono bg-slate-50 dark:bg-slate-950 px-2.5 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 focus:border-cyan-400 focus:outline-none w-36"
                                   placeholder="UpCloud Plan"
                                 />
-                                <label className="flex items-center gap-1.5 text-xs text-slate-300 cursor-pointer select-none px-2.5 py-1.5 bg-slate-950 rounded-xl border border-slate-800">
+                                <label className="flex items-center gap-1.5 text-xs text-slate-700 dark:text-slate-300 cursor-pointer select-none px-2.5 py-1.5 bg-slate-50 dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800">
                                   <input
                                     type="checkbox"
                                     checked={Boolean(currentForm.popular)}
                                     onChange={(e) => setPlanForm({ ...planForm, popular: e.target.checked })}
-                                    className="rounded border-slate-700 text-cyan-500 focus:ring-cyan-500"
+                                    className="rounded border-slate-300 dark:border-slate-700 text-cyan-500 focus:ring-cyan-500"
                                   />
                                   <span>Badge Terpopuler</span>
                                 </label>
@@ -460,8 +492,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
                             </div>
                           ) : (
                             <>
-                              <h4 className="text-xl font-bold text-white">{p.name}</h4>
-                              <p className="text-xs text-cyan-400 font-mono mt-0.5">
+                              <h4 className="text-xl font-bold text-slate-900 dark:text-white">{p.name}</h4>
+                              <p className="text-xs text-cyan-600 dark:text-cyan-400 font-mono mt-0.5">
                                 UpCloud Plan: {p.upcloudPlan}
                               </p>
                             </>
@@ -470,43 +502,43 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
                       </div>
 
                       {/* Pricing Editor Box */}
-                      <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-3">
-                        <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block">
+                      <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-3">
+                        <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
                           Harga Jual Per Bulan (Rupiah)
                         </span>
 
                         {isEditing ? (
                           <div className="flex items-center gap-2">
-                            <div className="flex items-center gap-1.5 bg-slate-900 border border-cyan-500/50 focus-within:border-cyan-400 focus-within:ring-2 focus-within:ring-cyan-500/20 px-3 py-1.5 rounded-xl w-full">
-                              <span className="text-cyan-400 font-bold text-sm">Rp</span>
+                            <div className="flex items-center gap-1.5 bg-white dark:bg-slate-900 border border-cyan-500/50 focus-within:border-cyan-400 focus-within:ring-2 focus-within:ring-cyan-500/20 px-3 py-1.5 rounded-xl w-full">
+                              <span className="text-cyan-600 dark:text-cyan-400 font-bold text-sm">Rp</span>
                               <input
                                 type="number"
                                 value={currentForm.pricePerMonthIdr || 0}
                                 onChange={(e) => setPlanForm({ ...planForm, pricePerMonthIdr: Number(e.target.value) })}
-                                className="w-full text-2xl font-black text-white bg-transparent border-0 focus:outline-none font-mono"
+                                className="w-full text-2xl font-black text-slate-900 dark:text-white bg-transparent border-0 focus:outline-none font-mono"
                               />
                             </div>
                           </div>
                         ) : (
                           <div className="flex items-baseline gap-1">
-                            <span className="text-xs text-cyan-400 font-bold">Rp</span>
-                            <span className="text-3xl font-black text-white font-mono">
+                            <span className="text-xs text-cyan-600 dark:text-cyan-400 font-bold">Rp</span>
+                            <span className="text-3xl font-black text-slate-900 dark:text-white font-mono">
                               {p.pricePerMonthIdr.toLocaleString('id-ID')}
                             </span>
-                            <span className="text-xs text-slate-500">/ bulan</span>
+                            <span className="text-xs text-slate-500 dark:text-slate-400">/ bulan</span>
                           </div>
                         )}
 
-                        <div className="pt-2 border-t border-slate-800/80 grid grid-cols-2 gap-2 text-[11px] text-slate-400">
+                        <div className="pt-2 border-t border-slate-200 dark:border-slate-800/80 grid grid-cols-2 gap-2 text-[11px] text-slate-500 dark:text-slate-400">
                           <div>
                             <span>Tagihan 3 Bulan (-5%): </span>
-                            <strong className="text-slate-200">
+                            <strong className="text-slate-700 dark:text-slate-200">
                               Rp {Math.round((currentForm.pricePerMonthIdr || 0) * 3 * 0.95).toLocaleString('id-ID')}
                             </strong>
                           </div>
                           <div>
                             <span>Tagihan 1 Tahun (-15%): </span>
-                            <strong className="text-slate-200">
+                            <strong className="text-slate-700 dark:text-slate-200">
                               Rp {Math.round((currentForm.pricePerMonthIdr || 0) * 12 * 0.85).toLocaleString('id-ID')}
                             </strong>
                           </div>
@@ -515,8 +547,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
 
                       {/* Specs Summary / Editor */}
                       <div className="grid grid-cols-2 gap-2 text-xs">
-                        <div className="p-2.5 rounded-xl bg-slate-950/60 border border-slate-800 text-slate-300 flex items-center gap-2">
-                          <Cpu className="w-4 h-4 text-cyan-400 shrink-0" />
+                        <div className="p-2.5 rounded-xl bg-slate-50/80 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 flex items-center gap-2">
+                          <Cpu className="w-4 h-4 text-cyan-500 dark:text-cyan-400 shrink-0" />
                           {isEditing ? (
                             <div className="flex items-center gap-1.5 flex-1">
                               <input
@@ -524,17 +556,17 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
                                 min={1}
                                 value={currentForm.coreNumber || 1}
                                 onChange={(e) => setPlanForm({ ...planForm, coreNumber: Number(e.target.value) })}
-                                className="w-14 bg-slate-900 border border-cyan-500/50 focus:border-cyan-400 focus:ring-1 focus:ring-cyan-500 px-2 py-1 rounded-lg text-white font-mono text-center font-bold"
+                                className="w-14 bg-white dark:bg-slate-900 border border-cyan-500/50 focus:border-cyan-400 focus:ring-1 focus:ring-cyan-500 px-2 py-1 rounded-lg text-slate-900 dark:text-white font-mono text-center font-bold"
                               />
-                              <span className="text-[11px] text-slate-400">Core</span>
+                              <span className="text-[11px] text-slate-500 dark:text-slate-400">Core</span>
                             </div>
                           ) : (
-                            <span>{p.coreNumber} vCPU Core</span>
+                            <span className="font-medium">{p.coreNumber} vCPU Core</span>
                           )}
                         </div>
 
-                        <div className="p-2.5 rounded-xl bg-slate-950/60 border border-slate-800 text-slate-300 flex items-center gap-2">
-                          <Activity className="w-4 h-4 text-blue-400 shrink-0" />
+                        <div className="p-2.5 rounded-xl bg-slate-50/80 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 flex items-center gap-2">
+                          <Activity className="w-4 h-4 text-blue-500 dark:text-blue-400 shrink-0" />
                           {isEditing ? (
                             <div className="flex items-center gap-1.5 flex-1">
                               <input
@@ -542,17 +574,17 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
                                 min={1}
                                 value={(currentForm.memoryAmountMb || 1024) / 1024}
                                 onChange={(e) => setPlanForm({ ...planForm, memoryAmountMb: Number(e.target.value) * 1024 })}
-                                className="w-14 bg-slate-900 border border-cyan-500/50 focus:border-cyan-400 focus:ring-1 focus:ring-cyan-500 px-2 py-1 rounded-lg text-white font-mono text-center font-bold"
+                                className="w-14 bg-white dark:bg-slate-900 border border-cyan-500/50 focus:border-cyan-400 focus:ring-1 focus:ring-cyan-500 px-2 py-1 rounded-lg text-slate-900 dark:text-white font-mono text-center font-bold"
                               />
-                              <span className="text-[11px] text-slate-400">GB RAM</span>
+                              <span className="text-[11px] text-slate-500 dark:text-slate-400">GB RAM</span>
                             </div>
                           ) : (
-                            <span>{p.memoryAmountMb / 1024} GB RAM</span>
+                            <span className="font-medium">{p.memoryAmountMb / 1024} GB RAM</span>
                           )}
                         </div>
 
-                        <div className="p-2.5 rounded-xl bg-slate-950/60 border border-slate-800 text-slate-300 flex items-center gap-2">
-                          <HardDrive className="w-4 h-4 text-emerald-400 shrink-0" />
+                        <div className="p-2.5 rounded-xl bg-slate-50/80 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 flex items-center gap-2">
+                          <HardDrive className="w-4 h-4 text-emerald-500 dark:text-emerald-400 shrink-0" />
                           {isEditing ? (
                             <div className="flex items-center gap-1.5 flex-1">
                               <input
@@ -560,17 +592,17 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
                                 min={10}
                                 value={currentForm.storageSizeGb || 25}
                                 onChange={(e) => setPlanForm({ ...planForm, storageSizeGb: Number(e.target.value) })}
-                                className="w-14 bg-slate-900 border border-cyan-500/50 focus:border-cyan-400 focus:ring-1 focus:ring-cyan-500 px-2 py-1 rounded-lg text-white font-mono text-center font-bold"
+                                className="w-14 bg-white dark:bg-slate-900 border border-cyan-500/50 focus:border-cyan-400 focus:ring-1 focus:ring-cyan-500 px-2 py-1 rounded-lg text-slate-900 dark:text-white font-mono text-center font-bold"
                               />
-                              <span className="text-[11px] text-slate-400">GB SSD</span>
+                              <span className="text-[11px] text-slate-500 dark:text-slate-400">GB SSD</span>
                             </div>
                           ) : (
-                            <span>{p.storageSizeGb} GB MaxIOPS</span>
+                            <span className="font-medium">{p.storageSizeGb} GB MaxIOPS</span>
                           )}
                         </div>
 
-                        <div className="p-2.5 rounded-xl bg-slate-950/60 border border-slate-800 text-slate-300 flex items-center gap-2">
-                          <Globe2 className="w-4 h-4 text-indigo-400 shrink-0" />
+                        <div className="p-2.5 rounded-xl bg-slate-50/80 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 flex items-center gap-2">
+                          <Globe2 className="w-4 h-4 text-indigo-500 dark:text-indigo-400 shrink-0" />
                           {isEditing ? (
                             <div className="flex items-center gap-1.5 flex-1">
                               <input
@@ -578,21 +610,22 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
                                 min={1}
                                 value={currentForm.bandwidthTb || 1}
                                 onChange={(e) => setPlanForm({ ...planForm, bandwidthTb: Number(e.target.value) })}
-                                className="w-14 bg-slate-900 border border-cyan-500/50 focus:border-cyan-400 focus:ring-1 focus:ring-cyan-500 px-2 py-1 rounded-lg text-white font-mono text-center font-bold"
+                                className="w-14 bg-white dark:bg-slate-900 border border-cyan-500/50 focus:border-cyan-400 focus:ring-1 focus:ring-cyan-500 px-2 py-1 rounded-lg text-slate-900 dark:text-white font-mono text-center font-bold"
                               />
-                              <span className="text-[11px] text-slate-400">TB BW</span>
+                              <span className="text-[11px] text-slate-500 dark:text-slate-400">TB BW</span>
                             </div>
                           ) : (
-                            <span>{p.bandwidthTb} TB Kuota</span>
+                            <span className="font-medium">{p.bandwidthTb} TB Kuota</span>
                           )}
                         </div>
                       </div>
 
                       {/* Card Actions */}
-                      <div className="pt-2 flex items-center justify-between border-t border-slate-800">
+                      <div className="pt-2 flex items-center justify-between border-t border-slate-200 dark:border-slate-800">
                         {isEditing ? (
                           <div className="flex items-center gap-2 w-full">
                             <button
+                              type="button"
                               onClick={() => handleUpdatePlanPrice(p.id)}
                               className="flex-1 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer"
                             >
@@ -600,8 +633,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
                               <span>Simpan Perubahan</span>
                             </button>
                             <button
+                              type="button"
                               onClick={() => setEditingPlanId(null)}
-                              className="py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs transition-colors cursor-pointer"
+                              className="py-2.5 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs transition-colors cursor-pointer"
                             >
                               Batal
                             </button>
@@ -609,11 +643,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
                         ) : (
                           <div className="flex items-center justify-between w-full">
                             <button
+                              type="button"
                               onClick={() => {
                                 setEditingPlanId(p.id);
                                 setPlanForm(p);
                               }}
-                              className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-400 border border-cyan-500/20 text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer"
+                              className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-cyan-700 dark:text-cyan-400 border border-cyan-500/20 text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer"
                             >
                               <Edit3 className="w-3.5 h-3.5" />
                               <span>Edit Harga & Spesifikasi</span>
@@ -623,9 +658,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
                               size="sm"
                               radius={12}
                               holdTime={1400}
-                              backgroundColor="#1e293b"
+                              backgroundColor={isDark ? "#1e293b" : "#f1f5f9"}
                               fillColor="#e11d48"
-                              textColor="#f43f5e"
+                              textColor={isDark ? "#f43f5e" : "#e11d48"}
                               fillTextColor="#ffffff"
                               doneLabel="Dihapus"
                               icon={<Trash2 className="w-3.5 h-3.5" />}
@@ -644,23 +679,23 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
 
               {/* Add New Plan Modal */}
               {showAddPlanModal && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md overflow-y-auto">
-                  <div className="relative w-full max-w-lg bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl my-8">
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-md overflow-y-auto">
+                  <div className="relative w-full max-w-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl my-8 text-slate-900 dark:text-white transition-all">
                     {/* Header */}
-                    <div className="flex items-center justify-between pb-4 border-b border-slate-800">
+                    <div className="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-slate-800">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 flex items-center justify-center shadow-lg shadow-cyan-500/10">
+                        <div className="w-10 h-10 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-600 dark:text-cyan-400 flex items-center justify-center shadow-lg shadow-cyan-500/10">
                           <Plus className="w-5 h-5" />
                         </div>
                         <div>
-                          <h4 className="text-lg font-bold text-white">Tambah Paket Cloud VPS Baru</h4>
-                          <p className="text-xs text-slate-400">Atur spesifikasi hardware dan harga jual komputasi</p>
+                          <h4 className="text-lg font-bold text-slate-900 dark:text-white">Tambah Paket Cloud VPS Baru</h4>
+                          <p className="text-xs text-slate-500 dark:text-slate-400">Atur spesifikasi hardware dan harga jual komputasi</p>
                         </div>
                       </div>
                       <button
                         type="button"
                         onClick={() => setShowAddPlanModal(false)}
-                        className="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
+                        className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white flex items-center justify-center transition-colors cursor-pointer"
                       >
                         <X className="w-4 h-4" />
                       </button>
@@ -669,8 +704,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
                     <form onSubmit={handleCreateNewPlan} className="space-y-5 text-xs">
                       {/* Nama Paket */}
                       <div className="space-y-1.5">
-                        <label className="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
-                          <Tag className="w-3.5 h-3.5 text-cyan-400" />
+                        <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+                          <Tag className="w-3.5 h-3.5 text-cyan-500 dark:text-cyan-400" />
                           <span>Nama Paket Layanan</span>
                         </label>
                         <input
@@ -679,15 +714,15 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
                           value={newPlanForm.name}
                           onChange={(e) => setNewPlanForm({ ...newPlanForm, name: e.target.value })}
                           placeholder="misal: Cloud Ultra 4 Core"
-                          className="w-full px-4 py-3 rounded-2xl bg-slate-950/90 border border-slate-800 hover:border-slate-700 text-white text-sm placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all"
+                          className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-950/90 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 text-slate-900 dark:text-white text-sm placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all"
                         />
                       </div>
 
                       {/* UpCloud Plan & Price Grid */}
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                         <div className="space-y-1.5">
-                          <label className="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
-                            <Server className="w-3.5 h-3.5 text-blue-400" />
+                          <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+                            <Server className="w-3.5 h-3.5 text-blue-500 dark:text-blue-400" />
                             <span>UpCloud Plan Code</span>
                           </label>
                           <input
@@ -696,18 +731,18 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
                             value={newPlanForm.upcloudPlan}
                             onChange={(e) => setNewPlanForm({ ...newPlanForm, upcloudPlan: e.target.value })}
                             placeholder="e.g. 1xCPU-1GB"
-                            className="w-full px-4 py-3 rounded-2xl bg-slate-950/90 border border-slate-800 hover:border-slate-700 text-white text-sm font-mono placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all"
+                            className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-950/90 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 text-slate-900 dark:text-white text-sm font-mono placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all"
                           />
-                          <p className="text-[11px] text-slate-500">Kode paket standar API UpCloud</p>
+                          <p className="text-[11px] text-slate-500 dark:text-slate-400">Kode paket standar API UpCloud</p>
                         </div>
 
                         <div className="space-y-1.5">
-                          <label className="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
-                            <DollarSign className="w-3.5 h-3.5 text-emerald-400" />
+                          <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+                            <DollarSign className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400" />
                             <span>Harga Jual IDR / Bulan</span>
                           </label>
-                          <div className="relative flex items-center rounded-2xl bg-slate-950/90 border border-slate-800 hover:border-slate-700 focus-within:border-cyan-500 focus-within:ring-2 focus-within:ring-cyan-500/20 transition-all overflow-hidden">
-                            <span className="px-3.5 py-3 text-xs font-bold text-cyan-400 bg-slate-900/60 border-r border-slate-800 shrink-0">
+                          <div className="relative flex items-center rounded-2xl bg-slate-50 dark:bg-slate-950/90 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 focus-within:border-cyan-500 focus-within:ring-2 focus-within:ring-cyan-500/20 transition-all overflow-hidden">
+                            <span className="px-3.5 py-3 text-xs font-bold text-cyan-600 dark:text-cyan-400 bg-slate-100 dark:bg-slate-900/60 border-r border-slate-200 dark:border-slate-800 shrink-0">
                               Rp
                             </span>
                             <input
@@ -716,37 +751,37 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
                               value={newPlanForm.pricePerMonthIdr || ''}
                               onChange={(e) => setNewPlanForm({ ...newPlanForm, pricePerMonthIdr: Number(e.target.value) })}
                               placeholder="100000"
-                              className="w-full px-3.5 py-3 bg-transparent text-white text-sm font-mono font-bold focus:outline-none"
+                              className="w-full px-3.5 py-3 bg-transparent text-slate-900 dark:text-white text-sm font-mono font-bold focus:outline-none"
                             />
                           </div>
-                          <p className="text-[11px] text-emerald-400 font-mono">
+                          <p className="text-[11px] text-emerald-600 dark:text-emerald-400 font-mono">
                             Preview: Rp {(newPlanForm.pricePerMonthIdr || 0).toLocaleString('id-ID')} / bulan
                           </p>
                         </div>
                       </div>
 
                       {/* Popular Toggle */}
-                      <label className="flex items-center gap-2.5 text-xs text-slate-300 cursor-pointer select-none p-3 rounded-2xl bg-slate-950/80 border border-slate-800 hover:border-slate-700 transition-all">
+                      <label className="flex items-center gap-2.5 text-xs text-slate-700 dark:text-slate-300 cursor-pointer select-none p-3 rounded-2xl bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 transition-all">
                         <input
                           type="checkbox"
                           checked={Boolean(newPlanForm.popular)}
                           onChange={(e) => setNewPlanForm({ ...newPlanForm, popular: e.target.checked })}
-                          className="rounded border-slate-700 text-cyan-500 focus:ring-cyan-500"
+                          className="rounded border-slate-300 dark:border-slate-700 text-cyan-500 focus:ring-cyan-500"
                         />
                         <span>Tandai sebagai Paket Rekomendasi Terpopuler (Badge Popular)</span>
                       </label>
 
                       {/* Specs Box */}
-                      <div className="p-4 rounded-2xl bg-slate-950/80 border border-slate-800/80 space-y-3">
-                        <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block">
+                      <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800/80 space-y-3">
+                        <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
                           Spesifikasi Hardware Cloud
                         </span>
 
                         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
                           {/* vCPU */}
-                          <div className="p-2.5 rounded-xl bg-slate-900 border border-slate-800 hover:border-slate-700 focus-within:border-cyan-500/60 focus-within:ring-1 focus-within:ring-cyan-500/20 transition-all text-center">
-                            <div className="flex items-center justify-center gap-1 text-[11px] text-slate-400 mb-1">
-                              <Cpu className="w-3 h-3 text-cyan-400" />
+                          <div className="p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 focus-within:border-cyan-500/60 focus-within:ring-1 focus-within:ring-cyan-500/20 transition-all text-center">
+                            <div className="flex items-center justify-center gap-1 text-[11px] text-slate-500 dark:text-slate-400 mb-1">
+                              <Cpu className="w-3 h-3 text-cyan-500 dark:text-cyan-400" />
                               <span>vCPU</span>
                             </div>
                             <div className="flex items-center justify-center gap-1">
@@ -755,16 +790,16 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
                                 min={1}
                                 value={newPlanForm.coreNumber || 1}
                                 onChange={(e) => setNewPlanForm({ ...newPlanForm, coreNumber: Math.max(1, Number(e.target.value)) })}
-                                className="w-12 text-center text-sm font-bold font-mono text-white bg-transparent focus:outline-none"
+                                className="w-12 text-center text-sm font-bold font-mono text-slate-900 dark:text-white bg-transparent focus:outline-none"
                               />
-                              <span className="text-[11px] text-slate-500 font-medium">Core</span>
+                              <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Core</span>
                             </div>
                           </div>
 
                           {/* RAM */}
-                          <div className="p-2.5 rounded-xl bg-slate-900 border border-slate-800 hover:border-slate-700 focus-within:border-blue-500/60 focus-within:ring-1 focus-within:ring-blue-500/20 transition-all text-center">
-                            <div className="flex items-center justify-center gap-1 text-[11px] text-slate-400 mb-1">
-                              <Activity className="w-3 h-3 text-blue-400" />
+                          <div className="p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 focus-within:border-blue-500/60 focus-within:ring-1 focus-within:ring-blue-500/20 transition-all text-center">
+                            <div className="flex items-center justify-center gap-1 text-[11px] text-slate-500 dark:text-slate-400 mb-1">
+                              <Activity className="w-3 h-3 text-blue-500 dark:text-blue-400" />
                               <span>RAM</span>
                             </div>
                             <div className="flex items-center justify-center gap-1">
@@ -774,16 +809,16 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
                                 step={0.5}
                                 value={(newPlanForm.memoryAmountMb || 1024) / 1024}
                                 onChange={(e) => setNewPlanForm({ ...newPlanForm, memoryAmountMb: Math.max(0.5, Number(e.target.value)) * 1024 })}
-                                className="w-12 text-center text-sm font-bold font-mono text-white bg-transparent focus:outline-none"
+                                className="w-12 text-center text-sm font-bold font-mono text-slate-900 dark:text-white bg-transparent focus:outline-none"
                               />
-                              <span className="text-[11px] text-slate-500 font-medium">GB</span>
+                              <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">GB</span>
                             </div>
                           </div>
 
                           {/* Disk */}
-                          <div className="p-2.5 rounded-xl bg-slate-900 border border-slate-800 hover:border-slate-700 focus-within:border-emerald-500/60 focus-within:ring-1 focus-within:ring-emerald-500/20 transition-all text-center">
-                            <div className="flex items-center justify-center gap-1 text-[11px] text-slate-400 mb-1">
-                              <HardDrive className="w-3 h-3 text-emerald-400" />
+                          <div className="p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 focus-within:border-emerald-500/60 focus-within:ring-1 focus-within:ring-emerald-500/20 transition-all text-center">
+                            <div className="flex items-center justify-center gap-1 text-[11px] text-slate-500 dark:text-slate-400 mb-1">
+                              <HardDrive className="w-3 h-3 text-emerald-500 dark:text-emerald-400" />
                               <span>Disk SSD</span>
                             </div>
                             <div className="flex items-center justify-center gap-1">
@@ -792,16 +827,16 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
                                 min={10}
                                 value={newPlanForm.storageSizeGb || 25}
                                 onChange={(e) => setNewPlanForm({ ...newPlanForm, storageSizeGb: Math.max(1, Number(e.target.value)) })}
-                                className="w-12 text-center text-sm font-bold font-mono text-white bg-transparent focus:outline-none"
+                                className="w-12 text-center text-sm font-bold font-mono text-slate-900 dark:text-white bg-transparent focus:outline-none"
                               />
-                              <span className="text-[11px] text-slate-500 font-medium">GB</span>
+                              <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">GB</span>
                             </div>
                           </div>
 
                           {/* Bandwidth */}
-                          <div className="p-2.5 rounded-xl bg-slate-900 border border-slate-800 hover:border-slate-700 focus-within:border-indigo-500/60 focus-within:ring-1 focus-within:ring-indigo-500/20 transition-all text-center">
-                            <div className="flex items-center justify-center gap-1 text-[11px] text-slate-400 mb-1">
-                              <Globe2 className="w-3 h-3 text-indigo-400" />
+                          <div className="p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 focus-within:border-indigo-500/60 focus-within:ring-1 focus-within:ring-indigo-500/20 transition-all text-center">
+                            <div className="flex items-center justify-center gap-1 text-[11px] text-slate-500 dark:text-slate-400 mb-1">
+                              <Globe2 className="w-3 h-3 text-indigo-500 dark:text-indigo-400" />
                               <span>Kuota BW</span>
                             </div>
                             <div className="flex items-center justify-center gap-1">
@@ -810,9 +845,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
                                 min={1}
                                 value={newPlanForm.bandwidthTb || 1}
                                 onChange={(e) => setNewPlanForm({ ...newPlanForm, bandwidthTb: Math.max(1, Number(e.target.value)) })}
-                                className="w-12 text-center text-sm font-bold font-mono text-white bg-transparent focus:outline-none"
+                                className="w-12 text-center text-sm font-bold font-mono text-slate-900 dark:text-white bg-transparent focus:outline-none"
                               />
-                              <span className="text-[11px] text-slate-500 font-medium">TB</span>
+                              <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">TB</span>
                             </div>
                           </div>
                         </div>
@@ -830,7 +865,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
                         <button
                           type="button"
                           onClick={() => setShowAddPlanModal(false)}
-                          className="py-3.5 px-6 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-medium text-sm transition-colors cursor-pointer"
+                          className="py-3.5 px-6 rounded-2xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 hover:text-slate-950 dark:text-slate-300 dark:hover:text-white font-medium text-sm transition-colors cursor-pointer"
                         >
                           Batal
                         </button>
@@ -847,16 +882,16 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
             <form onSubmit={handleSaveSettings} className="space-y-8">
 
               {/* Admin Access & Firebase Auth Card */}
-              <div className="bg-slate-900/80 rounded-3xl p-6 sm:p-8 border border-slate-800 shadow-xl space-y-6">
-                <div className="flex items-center gap-3 pb-4 border-b border-slate-800">
-                  <div className="w-10 h-10 rounded-2xl bg-purple-500/10 border border-purple-500/20 text-purple-400 flex items-center justify-center">
+              <div className="bg-white dark:bg-slate-900/80 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-sm dark:shadow-xl space-y-6 transition-all">
+                <div className="flex items-center gap-3 pb-4 border-b border-slate-200 dark:border-slate-800">
+                  <div className="w-10 h-10 rounded-2xl bg-purple-500/10 border border-purple-500/20 text-purple-600 dark:text-purple-400 flex items-center justify-center">
                     <ShieldCheck className="w-5 h-5" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
                       Hak Akses Administrator & Firebase Auth
                     </h3>
-                    <p className="text-xs text-slate-400">
+                    <p className="text-xs text-slate-500 dark:text-slate-400">
                       Kelola daftar email yang berhak mengakses panel admin dan mengelola harga/server.
                     </p>
                   </div>
@@ -864,7 +899,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
 
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
                       Daftar Email Administrator (Pisahkan dengan koma)
                     </label>
                     <input
@@ -875,41 +910,41 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
                         setFormSettings({ ...formSettings, adminEmails: list });
                       }}
                       placeholder="admin@domain.com, admin2@domain.com"
-                      className="w-full px-4 py-3 rounded-2xl bg-slate-950 border border-slate-800 text-white placeholder-slate-600 focus:outline-none focus:border-purple-500 text-sm font-mono"
+                      className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none focus:border-purple-500 text-sm font-mono transition-all"
                     />
-                    <p className="text-[11px] text-slate-500 mt-1">
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
                       Pengguna yang login via Firebase dengan email di atas akan otomatis dikenali sebagai Administrator.
                     </p>
                   </div>
 
-                  <div className="p-3.5 rounded-2xl bg-slate-950 border border-slate-800 text-xs text-slate-400 space-y-1">
-                    <p className="font-semibold text-purple-300 flex items-center gap-1.5">
+                  <div className="p-3.5 rounded-2xl bg-purple-50/70 dark:bg-slate-950 border border-purple-200/70 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-400 space-y-1">
+                    <p className="font-semibold text-purple-700 dark:text-purple-300 flex items-center gap-1.5">
                       <Sparkles className="w-3.5 h-3.5" />
                       <span>Status Akun Admin Aktif:</span>
                     </p>
-                    <p className="text-[11px] font-mono text-slate-300">
-                      Login saat ini: <strong className="text-cyan-400">{user?.email}</strong> ({user?.displayName || 'Admin'})
+                    <p className="text-[11px] font-mono text-slate-700 dark:text-slate-300">
+                      Login saat ini: <strong className="text-cyan-600 dark:text-cyan-400">{user?.email}</strong> ({user?.displayName || 'Admin'})
                     </p>
                   </div>
                 </div>
               </div>
               
               {/* UpCloud Configuration Card with Multi-Token Failover */}
-              <div className="bg-slate-900/80 rounded-3xl p-6 sm:p-8 border border-slate-800 shadow-xl space-y-6">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-800">
+              <div className="bg-white dark:bg-slate-900/80 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-sm dark:shadow-xl space-y-6 transition-all">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-200 dark:border-slate-800">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 flex items-center justify-center">
+                    <div className="w-10 h-10 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-600 dark:text-cyan-400 flex items-center justify-center">
                       <Key className="w-5 h-5" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                      <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
                         UpCloud Cloud Provider API 1.3
-                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border border-cyan-500/20">
                           Multi-Token Failover
                         </span>
                       </h3>
-                      <p className="text-xs text-slate-400">
-                        Dokumentasi: <a href="https://developers.upcloud.com/api/1.3" target="_blank" rel="noreferrer" className="text-cyan-400 underline">https://developers.upcloud.com/api/1.3</a>
+                      <p className="text-xs text-slate-500 dark:text-slate-400">
+                        Dokumentasi: <a href="https://developers.upcloud.com/api/1.3" target="_blank" rel="noreferrer" className="text-cyan-600 dark:text-cyan-400 underline">https://developers.upcloud.com/api/1.3</a>
                       </p>
                     </div>
                   </div>
@@ -918,7 +953,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
                     type="button"
                     onClick={handleTestUpCloud}
                     disabled={upcloudTestStatus.loading}
-                    className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-400 border border-cyan-500/30 text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer disabled:opacity-50"
+                    className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-cyan-700 dark:text-cyan-400 border border-cyan-500/30 text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer disabled:opacity-50"
                   >
                     <RefreshCw className={`w-3.5 h-3.5 ${upcloudTestStatus.loading ? 'animate-spin' : ''}`} />
                     <span>Tes Koneksi Semua Token</span>
@@ -926,11 +961,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
                 </div>
 
                 {/* Failover Feature Description Banner */}
-                <div className="p-4 rounded-2xl bg-cyan-950/20 border border-cyan-500/20 flex items-start gap-3 text-xs text-cyan-300">
-                  <Zap className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
+                <div className="p-4 rounded-2xl bg-cyan-50 dark:bg-cyan-950/20 border border-cyan-200 dark:border-cyan-500/20 flex items-start gap-3 text-xs text-cyan-900 dark:text-cyan-300">
+                  <Zap className="w-4 h-4 text-cyan-600 dark:text-cyan-400 shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-semibold text-cyan-200">Sistem Failover Multi-Token Berjenjang Otomatis</p>
-                    <p className="text-slate-400 text-[11px] mt-0.5 leading-relaxed">
+                    <p className="font-semibold text-cyan-800 dark:text-cyan-200">Sistem Failover Multi-Token Berjenjang Otomatis</p>
+                    <p className="text-slate-600 dark:text-slate-400 text-[11px] mt-0.5 leading-relaxed">
                       Token dieksekusi berurutan berdasarkan nomor urut (Prioritas #1 ➔ #2 ➔ #3). Apabila Token #1 kehabisan saldo/kredit, terkena rate-limit (HTTP 429), atau offline, sistem secara otomatis mengalihkan proses provisioning VPS pelanggan ke token berikutnya tanpa jeda.
                     </p>
                   </div>
@@ -940,16 +975,16 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
                 {upcloudTestStatus.result && (
                   <div className={`p-4 rounded-2xl text-xs border space-y-3 ${
                     upcloudTestStatus.result.success
-                      ? 'bg-emerald-950/30 border-emerald-500/30 text-emerald-300'
-                      : 'bg-rose-950/30 border-rose-500/30 text-rose-300'
+                      ? 'bg-emerald-50 dark:bg-emerald-950/30 border-emerald-200 dark:border-emerald-500/30 text-emerald-800 dark:text-emerald-300'
+                      : 'bg-rose-50 dark:bg-rose-950/30 border-rose-200 dark:border-rose-500/30 text-rose-800 dark:text-rose-300'
                   }`}>
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                       <p className="font-bold flex items-center gap-2">
-                        {upcloudTestStatus.result.success ? <CheckCircle2 className="w-4 h-4 text-emerald-400" /> : <AlertTriangle className="w-4 h-4 text-rose-400" />}
+                        {upcloudTestStatus.result.success ? <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /> : <AlertTriangle className="w-4 h-4 text-rose-600 dark:text-rose-400" />}
                         {upcloudTestStatus.result.message}
                       </p>
                       {upcloudTestStatus.result.activeToken && (
-                        <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 self-start sm:self-auto">
+                        <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 self-start sm:self-auto">
                           Active Token: {upcloudTestStatus.result.activeToken}
                         </span>
                       )}
@@ -957,37 +992,37 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
 
                     {/* Breakdown of individual tokens tested */}
                     {upcloudTestStatus.result.results && upcloudTestStatus.result.results.length > 0 && (
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2 border-t border-slate-800/80">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2 border-t border-slate-200 dark:border-slate-800/80">
                         {upcloudTestStatus.result.results.map((r: any, idx: number) => (
                           <div
                             key={idx}
-                            className="p-3 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center justify-between text-[11px]"
+                            className="p-3 rounded-xl bg-slate-50 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 flex items-center justify-between text-[11px]"
                           >
                             <div className="space-y-0.5">
-                              <div className="flex items-center gap-1.5 font-mono font-bold text-slate-200">
-                                <span className="text-cyan-400">#{idx + 1}</span>
+                              <div className="flex items-center gap-1.5 font-mono font-bold text-slate-800 dark:text-slate-200">
+                                <span className="text-cyan-600 dark:text-cyan-400">#{idx + 1}</span>
                                 <span>{r.key}</span>
                               </div>
-                              <div className="text-[10px] text-slate-400 font-mono">
+                              <div className="text-[10px] text-slate-500 dark:text-slate-400 font-mono">
                                 {r.maskedToken}
                               </div>
                               {r.username && (
-                                <div className="text-[10px] text-slate-300">
-                                  User: <span className="text-white font-medium">{r.username}</span> • Saldo: <span className="text-emerald-400 font-semibold">{r.credits !== undefined ? `${r.credits}` : 'OK'}</span>
+                                <div className="text-[10px] text-slate-600 dark:text-slate-300">
+                                  User: <span className="text-slate-900 dark:text-white font-medium">{r.username}</span> • Saldo: <span className="text-emerald-600 dark:text-emerald-400 font-semibold">{r.credits !== undefined ? `${r.credits}` : 'OK'}</span>
                                 </div>
                               )}
                               {r.error && (
-                                <div className="text-[10px] text-rose-400 truncate max-w-[200px]" title={r.error}>
+                                <div className="text-[10px] text-rose-600 dark:text-rose-400 truncate max-w-[200px]" title={r.error}>
                                   {r.error}
                                 </div>
                               )}
                             </div>
                             <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider shrink-0 ${
                               r.status === 'valid'
-                                ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                                ? 'bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30'
                                 : r.status === 'rate_limited'
-                                ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
-                                : 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
+                                ? 'bg-amber-500/10 dark:bg-amber-500/20 text-amber-700 dark:text-amber-400 border border-amber-500/30'
+                                : 'bg-rose-500/10 dark:bg-rose-500/20 text-rose-700 dark:text-rose-400 border border-rose-500/30'
                             }`}>
                               {r.status === 'valid' ? 'Valid' : r.status === 'rate_limited' ? 'Rate Limit' : 'Error'}
                             </span>
@@ -1018,18 +1053,18 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
               </div>
 
               {/* BuatQRIS Configuration Card */}
-              <div className="bg-slate-900/80 rounded-3xl p-6 sm:p-8 border border-slate-800 shadow-xl space-y-6">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-800">
+              <div className="bg-white dark:bg-slate-900/80 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-sm dark:shadow-xl space-y-6 transition-all">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-200 dark:border-slate-800">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center">
+                    <div className="w-10 h-10 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
                       <QrCode className="w-5 h-5" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                      <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
                         BuatQRIS Payment Gateway Open API
                       </h3>
-                      <p className="text-xs text-slate-400">
-                        Dasbor: <a href="https://app.buatqris.site/dasbort" target="_blank" rel="noreferrer" className="text-emerald-400 underline">https://app.buatqris.site/dasbort</a>
+                      <p className="text-xs text-slate-500 dark:text-slate-400">
+                        Dasbor: <a href="https://app.buatqris.site/dasbort" target="_blank" rel="noreferrer" className="text-emerald-600 dark:text-emerald-400 underline">https://app.buatqris.site/dasbort</a>
                       </p>
                     </div>
                   </div>
@@ -1038,7 +1073,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
                     type="button"
                     onClick={handleTestBuatQris}
                     disabled={buatqrisTestStatus.loading}
-                    className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-emerald-500/30 text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer disabled:opacity-50"
+                    className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30 text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer disabled:opacity-50"
                   >
                     <RefreshCw className={`w-3.5 h-3.5 ${buatqrisTestStatus.loading ? 'animate-spin' : ''}`} />
                     <span>Tes Koneksi BuatQRIS</span>
@@ -1049,12 +1084,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
                 {buatqrisTestStatus.result && (
                   <div className={`p-4 rounded-2xl text-xs border ${
                     buatqrisTestStatus.result.success
-                      ? 'bg-emerald-950/30 border-emerald-500/30 text-emerald-300'
-                      : 'bg-rose-950/30 border-rose-500/30 text-rose-300'
+                      ? 'bg-emerald-50 dark:bg-emerald-950/30 border-emerald-200 dark:border-emerald-500/30 text-emerald-800 dark:text-emerald-300'
+                      : 'bg-rose-50 dark:bg-rose-950/30 border-rose-200 dark:border-rose-500/30 text-rose-800 dark:text-rose-300'
                   }`}>
                     <p className="font-bold mb-1">{buatqrisTestStatus.result.message}</p>
                     {buatqrisTestStatus.result.data && (
-                      <p className="font-mono text-[11px] text-slate-400">
+                      <p className="font-mono text-[11px] text-slate-600 dark:text-slate-400">
                         Trx ID: {buatqrisTestStatus.result.data.transaction_id} • Status: {buatqrisTestStatus.result.data.status}
                       </p>
                     )}
@@ -1065,7 +1100,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
                   {/* Account ID & Secret Token */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+                      <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
                         Account ID
                       </label>
                       <input
@@ -1073,12 +1108,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
                         value={formSettings.buatqrisAccountId || ''}
                         onChange={(e) => setFormSettings({ ...formSettings, buatqrisAccountId: e.target.value })}
                         placeholder="Ambil di dasbor -> menu Open API"
-                        className="w-full px-4 py-3 rounded-2xl bg-slate-950/90 border border-slate-800 hover:border-slate-700 text-white placeholder-slate-600 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-sm font-mono transition-all"
+                        className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-950/90 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-sm font-mono transition-all"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+                      <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
                         Secret Token
                       </label>
                       <div className="relative">
@@ -1087,12 +1122,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
                           value={formSettings.buatqrisSecretToken || ''}
                           onChange={(e) => setFormSettings({ ...formSettings, buatqrisSecretToken: e.target.value })}
                           placeholder="token_secret_xxxxxxxxxxxxxxxx"
-                          className="w-full pl-4 pr-12 py-3 rounded-2xl bg-slate-950/90 border border-slate-800 hover:border-slate-700 text-white placeholder-slate-600 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-sm font-mono transition-all"
+                          className="w-full pl-4 pr-12 py-3 rounded-2xl bg-slate-50 dark:bg-slate-950/90 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-sm font-mono transition-all"
                         />
                         <button
                           type="button"
                           onClick={() => toggleToken('secret')}
-                          className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-200 cursor-pointer"
+                          className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 dark:text-slate-500 dark:hover:text-slate-200 cursor-pointer"
                           title={showTokens.secret ? 'Sembunyikan' : 'Lihat'}
                         >
                           {showTokens.secret ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -1103,7 +1138,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
 
                   {/* Signing Secret */}
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
                       Signing Secret (Untuk Verifikasi Webhook HMAC-SHA256)
                     </label>
                     <div className="relative">
@@ -1112,12 +1147,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
                         value={formSettings.buatqrisSigningSecret || ''}
                         onChange={(e) => setFormSettings({ ...formSettings, buatqrisSigningSecret: e.target.value })}
                         placeholder="Signing secret webhook dari dasbor"
-                        className="w-full pl-4 pr-12 py-3 rounded-2xl bg-slate-950/90 border border-slate-800 hover:border-slate-700 text-white placeholder-slate-600 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-sm font-mono transition-all"
+                        className="w-full pl-4 pr-12 py-3 rounded-2xl bg-slate-50 dark:bg-slate-950/90 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-sm font-mono transition-all"
                       />
                       <button
                         type="button"
                         onClick={() => toggleToken('signing')}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-200 cursor-pointer"
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 dark:text-slate-500 dark:hover:text-slate-200 cursor-pointer"
                         title={showTokens.signing ? 'Sembunyikan' : 'Lihat'}
                       >
                         {showTokens.signing ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -1126,18 +1161,18 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
                   </div>
 
                   {/* Webhook Endpoint Display */}
-                  <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1.5">
-                    <span className="text-[11px] text-slate-400 font-semibold block">
+                  <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-1.5">
+                    <span className="text-[11px] text-slate-500 dark:text-slate-400 font-semibold block">
                       URL Callback / Webhook untuk dimasukkan ke dasbor BuatQRIS:
                     </span>
-                    <div className="flex items-center justify-between gap-2 px-3 py-2 rounded-xl bg-slate-900 border border-slate-800 font-mono text-xs text-emerald-400">
+                    <div className="flex items-center justify-between gap-2 px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 font-mono text-xs text-emerald-600 dark:text-emerald-400">
                       <span className="truncate">{webhookUrl}</span>
                       <button
                         type="button"
                         onClick={copyWebhookUrl}
-                        className="text-slate-400 hover:text-white shrink-0 flex items-center gap-1 text-[11px] cursor-pointer"
+                        className="text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white shrink-0 flex items-center gap-1 text-[11px] cursor-pointer"
                       >
-                        {copiedWebhook ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                        {copiedWebhook ? <Check className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
                         <span>{copiedWebhook ? 'Tersalin' : 'Salin URL'}</span>
                       </button>
                     </div>
@@ -1146,7 +1181,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
                   {/* Settings toggles with GlideSelect */}
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
                     <div>
-                      <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+                      <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
                         Metode QRIS
                       </label>
                       <GlideSelect
@@ -1155,9 +1190,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
                         onChange={(val) => setFormSettings({ ...formSettings, buatqrisMethod: val as any })}
                         showTags
                         accentColor="#10b981"
-                        surfaceColor="#090e17"
-                        highlightColor="#1e293b"
-                        textColor="#f8fafc"
+                        surfaceColor={isDark ? '#090e17' : '#ffffff'}
+                        highlightColor={isDark ? '#1e293b' : '#f1f5f9'}
+                        textColor={isDark ? '#f8fafc' : '#0f172a'}
                         menuWidth={280}
                         placement="bottom"
                         size="md"
@@ -1167,7 +1202,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
                     </div>
 
                     <div>
-                      <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+                      <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
                         Beban Biaya Admin
                       </label>
                       <GlideSelect
@@ -1176,9 +1211,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
                         onChange={(val) => setFormSettings({ ...formSettings, buatqrisFeeBy: val as any })}
                         showTags
                         accentColor="#10b981"
-                        surfaceColor="#090e17"
-                        highlightColor="#1e293b"
-                        textColor="#f8fafc"
+                        surfaceColor={isDark ? '#090e17' : '#ffffff'}
+                        highlightColor={isDark ? '#1e293b' : '#f1f5f9'}
+                        textColor={isDark ? '#f8fafc' : '#0f172a'}
                         menuWidth={280}
                         placement="bottom"
                         size="md"
@@ -1188,7 +1223,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
                     </div>
 
                     <div>
-                      <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+                      <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
                         Mode Transaksi
                       </label>
                       <GlideSelect
@@ -1197,9 +1232,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
                         onChange={(val) => setFormSettings({ ...formSettings, isSandbox: val === 'true' })}
                         showTags
                         accentColor="#10b981"
-                        surfaceColor="#090e17"
-                        highlightColor="#1e293b"
-                        textColor="#f8fafc"
+                        surfaceColor={isDark ? '#090e17' : '#ffffff'}
+                        highlightColor={isDark ? '#1e293b' : '#f1f5f9'}
+                        textColor={isDark ? '#f8fafc' : '#0f172a'}
                         menuWidth={280}
                         placement="bottom"
                         size="md"
@@ -1215,7 +1250,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
               <button
                 type="submit"
                 disabled={saving}
-                className="w-full py-4 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold text-base shadow-xl shadow-cyan-500/25 hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                className="w-full py-4 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 dark:text-white font-bold text-base shadow-xl shadow-cyan-500/25 hover:scale-[1.005] active:scale-[0.995] transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
               >
                 <Save className="w-5 h-5" />
                 <span>{saving ? 'Menyimpan...' : 'Simpan Semua Pengaturan API'}</span>
@@ -1227,48 +1262,56 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
           {activeTab === 'metrics' && metrics && (
             <div className="space-y-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="bg-slate-900/80 p-6 rounded-3xl border border-slate-800 shadow-xl">
+                <div className="bg-white dark:bg-slate-900/80 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm dark:shadow-xl transition-all">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs text-slate-400 font-semibold uppercase">Total Pendapatan</span>
-                    <DollarSign className="w-5 h-5 text-emerald-400" />
+                    <span className="text-xs text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wider">Total Pendapatan</span>
+                    <div className="w-10 h-10 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+                      <DollarSign className="w-5 h-5" />
+                    </div>
                   </div>
-                  <p className="text-3xl font-black text-white mt-3 font-mono">
+                  <p className="text-3xl font-black text-slate-900 dark:text-white mt-3 font-mono">
                     Rp {metrics.totalRevenueIdr.toLocaleString('id-ID')}
                   </p>
-                  <p className="text-xs text-emerald-400 mt-1">Pembayaran QRIS lunas</p>
+                  <p className="text-xs text-emerald-600 dark:text-emerald-400 mt-1 font-medium">Pembayaran QRIS lunas</p>
                 </div>
 
-                <div className="bg-slate-900/80 p-6 rounded-3xl border border-slate-800 shadow-xl">
+                <div className="bg-white dark:bg-slate-900/80 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm dark:shadow-xl transition-all">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs text-slate-400 font-semibold uppercase">Server Aktif</span>
-                    <Server className="w-5 h-5 text-cyan-400" />
+                    <span className="text-xs text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wider">Server Aktif</span>
+                    <div className="w-10 h-10 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-600 dark:text-cyan-400 flex items-center justify-center">
+                      <Server className="w-5 h-5" />
+                    </div>
                   </div>
-                  <p className="text-3xl font-black text-white mt-3">
+                  <p className="text-3xl font-black text-slate-900 dark:text-white mt-3">
                     {metrics.activeServersCount}
                   </p>
-                  <p className="text-xs text-cyan-400 mt-1">Cloud VPS Running</p>
+                  <p className="text-xs text-cyan-600 dark:text-cyan-400 mt-1 font-medium">Cloud VPS Running</p>
                 </div>
 
-                <div className="bg-slate-900/80 p-6 rounded-3xl border border-slate-800 shadow-xl">
+                <div className="bg-white dark:bg-slate-900/80 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm dark:shadow-xl transition-all">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs text-slate-400 font-semibold uppercase">Menunggu Pembayaran</span>
-                    <Clock className="w-5 h-5 text-amber-400" />
+                    <span className="text-xs text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wider">Menunggu Pembayaran</span>
+                    <div className="w-10 h-10 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+                      <Clock className="w-5 h-5" />
+                    </div>
                   </div>
-                  <p className="text-3xl font-black text-white mt-3">
+                  <p className="text-3xl font-black text-slate-900 dark:text-white mt-3">
                     {metrics.pendingOrdersCount}
                   </p>
-                  <p className="text-xs text-amber-400 mt-1">QRIS Pending</p>
+                  <p className="text-xs text-amber-600 dark:text-amber-400 mt-1 font-medium">QRIS Pending</p>
                 </div>
 
-                <div className="bg-slate-900/80 p-6 rounded-3xl border border-slate-800 shadow-xl">
+                <div className="bg-white dark:bg-slate-900/80 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm dark:shadow-xl transition-all">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs text-slate-400 font-semibold uppercase">Total Transaksi</span>
-                    <ShoppingBag className="w-5 h-5 text-blue-400" />
+                    <span className="text-xs text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wider">Total Transaksi</span>
+                    <div className="w-10 h-10 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-blue-600 dark:text-blue-400 flex items-center justify-center">
+                      <ShoppingBag className="w-5 h-5" />
+                    </div>
                   </div>
-                  <p className="text-3xl font-black text-white mt-3">
+                  <p className="text-3xl font-black text-slate-900 dark:text-white mt-3">
                     {metrics.totalOrders}
                   </p>
-                  <p className="text-xs text-blue-400 mt-1">Pesanan masuk</p>
+                  <p className="text-xs text-blue-600 dark:text-blue-400 mt-1 font-medium">Pesanan masuk</p>
                 </div>
               </div>
 
@@ -1284,20 +1327,25 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
 
           {/* TAB 4: ALL ORDERS */}
           {activeTab === 'orders' && (
-            <div className="bg-slate-900/80 rounded-3xl border border-slate-800 shadow-xl overflow-hidden">
-              <div className="p-6 border-b border-slate-800 flex items-center justify-between">
-                <h3 className="font-bold text-white text-base">Daftar Semua Pesanan VPS</h3>
-                <span className="text-xs text-slate-400">{orders.length} pesanan tercatat</span>
+            <div className="bg-white dark:bg-slate-900/80 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm dark:shadow-xl overflow-hidden transition-all">
+              <div className="p-6 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+                <div>
+                  <h3 className="font-bold text-slate-900 dark:text-white text-base">Daftar Semua Pesanan VPS</h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Riwayat transaksi dan status server pelanggan</p>
+                </div>
+                <span className="px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+                  {orders.length} pesanan tercatat
+                </span>
               </div>
 
               {orders.length === 0 ? (
-                <div className="p-12 text-center text-slate-500 text-sm">
+                <div className="p-12 text-center text-slate-400 dark:text-slate-500 text-sm">
                   Belum ada pesanan yang dibuat.
                 </div>
               ) : (
                 <div className="overflow-x-auto">
                   <table className="w-full text-left text-xs">
-                    <thead className="bg-slate-950 text-slate-400 uppercase font-semibold">
+                    <thead className="bg-slate-50 dark:bg-slate-950 text-slate-500 dark:text-slate-400 uppercase font-semibold text-[11px] tracking-wider">
                       <tr>
                         <th className="p-4">No. Order</th>
                         <th className="p-4">Customer</th>
@@ -1309,28 +1357,28 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
                         <th className="p-4">Tanggal</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-800">
+                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                       {orders.map((o) => (
-                        <tr key={o.id} className="hover:bg-slate-800/30">
-                          <td className="p-4 font-mono font-bold text-cyan-400">{o.orderNumber}</td>
+                        <tr key={o.id} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/30 transition-colors">
+                          <td className="p-4 font-mono font-bold text-cyan-600 dark:text-cyan-400">{o.orderNumber}</td>
                           <td className="p-4">
-                            <p className="font-semibold text-white">{o.customerName}</p>
-                            <p className="text-slate-500 text-[11px]">{o.customerEmail}</p>
+                            <p className="font-semibold text-slate-900 dark:text-white">{o.customerName}</p>
+                            <p className="text-slate-500 dark:text-slate-400 text-[11px]">{o.customerEmail}</p>
                           </td>
                           <td className="p-4">
-                            <p className="font-medium text-slate-200">{o.planId}</p>
-                            <p className="text-slate-500 text-[11px]">{o.zoneCode} • {o.hostname}</p>
+                            <p className="font-medium text-slate-800 dark:text-slate-200">{o.planId}</p>
+                            <p className="text-slate-500 dark:text-slate-400 text-[11px]">{o.zoneCode} • {o.hostname}</p>
                           </td>
-                          <td className="p-4 font-mono font-bold text-white">
+                          <td className="p-4 font-mono font-bold text-slate-900 dark:text-white">
                             Rp {o.totalAmountIdr.toLocaleString('id-ID')}
                           </td>
                           <td className="p-4">
                             <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${
                               o.paymentStatus === 'PAID'
-                                ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                                ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20'
                                 : o.paymentStatus === 'PENDING'
-                                ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
-                                : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'
+                                ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20'
+                                : 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20'
                             }`}>
                               {o.paymentStatus}
                             </span>
@@ -1338,18 +1386,18 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
                           <td className="p-4">
                             <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${
                               o.vpsStatus === 'ACTIVE'
-                                ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20'
+                                ? 'bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border border-cyan-500/20'
                                 : o.vpsStatus === 'PROVISIONING'
-                                ? 'bg-blue-500/10 text-blue-400 animate-pulse'
-                                : 'bg-slate-800 text-slate-400'
+                                ? 'bg-blue-500/10 text-blue-600 dark:text-blue-400 animate-pulse'
+                                : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
                             }`}>
                               {o.vpsStatus}
                             </span>
                           </td>
-                          <td className="p-4 font-mono text-cyan-300">
+                          <td className="p-4 font-mono text-cyan-600 dark:text-cyan-300">
                             {o.serverIp || '-'}
                           </td>
-                          <td className="p-4 text-slate-500">
+                          <td className="p-4 text-slate-500 dark:text-slate-400">
                             {new Date(o.createdAt).toLocaleDateString('id-ID')}
                           </td>
                         </tr>

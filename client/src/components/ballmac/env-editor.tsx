@@ -220,21 +220,21 @@ export function EnvEditor({
   };
 
   return (
-    <div className={`w-full rounded-2xl sm:rounded-3xl border border-slate-800 bg-slate-950/80 p-5 sm:p-7 shadow-2xl backdrop-blur-md transition-all ${className}`}>
+    <div className={`w-full rounded-2xl sm:rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950/80 p-5 sm:p-7 shadow-sm dark:shadow-2xl backdrop-blur-md transition-all ${className}`}>
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-800/80">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-200 dark:border-slate-800/80">
         <div>
           <div className="flex items-center gap-2.5">
-            <h3 className="text-base sm:text-lg font-bold text-white tracking-tight flex items-center gap-2">
-              <Shield className="w-4 h-4 text-cyan-400" />
+            <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
+              <Shield className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
               {title}
             </h3>
-            <span className="text-[11px] font-mono px-2 py-0.5 rounded-full bg-slate-900 border border-slate-800 text-slate-400">
+            <span className="text-[11px] font-mono px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400">
               {currentItems.length} {currentItems.length === 1 ? 'Token / Var' : 'Tokens / Vars'}
             </span>
           </div>
           {description && (
-            <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
               {description}
             </p>
           )}
@@ -245,9 +245,9 @@ export function EnvEditor({
           <button
             type="button"
             onClick={() => setShowAll(!showAll)}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 text-xs font-medium text-slate-300 hover:text-white transition-all cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-900/90 hover:bg-slate-200 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 text-xs font-medium text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer"
           >
-            {showAll ? <EyeOff className="w-3.5 h-3.5 text-slate-400" /> : <Eye className="w-3.5 h-3.5 text-slate-400" />}
+            {showAll ? <EyeOff className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" /> : <Eye className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />}
             <span>{showAll ? "Hide all" : "Show all"}</span>
           </button>
 
@@ -255,9 +255,9 @@ export function EnvEditor({
           <button
             type="button"
             onClick={handleCopyEnv}
-            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 text-xs font-semibold text-slate-200 hover:text-white transition-all shadow-sm cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-900/90 hover:bg-slate-200 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white transition-all shadow-sm cursor-pointer"
           >
-            {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-slate-400" />}
+            {copied ? <Check className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />}
             <span>{copied ? "Copied!" : "Copy .env"}</span>
           </button>
         </div>
@@ -274,14 +274,14 @@ export function EnvEditor({
           return (
             <div
               key={itemId}
-              className="group relative flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 p-2 sm:p-2.5 rounded-2xl border border-slate-800/80 bg-slate-900/40 hover:bg-slate-900/70 hover:border-slate-700/80 transition-all"
+              className="group relative flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 p-2 sm:p-2.5 rounded-2xl border border-slate-200 dark:border-slate-800/80 bg-slate-50/70 dark:bg-slate-900/40 hover:bg-slate-100/80 dark:hover:bg-slate-900/70 hover:border-slate-300 dark:hover:border-slate-700/80 transition-all"
             >
               {/* Failover / Priority order index indicator */}
               <div className="hidden lg:flex items-center justify-center w-6 text-center">
                 <span className={`text-[10px] font-mono font-bold px-1.5 py-0.5 rounded ${
                   index === 0
-                    ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20'
-                    : 'bg-slate-800/80 text-slate-400'
+                    ? 'bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border border-cyan-500/20'
+                    : 'bg-slate-200 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400'
                 }`} title={index === 0 ? "Prioritas Utama (Primary)" : `Failover Cadangan #${index}`}>
                   #{index + 1}
                 </span>
@@ -296,14 +296,14 @@ export function EnvEditor({
                   onPaste={(e) => handleKeyPaste(e, index)}
                   disabled={readOnly}
                   placeholder={placeholderKey}
-                  className={`w-full px-3.5 py-2.5 rounded-xl bg-slate-950/90 border text-xs sm:text-sm font-mono tracking-wide text-white placeholder-slate-600 focus:outline-none transition-all ${
+                  className={`w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-950/90 border text-xs sm:text-sm font-mono tracking-wide text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none transition-all ${
                     isDuplicate
-                      ? "border-rose-500/80 focus:border-rose-500 focus:ring-1 focus:ring-rose-500/30 text-rose-300"
-                      : "border-slate-800 hover:border-slate-700 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/20"
+                      ? "border-rose-500/80 focus:border-rose-500 focus:ring-1 focus:ring-rose-500/30 text-rose-600 dark:text-rose-300"
+                      : "border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/20"
                   }`}
                 />
                 {isDuplicate && (
-                  <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1 text-rose-400 text-[10px]" title="Nama variabel duplikat">
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1 text-rose-500 dark:text-rose-400 text-[10px]" title="Nama variabel duplikat">
                     <AlertCircle className="w-3.5 h-3.5" />
                   </div>
                 )}
@@ -317,12 +317,12 @@ export function EnvEditor({
                   onChange={(e) => handleValueChange(index, e.target.value)}
                   disabled={readOnly}
                   placeholder={placeholderValue}
-                  className="w-full pl-3.5 pr-10 py-2.5 rounded-xl bg-slate-950/90 border border-slate-800 hover:border-slate-700 text-xs sm:text-sm font-mono text-slate-200 placeholder-slate-600 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/20 transition-all tracking-wider"
+                  className="w-full pl-3.5 pr-10 py-2.5 rounded-xl bg-white dark:bg-slate-950/90 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 text-xs sm:text-sm font-mono text-slate-900 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/20 transition-all tracking-wider"
                 />
                 <button
                   type="button"
                   onClick={() => toggleShowIndividual(itemId)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-200 p-1 rounded-lg transition-colors cursor-pointer"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 dark:text-slate-500 dark:hover:text-slate-200 p-1 rounded-lg transition-colors cursor-pointer"
                   title={isValueVisible ? "Sembunyikan Nilai" : "Tampilkan Nilai"}
                 >
                   {isValueVisible ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
@@ -335,12 +335,12 @@ export function EnvEditor({
                   <span
                     className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-semibold tracking-wide uppercase ${
                       badge.variant === 'success'
-                        ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                        ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20'
                         : badge.variant === 'error'
-                        ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20'
+                        ? 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20'
                         : badge.variant === 'warning'
-                        ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
-                        : 'bg-slate-800 text-slate-300'
+                        ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20'
+                        : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300'
                     }`}
                   >
                     {badge.variant === 'success' && <CheckCircle2 className="w-3 h-3" />}
@@ -355,7 +355,7 @@ export function EnvEditor({
                 <button
                   type="button"
                   onClick={() => handleRemoveVariable(index)}
-                  className="self-end sm:self-center p-2 rounded-xl text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 transition-colors cursor-pointer shrink-0"
+                  className="self-end sm:self-center p-2 rounded-xl text-slate-400 hover:text-rose-600 dark:text-slate-500 dark:hover:text-rose-400 hover:bg-rose-500/10 transition-colors cursor-pointer shrink-0"
                   title="Hapus variabel ini"
                 >
                   <Trash2 className="w-4 h-4" />
@@ -367,15 +367,15 @@ export function EnvEditor({
       </div>
 
       {/* Bottom Actions Bar */}
-      <div className="pt-3 border-t border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div className="pt-3 border-t border-slate-200 dark:border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           {!readOnly && (
             <button
               type="button"
               onClick={handleAddVariable}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs font-semibold text-white transition-all shadow-sm active:scale-95 cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 text-xs font-semibold text-slate-900 dark:text-white transition-all shadow-sm active:scale-95 cursor-pointer"
             >
-              <Plus className="w-3.5 h-3.5 text-cyan-400" />
+              <Plus className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400" />
               <span>Add variable</span>
             </button>
           )}
@@ -384,38 +384,38 @@ export function EnvEditor({
             <button
               type="button"
               onClick={() => setIsPasteModalOpen(true)}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs font-semibold text-slate-300 hover:text-white transition-all cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer"
             >
-              <FileText className="w-3.5 h-3.5 text-slate-400" />
+              <FileText className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
               <span>Paste .env</span>
             </button>
           )}
         </div>
 
-        <p className="text-[11px] text-slate-500 leading-normal">
+        <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-normal">
           Tip: paste several lines into any name field to import them.
         </p>
       </div>
 
       {/* Paste .env Modal */}
       {isPasteModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="w-full max-w-lg rounded-3xl border border-slate-800 bg-slate-900 p-6 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="w-full max-w-lg rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-2xl space-y-4 text-slate-900 dark:text-white">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
               <div className="flex items-center gap-2">
-                <FileText className="w-4 h-4 text-cyan-400" />
-                <h4 className="text-sm font-bold text-white">Import / Paste .env</h4>
+                <FileText className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
+                <h4 className="text-sm font-bold text-slate-900 dark:text-white">Import / Paste .env</h4>
               </div>
               <button
                 type="button"
                 onClick={() => setIsPasteModalOpen(false)}
-                className="text-slate-400 hover:text-white p-1 rounded-lg"
+                className="text-slate-400 hover:text-slate-700 dark:text-slate-400 dark:hover:text-white p-1 rounded-lg"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-slate-500 dark:text-slate-400">
               Tempel baris-baris token atau format <code>KEY=VALUE</code> dari file .env Anda. Baris kosong dan komentar (<code>#</code>) akan diabaikan.
             </p>
 
@@ -424,14 +424,14 @@ export function EnvEditor({
               value={pasteContent}
               onChange={(e) => setPasteContent(e.target.value)}
               placeholder={`# Contoh multi-token UpCloud failover:\nUPCLOUD_API_TOKEN_1=ucat_xxxxxxxxxxxxxxx\nUPCLOUD_API_TOKEN_2=ucat_yyyyyyyyyyyyyyy\nUPCLOUD_API_TOKEN_3=ucat_zzzzzzzzzzzzzzz`}
-              className="w-full p-3 rounded-2xl bg-slate-950 border border-slate-800 text-xs font-mono text-slate-200 placeholder-slate-600 focus:outline-none focus:border-cyan-500 transition-all resize-y"
+              className="w-full p-3 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs font-mono text-slate-900 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none focus:border-cyan-500 transition-all resize-y"
             />
 
             <div className="flex items-center justify-end gap-2 pt-2">
               <button
                 type="button"
                 onClick={() => setIsPasteModalOpen(false)}
-                className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold cursor-pointer"
+                className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-semibold cursor-pointer"
               >
                 Batal
               </button>
@@ -439,7 +439,7 @@ export function EnvEditor({
                 type="button"
                 onClick={() => handleApplyPasteModal('append')}
                 disabled={!pasteContent.trim()}
-                className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-cyan-500/30 text-xs font-semibold cursor-pointer disabled:opacity-50"
+                className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-cyan-700 dark:text-cyan-300 border border-cyan-500/30 text-xs font-semibold cursor-pointer disabled:opacity-50"
               >
                 Tambahkan (Append)
               </button>
@@ -447,7 +447,7 @@ export function EnvEditor({
                 type="button"
                 onClick={() => handleApplyPasteModal('replace')}
                 disabled={!pasteContent.trim()}
-                className="px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold shadow-lg shadow-cyan-600/30 cursor-pointer disabled:opacity-50"
+                className="px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold text-xs shadow-md shadow-cyan-500/20 cursor-pointer disabled:opacity-50"
               >
                 Ganti Semua (Replace)
               </button>
