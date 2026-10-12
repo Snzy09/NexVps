@@ -375,11 +375,6 @@ export default function GridChangelog() {
                 <span>Reset</span>
               </button>
             </div>
-
-            {/* Live Rule Banner */}
-            <div className="inline-block text-xs font-mono text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-1">
-              Aturan Versi: <span className="text-cyan-400 font-semibold">v1.0.0</span> ➔ 3 Fitur Baru / 2 Perbaikan / 2 Bug Fixes ➔ <span className="text-cyan-400 font-semibold">v1.2.0</span> & berulang.
-            </div>
           </div>
         )}
       </div>
