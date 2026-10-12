@@ -45,7 +45,7 @@ const AVATAR_PRESETS = [
 
 interface UserProfileWithStatsProps {
   onOpenAuth?: (tab?: "login" | "register") => void;
-  onNavigateTab?: (tab: "store" | "servers" | "admin" | "changelog" | "profile") => void;
+  onNavigateTab?: (tab: "store" | "servers" | "admin" | "changelog" | "profile" | "support") => void;
 }
 
 export default function UserProfileWithStats({
@@ -380,10 +380,16 @@ export default function UserProfileWithStats({
               <Button 
                 className="mt-5 w-full bg-white text-slate-950 hover:bg-slate-100 dark:bg-white dark:text-slate-950 dark:hover:bg-slate-200 font-bold text-xs py-2.5 rounded-xl shadow-md cursor-pointer flex items-center justify-center gap-2 transition-all" 
                 size="sm"
-                onClick={() => window.open(`https://wa.me/6281234567890?text=Halo%20Admin%20NexVps,%20saya%20${encodeURIComponent(user.displayName || user.email)}`, '_blank')}
+                onClick={() => {
+                  if (onNavigateTab) {
+                    onNavigateTab('support');
+                  } else {
+                    window.open(`https://wa.me/6281234567890?text=Halo%20Admin%20NexVps,%20saya%20${encodeURIComponent(user.displayName || user.email)}`, '_blank');
+                  }
+                }}
               >
                 <Mail className="size-3.5" />
-                Hubungi Support
+                Hubungi Support & Chat Admin
               </Button>
             </div>
 

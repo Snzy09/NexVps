@@ -43,8 +43,8 @@ import {
 } from './ui/sidebar';
 
 interface AppSidebarProps {
-  currentTab: 'store' | 'servers' | 'admin' | 'changelog' | 'profile';
-  setCurrentTab: (tab: 'store' | 'servers' | 'admin' | 'changelog' | 'profile') => void;
+  currentTab: 'store' | 'servers' | 'admin' | 'changelog' | 'profile' | 'support';
+  setCurrentTab: (tab: 'store' | 'servers' | 'admin' | 'changelog' | 'profile' | 'support') => void;
   activeServersCount: number;
   onOpenAuth: (defaultTab?: 'login' | 'register', adminOnly?: boolean) => void;
   collapsible?: 'hidden' | 'dock' | 'none';
@@ -177,6 +177,17 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
               <SidebarLabel>Gateway QRIS</SidebarLabel>
               <SidebarBadge>Auto</SidebarBadge>
             </SidebarItem>
+
+            {/* Bantuan & Support Admin */}
+            <SidebarItem
+              tooltip="Pusat Bantuan & Support Admin"
+              isCurrent={currentTab === 'support'}
+              onClick={() => setCurrentTab('support')}
+              badge="24/7"
+            >
+              <LifeBuoy className="h-4 w-4 shrink-0 text-emerald-400" />
+              <SidebarLabel>Bantuan & Support</SidebarLabel>
+            </SidebarItem>
           </SidebarSection>
 
           {/* Collapsible Disclosure Groups */}
@@ -197,18 +208,20 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
                 </SidebarItem>
 
                 <SidebarItem 
-                  tooltip="Bantuan WhatsApp"
-                  onClick={() => window.open('https://wa.me/6281234567890?text=Halo%20NexVps%20Support', '_blank')}
+                  tooltip="Chat Dukungan Admin"
+                  isCurrent={currentTab === 'support'}
+                  onClick={() => setCurrentTab('support')}
                 >
-                  <LifeBuoy className="h-3.5 w-3.5 text-slate-400" />
+                  <LifeBuoy className="h-3.5 w-3.5 text-emerald-400" />
                   <SidebarLabel>Chat Dukungan CS</SidebarLabel>
                 </SidebarItem>
 
                 <SidebarItem 
-                  tooltip="FAQ"
-                  onClick={() => setCurrentTab('store')}
+                  tooltip="FAQ & Solusi Mandiri"
+                  isCurrent={currentTab === 'support'}
+                  onClick={() => setCurrentTab('support')}
                 >
-                  <HelpCircle className="h-3.5 w-3.5 text-slate-400" />
+                  <HelpCircle className="h-3.5 w-3.5 text-cyan-400" />
                   <SidebarLabel>FAQ Cloud VPS</SidebarLabel>
                 </SidebarItem>
               </SidebarDisclosurePanel>

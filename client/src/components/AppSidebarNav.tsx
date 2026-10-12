@@ -23,8 +23,8 @@ import SwitchAnimatedTheme from './SwitchAnimatedTheme';
 import { DropdownMenuNotifications } from './DropdownMenuNotifications';
 
 interface AppSidebarNavProps {
-  currentTab: 'store' | 'servers' | 'admin' | 'changelog' | 'profile';
-  setCurrentTab: (tab: 'store' | 'servers' | 'admin' | 'changelog' | 'profile') => void;
+  currentTab: 'store' | 'servers' | 'admin' | 'changelog' | 'profile' | 'support';
+  setCurrentTab: (tab: 'store' | 'servers' | 'admin' | 'changelog' | 'profile' | 'support') => void;
   activeServersCount: number;
   onOpenAuth: (defaultTab?: 'login' | 'register', adminOnly?: boolean) => void;
 }
@@ -62,6 +62,8 @@ export const AppSidebarNav: React.FC<AppSidebarNavProps> = ({
     { title: 'Business Cloud (2 vCPU, 4 GB)', cat: 'Paket VPS', action: () => { setCurrentTab('store'); setSearchOpen(false); } },
     { title: 'Enterprise Power (4 vCPU, 8 GB)', cat: 'Paket VPS', action: () => { setCurrentTab('store'); setSearchOpen(false); } },
     { title: 'Server Saya & Live Status', cat: 'Navigasi', action: () => { setCurrentTab('servers'); setSearchOpen(false); } },
+    { title: 'Pusat Bantuan & Chat Admin 24/7', cat: 'Support', action: () => { setCurrentTab('support'); setSearchOpen(false); } },
+    { title: 'Kontak WhatsApp & Gmail Admin', cat: 'Support', action: () => { setCurrentTab('support'); setSearchOpen(false); } },
     { title: 'Profil & Pengaturan Akun', cat: 'Navigasi', action: () => { setCurrentTab('profile'); setSearchOpen(false); } },
     { title: 'Changelog Platform & Roadmap', cat: 'Navigasi', action: () => { setCurrentTab('changelog'); setSearchOpen(false); } },
     { title: 'Admin & Pengaturan Tarif', cat: 'Admin', action: () => { setCurrentTab('admin'); setSearchOpen(false); } },
@@ -85,7 +87,8 @@ export const AppSidebarNav: React.FC<AppSidebarNavProps> = ({
               {currentTab === 'store' ? 'Katalog Paket VPS' :
                currentTab === 'servers' ? 'Server Saya' :
                currentTab === 'changelog' ? 'Changelog Platform' :
-               currentTab === 'profile' ? 'Profil & Pengaturan User' : 'Panel Administrator'}
+               currentTab === 'profile' ? 'Profil & Pengaturan User' : 
+               currentTab === 'support' ? 'Pusat Bantuan & Support Admin' : 'Panel Administrator'}
             </span>
           </nav>
         </div>

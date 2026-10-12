@@ -12,6 +12,7 @@ import { ServersDashboard } from './components/ServersDashboard';
 import { AdminDashboard } from './components/AdminDashboard';
 import GridChangelog from './components/GridChangelog';
 import UserProfileWithStats from './components/UserProfileWithStats';
+import SupportPage from './components/SupportPage';
 import { AuthModal } from './components/AuthModal';
 import Footer from './components/Footer';
 import { api, getStoredPlans } from './services/api';
@@ -23,7 +24,7 @@ const AppContent: React.FC = () => {
   const { user } = useAuth();
   const toast = useToast();
   const { notify } = useNotification();
-  const [currentTab, setCurrentTab] = useState<'store' | 'servers' | 'admin' | 'changelog' | 'profile'>('store');
+  const [currentTab, setCurrentTab] = useState<'store' | 'servers' | 'admin' | 'changelog' | 'profile' | 'support'>('store');
   const [catalog, setCatalog] = useState<CatalogData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [activeOrder, setActiveOrder] = useState<Order | null>(null);
@@ -231,6 +232,12 @@ const AppContent: React.FC = () => {
             {currentTab === 'profile' && (
               <UserProfileWithStats
                 onOpenAuth={handleOpenAuth}
+                onNavigateTab={setCurrentTab}
+              />
+            )}
+
+            {currentTab === 'support' && (
+              <SupportPage
                 onNavigateTab={setCurrentTab}
               />
             )}

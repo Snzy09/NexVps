@@ -26,7 +26,7 @@ import { useNotification, type UserNotificationItem } from "../contexts/Notifica
 import { useAuth } from "../contexts/AuthContext"
 
 interface DropdownMenuNotificationsProps {
-  onNavigateTab?: (tab: 'store' | 'servers' | 'admin' | 'changelog' | 'profile') => void
+  onNavigateTab?: (tab: 'store' | 'servers' | 'admin' | 'changelog' | 'profile' | 'support') => void
   className?: string
 }
 
