@@ -146,6 +146,11 @@ export interface AuthUser {
   uid: string;
   email: string;
   displayName?: string;
+  username?: string;
+  title?: string;
+  bio?: string;
+  role?: string;
+  memberSince?: string;
   photoURL?: string;
   isAdmin: boolean;
 }

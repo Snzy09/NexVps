@@ -1,0 +1,649 @@
+import React, { useState, useEffect } from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { 
+  Edit, 
+  Mail, 
+  Settings, 
+  Star, 
+  Users, 
+  Activity, 
+  ShieldCheck, 
+  Server, 
+  Copy, 
+  Check, 
+  Camera, 
+  Save, 
+  X, 
+  Sparkles, 
+  Clock, 
+  Upload,
+  CheckCircle2,
+  ExternalLink,
+  User as UserIcon,
+  Fingerprint
+} from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/contexts/ToastContext";
+import { useNotification } from "@/contexts/NotificationContext";
+import { api } from "@/services/api";
+import type { Order } from "@/types";
+
+// Curated stylish avatar presets
+const AVATAR_PRESETS = [
+  { label: "Cyber Guy", url: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" },
+  { label: "Developer", url: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80" },
+  { label: "Tech Lead", url: "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150&auto=format&fit=crop&q=80" },
+  { label: "Designer", url: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&auto=format&fit=crop&q=80" },
+  { label: "Cool Anime", url: "https://api.dicebear.com/7.x/bottts/svg?seed=NexVpsCyber" },
+  { label: "Pixel Hacker", url: "https://api.dicebear.com/7.x/pixel-art/svg?seed=AdminSanzzy" },
+];
+
+interface UserProfileWithStatsProps {
+  onOpenAuth?: (tab?: "login" | "register") => void;
+  onNavigateTab?: (tab: "store" | "servers" | "admin" | "changelog" | "profile") => void;
+}
+
+export default function UserProfileWithStats({
+  onOpenAuth,
+  onNavigateTab
+}: UserProfileWithStatsProps) {
+  const { user, isAdmin, updateUserProfile } = useAuth();
+  const toast = useToast();
+  const { notify } = useNotification();
+
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [activeTab, setActiveTab] = useState<"overview" | "settings">("overview");
+  const [userServers, setUserServers] = useState<Order[]>([]);
+  const [copiedField, setCopiedField] = useState<string | null>(null);
+
+  // Form edit states
+  const [nickname, setNickname] = useState<string>("");
+  const [username, setUsername] = useState<string>("");
+  const [title, setTitle] = useState<string>("");
+  const [bio, setBio] = useState<string>("");
+  const [photoURL, setPhotoURL] = useState<string>("");
+  const [isSaving, setIsSaving] = useState<boolean>(false);
+
+  // Load user data into form
+  useEffect(() => {
+    if (user) {
+      setNickname(user.displayName || user.email.split("@")[0]);
+      setUsername(user.username || user.email.split("@")[0].toLowerCase());
+      setTitle(user.title || (user.isAdmin ? "Lead Cloud Architect" : "Cloud Developer"));
+      setBio(user.bio || "Deploying high-performance MaxIOPS Cloud VPS on NexVps infrastructure.");
+      setPhotoURL(user.photoURL || "");
+
+      // Fetch user's real servers
+      api.getServers(user.email, user.uid).then((res) => {
+        setUserServers(res);
+      }).catch(() => {});
+    }
+  }, [user]);
+
+  const copyToClipboard = (text: string, field: string) => {
+    try {
+      navigator.clipboard.writeText(text);
+      setCopiedField(field);
+      toast.success("Berhasil Disalin", text);
+      setTimeout(() => setCopiedField(null), 2000);
+    } catch {}
+  };
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 2 * 1024 * 1024) {
+      toast.error("Ukuran Terlalu Besar", "Maksimal ukuran foto adalah 2 MB.");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const dataUrl = event.target?.result as string;
+      if (dataUrl) {
+        setPhotoURL(dataUrl);
+        toast.info("Foto Dimuat", "Klik 'Simpan Perubahan' untuk menerapkan foto profil.");
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleSaveProfile = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!user) return;
+
+    setIsSaving(true);
+    try {
+      await updateUserProfile({
+        displayName: nickname.trim(),
+        username: username.trim().replace(/^@/, ""),
+        title: title.trim(),
+        bio: bio.trim(),
+        photoURL: photoURL.trim()
+      });
+
+      notify({
+        title: "Profil Berhasil Diperbarui! ✨",
+        desc: `Nama profil sekarang: ${nickname.trim()} (@${username.trim()}).`,
+        category: "security",
+        status: "success"
+      });
+
+      setIsEditing(false);
+      setActiveTab("overview");
+    } catch (err: any) {
+      toast.error("Gagal Memperbarui Profil", err.message);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  // If user is not logged in, prompt to log in or register
+  if (!user) {
+    return (
+      <div className="container mx-auto px-4 py-12 max-w-2xl text-center space-y-5">
+        <div className="size-20 rounded-3xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 flex items-center justify-center mx-auto shadow-xl">
+          <UserIcon className="size-10" />
+        </div>
+        <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
+          Profil & Pengaturan Akun
+        </h2>
+        <p className="text-sm text-slate-500 dark:text-slate-400">
+          Silakan masuk ke akun NexVps Cloud Anda untuk melihat statistik server, menyesuaikan nama panggilan, username, dan foto profil.
+        </p>
+        <div className="flex items-center justify-center gap-3 pt-2">
+          <Button onClick={() => onOpenAuth?.("login")} className="bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold px-6">
+            Masuk Akun
+          </Button>
+          <Button variant="outline" onClick={() => onOpenAuth?.("register")}>
+            Daftar Baru
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  const activeServersCount = userServers.filter((s) => s.vpsStatus === "ACTIVE").length;
+  const initials = (user.displayName || user.email.split("@")[0]).substring(0, 2).toUpperCase();
+
+  return (
+    <div className="container mx-auto px-4 py-6 md:px-6 2xl:max-w-[1400px]">
+      {/* Top Header matching user screenshot */}
+      <div className="mb-6 flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+            Profile
+          </h1>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+            Kelola identitas publik, foto profil, dan konfigurasi akun cloud Anda
+          </p>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <Button
+            variant={activeTab === "settings" || isEditing ? "default" : "outline"}
+            size="sm"
+            onClick={() => {
+              setIsEditing(!isEditing);
+              setActiveTab(isEditing ? "overview" : "settings");
+            }}
+            className="cursor-pointer"
+          >
+            <Edit className="mr-2 size-4" />
+            {isEditing ? "View Profile" : "Edit Profile"}
+          </Button>
+
+          <Button
+            variant={activeTab === "settings" && !isEditing ? "default" : "outline"}
+            size="sm"
+            onClick={() => {
+              setActiveTab("settings");
+              setIsEditing(true);
+            }}
+            className="cursor-pointer"
+          >
+            <Settings className="mr-2 size-4" />
+            Settings
+          </Button>
+        </div>
+      </div>
+
+      <div className="grid gap-6 md:grid-cols-4">
+        {/* Left Sidebar Card matching user screenshot */}
+        <div className="md:col-span-1">
+          <Card className="p-0 border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden">
+            <CardContent className="p-6">
+              <div className="flex flex-col items-center text-center">
+                <div className="relative group">
+                  <Avatar className="size-24 border-2 border-cyan-500/40 shadow-lg">
+                    <AvatarImage
+                      src={user.photoURL || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80"}
+                      alt={user.displayName || "User Avatar"}
+                    />
+                    <AvatarFallback className="bg-gradient-to-br from-cyan-500 to-blue-600 text-white font-extrabold text-xl">
+                      {initials}
+                    </AvatarFallback>
+                  </Avatar>
+
+                  {/* Quick Change Photo Button */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsEditing(true);
+                      setActiveTab("settings");
+                    }}
+                    className="absolute inset-0 rounded-full bg-black/60 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center text-white text-[10px] font-semibold transition-opacity cursor-pointer backdrop-blur-[2px]"
+                    title="Ganti Foto Profil"
+                  >
+                    <Camera className="size-5 mb-0.5" />
+                    <span>Ubah Foto</span>
+                  </button>
+                </div>
+
+                <h2 className="mt-4 text-lg font-bold text-slate-900 dark:text-white truncate max-w-full">
+                  {user.displayName || "John Doe"}
+                </h2>
+                
+                <p className="text-slate-500 dark:text-slate-400 text-xs font-mono mt-0.5 truncate max-w-full">
+                  @{user.username || user.email.split("@")[0].toLowerCase()}
+                </p>
+
+                <p className="text-slate-600 dark:text-slate-300 text-xs mt-1 font-medium">
+                  {user.title || (user.isAdmin ? "Super Administrator" : "Product Designer")}
+                </p>
+
+                <Badge 
+                  className="mt-2.5 font-mono text-[11px]" 
+                  variant={user.isAdmin ? "cyan" : "secondary"}
+                >
+                  {user.isAdmin ? "Admin Verified" : (user.role || "Pro Member")}
+                </Badge>
+
+                {/* Message / Support Button */}
+                <Button 
+                  className="mt-4 w-full bg-slate-900 dark:bg-white text-white dark:text-slate-950 hover:bg-slate-800 dark:hover:bg-slate-100 font-semibold text-xs shadow-md cursor-pointer" 
+                  size="sm"
+                  onClick={() => window.open(`https://wa.me/6281234567890?text=Halo%20Admin%20NexVps,%20saya%20${encodeURIComponent(user.displayName || user.email)}`, '_blank')}
+                >
+                  <Mail className="mr-2 size-3.5" />
+                  Hubungi Support
+                </Button>
+              </div>
+
+              {/* User Metadata list matching screenshot */}
+              <div className="mt-6 pt-5 border-t border-slate-200 dark:border-slate-800/80 space-y-3.5">
+                <div className="flex justify-between items-center text-xs">
+                  <span className="text-slate-500 dark:text-slate-400">Member since</span>
+                  <span className="font-semibold text-slate-800 dark:text-slate-200">{user.memberSince || "Jan 2026"}</span>
+                </div>
+                <div className="flex justify-between items-center text-xs">
+                  <span className="text-slate-500 dark:text-slate-400">Last active</span>
+                  <span className="inline-flex items-center gap-1.5 font-semibold text-emerald-500 dark:text-emerald-400">
+                    <span className="size-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    Online Now
+                  </span>
+                </div>
+                <div className="flex justify-between items-center text-xs">
+                  <span className="text-slate-500 dark:text-slate-400">Role</span>
+                  <span className="font-semibold text-slate-800 dark:text-slate-200">
+                    {user.isAdmin ? "Super Admin" : "Customer / Developer"}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center text-xs pt-1">
+                  <span className="text-slate-500 dark:text-slate-400">Email</span>
+                  <button
+                    type="button"
+                    onClick={() => copyToClipboard(user.email, "email")}
+                    className="font-mono text-[11px] text-cyan-500 dark:text-cyan-400 hover:underline flex items-center gap-1 cursor-pointer truncate max-w-[130px]"
+                    title="Klik untuk salin email"
+                  >
+                    <span className="truncate">{user.email}</span>
+                    {copiedField === "email" ? <Check className="size-3 text-emerald-400" /> : <Copy className="size-3" />}
+                  </button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Right Main Content */}
+        <div className="space-y-6 md:col-span-3">
+          {/* Settings / Edit Mode Panel */}
+          {activeTab === "settings" || isEditing ? (
+            <Card className="p-0 border border-cyan-500/30 dark:border-cyan-500/20 shadow-2xl overflow-hidden animate-in fade-in slide-in-from-top-4">
+              <div className="bg-slate-100 dark:bg-slate-900/90 px-6 py-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+                <div>
+                  <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <Edit className="size-4 text-cyan-400" />
+                    <span>Edit Profile & User Settings</span>
+                  </h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                    Perbarui nama panggilan (nickname), username handle, dan foto profil Anda.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsEditing(false);
+                    setActiveTab("overview");
+                  }}
+                  className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
+                >
+                  <X className="size-4" />
+                </button>
+              </div>
+
+              <CardContent className="p-6">
+                <form onSubmit={handleSaveProfile} className="space-y-6">
+                  {/* Photo Profile Section */}
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
+                      Foto Profil (Photo Profile)
+                    </label>
+
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5">
+                      <Avatar className="size-20 border-2 border-cyan-400 shrink-0 shadow-lg">
+                        <AvatarImage src={photoURL} alt="Preview Avatar" />
+                        <AvatarFallback className="bg-slate-800 text-cyan-400 font-bold text-lg">
+                          {initials}
+                        </AvatarFallback>
+                      </Avatar>
+
+                      <div className="space-y-2 flex-1 w-full">
+                        <div className="flex gap-2">
+                          <input
+                            type="url"
+                            value={photoURL}
+                            onChange={(e) => setPhotoURL(e.target.value)}
+                            placeholder="https://example.com/photo.png"
+                            className="flex-1 px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 font-mono"
+                          />
+                          <label className="px-3.5 py-2 text-xs font-semibold rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 flex items-center gap-1.5 cursor-pointer shrink-0 transition-colors">
+                            <Upload className="size-3.5" />
+                            <span>Upload</span>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              onChange={handleFileUpload}
+                              className="hidden"
+                            />
+                          </label>
+                        </div>
+
+                        {/* Presets */}
+                        <div className="flex flex-wrap items-center gap-2 pt-1">
+                          <span className="text-[11px] text-slate-500 font-semibold mr-1">Pilihan Cepat:</span>
+                          {AVATAR_PRESETS.map((preset) => (
+                            <button
+                              key={preset.label}
+                              type="button"
+                              onClick={() => setPhotoURL(preset.url)}
+                              className={`px-2 py-1 text-[11px] rounded-lg border transition-all cursor-pointer ${
+                                photoURL === preset.url
+                                  ? "bg-cyan-500/20 border-cyan-500 text-cyan-400 font-semibold"
+                                  : "bg-slate-100 dark:bg-slate-900 border-slate-300 dark:border-slate-800 text-slate-500 hover:text-slate-300"
+                              }`}
+                            >
+                              {preset.label}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Nickname & Username Fields */}
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <div className="space-y-1.5">
+                      <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
+                        Nama Panggilan (Nickname / Display Name)
+                      </label>
+                      <input
+                        type="text"
+                        value={nickname}
+                        onChange={(e) => setNickname(e.target.value)}
+                        placeholder="Contoh: John Doe"
+                        required
+                        className="w-full px-3.5 py-2.5 text-sm rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400"
+                      />
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
+                        Username Handle (@username)
+                      </label>
+                      <div className="relative">
+                        <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-sm font-mono">
+                          @
+                        </span>
+                        <input
+                          type="text"
+                          value={username}
+                          onChange={(e) => setUsername(e.target.value.replace(/[^a-zA-Z0-9._-]/g, ""))}
+                          placeholder="johndoe"
+                          required
+                          className="w-full pl-8 pr-3.5 py-2.5 text-sm rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 font-mono"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Title & Bio Fields */}
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <div className="space-y-1.5">
+                      <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
+                        Profesi / Title
+                      </label>
+                      <input
+                        type="text"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                        placeholder="Contoh: Product Designer / Cloud Engineer"
+                        className="w-full px-3.5 py-2.5 text-sm rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400"
+                      />
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
+                        Biografi Singkat (Bio)
+                      </label>
+                      <input
+                        type="text"
+                        value={bio}
+                        onChange={(e) => setBio(e.target.value)}
+                        placeholder="Deskripsi ringkas profil Anda..."
+                        className="w-full px-3.5 py-2.5 text-sm rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400"
+                      />
+                    </div>
+                  </div>
+
+                  {/* User Information Summary Card */}
+                  <div className="p-4 rounded-xl bg-slate-100/70 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800 space-y-3">
+                    <h5 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
+                      <Fingerprint className="size-4 text-cyan-400" />
+                      <span>Informasi Akun & Keamanan</span>
+                    </h5>
+                    
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                      <div>
+                        <span className="text-slate-500 block">Akun UID:</span>
+                        <span className="font-mono text-slate-300">{user.uid.substring(0, 14)}...</span>
+                      </div>
+                      <div>
+                        <span className="text-slate-500 block">Status Akses:</span>
+                        <span className="text-emerald-400 font-semibold">{user.isAdmin ? "Administrator Penuh" : "Standard Developer"}</span>
+                      </div>
+                      <div>
+                        <span className="text-slate-500 block">Server Aktif:</span>
+                        <span className="font-semibold text-slate-200">{activeServersCount} VPS MaxIOPS</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="flex items-center justify-end gap-3 pt-2">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => {
+                        setIsEditing(false);
+                        setActiveTab("overview");
+                      }}
+                      className="cursor-pointer"
+                    >
+                      Batal
+                    </Button>
+
+                    <Button
+                      type="submit"
+                      disabled={isSaving}
+                      className="bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold px-6 cursor-pointer shadow-lg shadow-cyan-500/20"
+                    >
+                      {isSaving ? "Menyimpan..." : "Simpan Perubahan"}
+                    </Button>
+                  </div>
+                </form>
+              </CardContent>
+            </Card>
+          ) : null}
+
+          {/* Stats Cards matching user screenshot */}
+          <div className="grid gap-4 sm:grid-cols-3">
+            {/* Card 1: 128 Projects Completed / Cloud VPS Deployments */}
+            <Card className="p-0 border border-slate-200 dark:border-slate-800 shadow-md hover:border-slate-700 transition-all">
+              <CardContent className="p-6">
+                <div className="flex items-center gap-4">
+                  <div className="bg-cyan-500/10 text-cyan-400 rounded-xl p-3 shrink-0 border border-cyan-500/20">
+                    <Star className="size-5" />
+                  </div>
+                  <div>
+                    <p className="text-2xl font-black text-slate-900 dark:text-white">
+                      {128 + activeServersCount}
+                    </p>
+                    <p className="text-slate-500 dark:text-slate-400 text-xs font-medium">
+                      Projects Completed
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Card 2: 8.5k Team Members / MaxIOPS Performance */}
+            <Card className="p-0 border border-slate-200 dark:border-slate-800 shadow-md hover:border-slate-700 transition-all">
+              <CardContent className="p-6">
+                <div className="flex items-center gap-4">
+                  <div className="bg-blue-500/10 text-blue-400 rounded-xl p-3 shrink-0 border border-blue-500/20">
+                    <Users className="size-5" />
+                  </div>
+                  <div>
+                    <p className="text-2xl font-black text-slate-900 dark:text-white">
+                      8.5k
+                    </p>
+                    <p className="text-slate-500 dark:text-slate-400 text-xs font-medium">
+                      Team Members
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Card 3: 99% Satisfaction Rate / SLA */}
+            <Card className="p-0 border border-slate-200 dark:border-slate-800 shadow-md hover:border-slate-700 transition-all">
+              <CardContent className="p-6">
+                <div className="flex items-center gap-4">
+                  <div className="bg-emerald-500/10 text-emerald-400 rounded-xl p-3 shrink-0 border border-emerald-500/20">
+                    <Star className="size-5" />
+                  </div>
+                  <div>
+                    <p className="text-2xl font-black text-slate-900 dark:text-white">
+                      99%
+                    </p>
+                    <p className="text-slate-500 dark:text-slate-400 text-xs font-medium">
+                      Satisfaction Rate
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Recent Activity Card matching user screenshot */}
+          <Card className="p-0 border border-slate-200 dark:border-slate-800 shadow-md overflow-hidden">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                  <Activity className="size-4 text-cyan-400" />
+                  <span>Recent Activity</span>
+                </h3>
+
+                <button
+                  type="button"
+                  onClick={() => onNavigateTab?.("servers")}
+                  className="text-xs text-cyan-500 dark:text-cyan-400 hover:underline flex items-center gap-1 cursor-pointer font-medium"
+                >
+                  <span>Lihat Server Aktif</span>
+                  <ExternalLink className="size-3" />
+                </button>
+              </div>
+
+              <div className="space-y-4">
+                {/* Dynamically render real server activity if available, plus screenshot baseline items */}
+                {userServers.length > 0 ? (
+                  userServers.slice(0, 3).map((srv) => (
+                    <div
+                      key={srv.id}
+                      className="flex items-start gap-4 border-b border-slate-100 dark:border-slate-800/80 pb-4 last:border-0"
+                    >
+                      <div className="bg-slate-100 dark:bg-slate-800 rounded-full p-2.5 shrink-0 text-cyan-400">
+                        <Server className="size-4" />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm font-semibold text-slate-900 dark:text-white truncate">
+                          VPS Aktif: &quot;{srv.hostname}&quot;
+                        </p>
+                        <p className="text-slate-500 dark:text-slate-400 text-xs mt-0.5">
+                          {srv.templateName || "Ubuntu Server"} · IP: {srv.serverIp || "Alokasi MaxIOPS"}
+                        </p>
+                      </div>
+                      <span className="text-[11px] font-mono text-slate-500 shrink-0">
+                        {new Date(srv.createdAt).toLocaleDateString("id-ID", { month: "short", day: "numeric" })}
+                      </span>
+                    </div>
+                  ))
+                ) : null}
+
+                {/* Baseline items matching user template */}
+                {[
+                  { text: 'Completed project "Dashboard UI"', time: "2 hours ago" },
+                  { text: 'Verified BuatQRIS Dynamic Payment', time: "Yesterday" },
+                  { text: 'Configured Singapore Edge Datacenter', time: "3 days ago" },
+                ].map((act, i) => (
+                  <div
+                    key={i}
+                    className="flex items-start gap-4 border-b border-slate-100 dark:border-slate-800/80 pb-4 last:border-0"
+                  >
+                    <div className="bg-slate-100 dark:bg-slate-800 rounded-full p-2.5 shrink-0 text-slate-500 dark:text-slate-400">
+                      <Star className="size-4" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-medium text-slate-800 dark:text-slate-200">
+                        {act.text}
+                      </p>
+                      <p className="text-slate-500 dark:text-slate-400 text-xs mt-0.5">
+                        {act.time}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </div>
+  );
+}

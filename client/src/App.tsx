@@ -11,6 +11,7 @@ import { QrisCheckoutModal } from './components/QrisCheckoutModal';
 import { ServersDashboard } from './components/ServersDashboard';
 import { AdminDashboard } from './components/AdminDashboard';
 import GridChangelog from './components/GridChangelog';
+import UserProfileWithStats from './components/UserProfileWithStats';
 import { AuthModal } from './components/AuthModal';
 import Footer from './components/Footer';
 import { api } from './services/api';
@@ -22,7 +23,7 @@ const AppContent: React.FC = () => {
   const { user } = useAuth();
   const toast = useToast();
   const { notify } = useNotification();
-  const [currentTab, setCurrentTab] = useState<'store' | 'servers' | 'admin' | 'changelog'>('store');
+  const [currentTab, setCurrentTab] = useState<'store' | 'servers' | 'admin' | 'changelog' | 'profile'>('store');
   const [catalog, setCatalog] = useState<CatalogData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [activeOrder, setActiveOrder] = useState<Order | null>(null);
@@ -191,6 +192,13 @@ const AppContent: React.FC = () => {
 
             {currentTab === 'changelog' && (
               <GridChangelog />
+            )}
+
+            {currentTab === 'profile' && (
+              <UserProfileWithStats
+                onOpenAuth={handleOpenAuth}
+                onNavigateTab={setCurrentTab}
+              />
             )}
           </main>
 

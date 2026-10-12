@@ -15,15 +15,16 @@ import {
   Sparkles,
   Command,
   X,
-  Check
+  Check,
+  User
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import SwitchAnimatedTheme from './SwitchAnimatedTheme';
 import { DropdownMenuNotifications } from './DropdownMenuNotifications';
 
 interface AppSidebarNavProps {
-  currentTab: 'store' | 'servers' | 'admin' | 'changelog';
-  setCurrentTab: (tab: 'store' | 'servers' | 'admin' | 'changelog') => void;
+  currentTab: 'store' | 'servers' | 'admin' | 'changelog' | 'profile';
+  setCurrentTab: (tab: 'store' | 'servers' | 'admin' | 'changelog' | 'profile') => void;
   activeServersCount: number;
   onOpenAuth: (defaultTab?: 'login' | 'register', adminOnly?: boolean) => void;
 }
@@ -61,6 +62,7 @@ export const AppSidebarNav: React.FC<AppSidebarNavProps> = ({
     { title: 'Business Cloud (2 vCPU, 4 GB)', cat: 'Paket VPS', action: () => { setCurrentTab('store'); setSearchOpen(false); } },
     { title: 'Enterprise Power (4 vCPU, 8 GB)', cat: 'Paket VPS', action: () => { setCurrentTab('store'); setSearchOpen(false); } },
     { title: 'Server Saya & Live Status', cat: 'Navigasi', action: () => { setCurrentTab('servers'); setSearchOpen(false); } },
+    { title: 'Profil & Pengaturan Akun', cat: 'Navigasi', action: () => { setCurrentTab('profile'); setSearchOpen(false); } },
     { title: 'Changelog Platform & Roadmap', cat: 'Navigasi', action: () => { setCurrentTab('changelog'); setSearchOpen(false); } },
     { title: 'Admin & Pengaturan Tarif', cat: 'Admin', action: () => { setCurrentTab('admin'); setSearchOpen(false); } },
     { title: 'Dokumentasi UpCloud API 1.3', cat: 'Docs', action: () => { window.open('https://developers.upcloud.com/api/1.3', '_blank'); setSearchOpen(false); } },
@@ -82,7 +84,8 @@ export const AppSidebarNav: React.FC<AppSidebarNavProps> = ({
             <span className="text-slate-200">
               {currentTab === 'store' ? 'Katalog Paket VPS' :
                currentTab === 'servers' ? 'Server Saya' :
-               currentTab === 'changelog' ? 'Changelog Platform' : 'Panel Administrator'}
+               currentTab === 'changelog' ? 'Changelog Platform' :
+               currentTab === 'profile' ? 'Profil & Pengaturan User' : 'Panel Administrator'}
             </span>
           </nav>
         </div>
@@ -156,10 +159,18 @@ export const AppSidebarNav: React.FC<AppSidebarNavProps> = ({
 
                 <div className="space-y-0.5">
                   <button
+                    onClick={() => { setCurrentTab('profile'); setProfileOpen(false); }}
+                    className="w-full text-left px-3 py-2 rounded-xl text-xs text-slate-300 hover:text-white hover:bg-slate-900 flex items-center gap-2 cursor-pointer transition-colors"
+                  >
+                    <User className="w-3.5 h-3.5 text-cyan-400" />
+                    <span>Profil & Pengaturan Akun</span>
+                  </button>
+
+                  <button
                     onClick={() => { setCurrentTab('servers'); setProfileOpen(false); }}
                     className="w-full text-left px-3 py-2 rounded-xl text-xs text-slate-300 hover:text-white hover:bg-slate-900 flex items-center gap-2 cursor-pointer transition-colors"
                   >
-                    <Terminal className="w-3.5 h-3.5 text-cyan-400" />
+                    <Terminal className="w-3.5 h-3.5 text-emerald-400" />
                     <span>Server Saya ({activeServersCount})</span>
                   </button>
 

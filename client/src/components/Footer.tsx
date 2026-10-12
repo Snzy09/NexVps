@@ -16,7 +16,7 @@ import {
 } from 'lucide-react';
 
 interface FooterProps {
-  onNavigateTab?: (tab: 'store' | 'servers' | 'admin' | 'changelog') => void;
+  onNavigateTab?: (tab: 'store' | 'servers' | 'admin' | 'changelog' | 'profile') => void;
   onOpenAuth?: (tab?: 'login' | 'register') => void;
 }
 
@@ -42,7 +42,7 @@ export default function Footer({ onNavigateTab, onOpenAuth }: FooterProps) {
     },
   };
 
-  const handleNav = (tab: 'store' | 'servers' | 'admin' | 'changelog') => {
+  const handleNav = (tab: 'store' | 'servers' | 'admin' | 'changelog' | 'profile') => {
     if (onNavigateTab) {
       onNavigateTab(tab);
       window.scrollTo({ top: 0, behavior: 'smooth' });

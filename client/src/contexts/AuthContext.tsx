@@ -20,6 +20,13 @@ interface AuthContextType {
   register: (email: string, password: string, displayName?: string) => Promise<void>;
   loginWithGoogle: () => Promise<void>;
   logout: () => Promise<void>;
+  updateUserProfile: (updates: {
+    displayName?: string;
+    username?: string;
+    title?: string;
+    bio?: string;
+    photoURL?: string;
+  }) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -68,11 +75,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const unsubscribe = onAuthStateChanged(auth, async (fbUser: FirebaseUser | null) => {
       if (fbUser && fbUser.email) {
         const isAdmin = await resolveAdminStatus(fbUser.email);
+        let savedProfile: Partial<AuthUser> = {};
+        try {
+          const raw = localStorage.getItem(`nexvps_profile_${fbUser.email.toLowerCase()}`);
+          if (raw) savedProfile = JSON.parse(raw);
+        } catch {}
+
         const mappedUser: AuthUser = {
           uid: fbUser.uid,
           email: fbUser.email,
-          displayName: fbUser.displayName || fbUser.email.split('@')[0],
-          photoURL: fbUser.photoURL || undefined,
+          displayName: savedProfile.displayName || fbUser.displayName || fbUser.email.split('@')[0],
+          username: savedProfile.username || fbUser.email.split('@')[0].toLowerCase(),
+          title: savedProfile.title || (isAdmin ? 'Lead Cloud Architect' : 'Cloud Engineer'),
+          bio: savedProfile.bio || 'Deploying high-performance MaxIOPS Cloud VPS on NexVps infrastructure.',
+          role: isAdmin ? 'Admin' : 'Pro Member',
+          memberSince: savedProfile.memberSince || 'Jan 2026',
+          photoURL: savedProfile.photoURL || fbUser.photoURL || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
           isAdmin
         };
         setUser(mappedUser);
@@ -210,6 +228,46 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     api.setAdminEmail(null);
   };
 
+  const updateUserProfile = async (updates: {
+    displayName?: string;
+    username?: string;
+    title?: string;
+    bio?: string;
+    photoURL?: string;
+  }) => {
+    if (!user) return;
+
+    try {
+      if (auth.currentUser) {
+        await updateProfile(auth.currentUser, {
+          displayName: updates.displayName || user.displayName,
+          photoURL: updates.photoURL !== undefined ? updates.photoURL : user.photoURL
+        });
+      }
+    } catch (e) {
+      console.warn('Firebase profile update warning:', e);
+    }
+
+    const updatedUser: AuthUser = {
+      ...user,
+      displayName: updates.displayName !== undefined ? updates.displayName : user.displayName,
+      username: updates.username !== undefined ? updates.username : user.username,
+      title: updates.title !== undefined ? updates.title : user.title,
+      bio: updates.bio !== undefined ? updates.bio : user.bio,
+      photoURL: updates.photoURL !== undefined ? updates.photoURL : user.photoURL,
+    };
+
+    setUser(updatedUser);
+
+    try {
+      localStorage.setItem(`nexvps_profile_${user.email.toLowerCase()}`, JSON.stringify(updatedUser));
+      const savedAdmin = localStorage.getItem(ADMIN_FALLBACK_STORAGE_KEY);
+      if (savedAdmin) {
+        localStorage.setItem(ADMIN_FALLBACK_STORAGE_KEY, JSON.stringify(updatedUser));
+      }
+    } catch {}
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -219,7 +277,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         login,
         register,
         loginWithGoogle,
-        logout
+        logout,
+        updateUserProfile
       }}
     >
       {children}

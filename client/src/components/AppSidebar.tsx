@@ -19,7 +19,8 @@ import {
   Ellipsis, 
   ChevronRight,
   Sparkles,
-  ExternalLink
+  ExternalLink,
+  User
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import SwitchAnimatedTheme from './SwitchAnimatedTheme';
@@ -43,8 +44,8 @@ import {
 } from './ui/sidebar';
 
 interface AppSidebarProps {
-  currentTab: 'store' | 'servers' | 'admin' | 'changelog';
-  setCurrentTab: (tab: 'store' | 'servers' | 'admin' | 'changelog') => void;
+  currentTab: 'store' | 'servers' | 'admin' | 'changelog' | 'profile';
+  setCurrentTab: (tab: 'store' | 'servers' | 'admin' | 'changelog' | 'profile') => void;
   activeServersCount: number;
   onOpenAuth: (defaultTab?: 'login' | 'register', adminOnly?: boolean) => void;
   collapsible?: 'hidden' | 'dock' | 'none';
@@ -146,6 +147,16 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
                 <SidebarLabel>Login Admin</SidebarLabel>
               </SidebarItem>
             )}
+
+            {/* Profil & Pengaturan User */}
+            <SidebarItem
+              tooltip="Profil & Pengaturan"
+              isCurrent={currentTab === 'profile'}
+              onClick={() => setCurrentTab('profile')}
+            >
+              <User className="h-4 w-4 shrink-0 text-cyan-400" />
+              <SidebarLabel>Profil & Pengaturan</SidebarLabel>
+            </SidebarItem>
 
             {/* Changelog & Catatan Rilis */}
             <SidebarItem
@@ -278,6 +289,14 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
                   <p className="text-xs font-bold text-white truncate">{user.displayName || 'Akun Cloud'}</p>
                   <p className="text-[10px] text-slate-400 font-mono truncate">{user.email}</p>
                 </div>
+
+                <button
+                  onClick={() => { setCurrentTab('profile'); setUserMenuOpen(false); }}
+                  className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer text-left"
+                >
+                  <User className="w-3.5 h-3.5 text-cyan-400" />
+                  <span>Profil & Pengaturan Akun</span>
+                </button>
 
                 <button
                   onClick={() => { setCurrentTab('servers'); setUserMenuOpen(false); }}
