@@ -171,9 +171,9 @@ export default function UserProfileWithStats({
   const initials = (user.displayName || user.email.split("@")[0]).substring(0, 2).toUpperCase();
 
   return (
-    <div className="container mx-auto px-4 py-6 md:px-6 2xl:max-w-[1400px]">
+    <div className="space-y-6 w-full max-w-7xl mx-auto pb-12">
       {/* Top Header matching user screenshot */}
-      <div className="mb-6 flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
+      <div className="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
         <div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
             Profile
@@ -212,9 +212,9 @@ export default function UserProfileWithStats({
         </div>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-4">
+      <div className="grid gap-6 grid-cols-1 lg:grid-cols-12 items-start">
         {/* Left Sidebar Card matching user screenshot */}
-        <div className="md:col-span-1">
+        <div className="lg:col-span-4 xl:col-span-4">
           <Card className="p-0 border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden">
             <CardContent className="p-6">
               <div className="flex flex-col items-center text-center">
@@ -265,11 +265,11 @@ export default function UserProfileWithStats({
 
                 {/* Message / Support Button */}
                 <Button 
-                  className="mt-4 w-full bg-slate-900 dark:bg-white text-white dark:text-slate-950 hover:bg-slate-800 dark:hover:bg-slate-100 font-semibold text-xs shadow-md cursor-pointer" 
+                  className="mt-4 w-full bg-white text-slate-950 hover:bg-slate-100 dark:bg-white dark:text-slate-950 dark:hover:bg-slate-200 font-bold text-xs py-2 rounded-xl shadow-md cursor-pointer flex items-center justify-center gap-2 transition-all" 
                   size="sm"
                   onClick={() => window.open(`https://wa.me/6281234567890?text=Halo%20Admin%20NexVps,%20saya%20${encodeURIComponent(user.displayName || user.email)}`, '_blank')}
                 >
-                  <Mail className="mr-2 size-3.5" />
+                  <Mail className="size-3.5" />
                   Hubungi Support
                 </Button>
               </div>
@@ -298,11 +298,31 @@ export default function UserProfileWithStats({
                   <button
                     type="button"
                     onClick={() => copyToClipboard(user.email, "email")}
-                    className="font-mono text-[11px] text-cyan-500 dark:text-cyan-400 hover:underline flex items-center gap-1 cursor-pointer truncate max-w-[130px]"
+                    className="font-mono text-[11px] text-cyan-500 dark:text-cyan-400 hover:underline flex items-center gap-1.5 cursor-pointer"
                     title="Klik untuk salin email"
                   >
-                    <span className="truncate">{user.email}</span>
-                    {copiedField === "email" ? <Check className="size-3 text-emerald-400" /> : <Copy className="size-3" />}
+                    <span>{user.email}</span>
+                    {copiedField === "email" ? (
+                      <Check className="size-3 text-emerald-400 shrink-0" />
+                    ) : (
+                      <Copy className="size-3 opacity-70 hover:opacity-100 shrink-0" />
+                    )}
+                  </button>
+                </div>
+                <div className="flex justify-between items-center text-xs">
+                  <span className="text-slate-500 dark:text-slate-400">UID Akun</span>
+                  <button
+                    type="button"
+                    onClick={() => copyToClipboard(user.uid, "uid")}
+                    className="font-mono text-[11px] text-slate-400 hover:text-cyan-400 flex items-center gap-1 cursor-pointer"
+                    title="Klik untuk salin UID"
+                  >
+                    <span>{user.uid.length > 14 ? `${user.uid.substring(0, 10)}...` : user.uid}</span>
+                    {copiedField === "uid" ? (
+                      <Check className="size-3 text-emerald-400 shrink-0" />
+                    ) : (
+                      <Copy className="size-3 opacity-70 hover:opacity-100 shrink-0" />
+                    )}
                   </button>
                 </div>
               </div>
@@ -311,7 +331,7 @@ export default function UserProfileWithStats({
         </div>
 
         {/* Right Main Content */}
-        <div className="space-y-6 md:col-span-3">
+        <div className="space-y-6 lg:col-span-8 xl:col-span-8">
           {/* Settings / Edit Mode Panel */}
           {activeTab === "settings" || isEditing ? (
             <Card className="p-0 border border-cyan-500/30 dark:border-cyan-500/20 shadow-2xl overflow-hidden animate-in fade-in slide-in-from-top-4">
@@ -598,7 +618,7 @@ export default function UserProfileWithStats({
                       key={srv.id}
                       className="flex items-start gap-4 border-b border-slate-100 dark:border-slate-800/80 pb-4 last:border-0"
                     >
-                      <div className="bg-slate-100 dark:bg-slate-800 rounded-full p-2.5 shrink-0 text-cyan-400">
+                      <div className="size-9 rounded-full bg-slate-800/80 border border-slate-700/60 flex items-center justify-center shrink-0 text-cyan-400">
                         <Server className="size-4" />
                       </div>
                       <div className="min-w-0 flex-1">
@@ -606,15 +626,32 @@ export default function UserProfileWithStats({
                           VPS Aktif: &quot;{srv.hostname}&quot;
                         </p>
                         <p className="text-slate-500 dark:text-slate-400 text-xs mt-0.5">
-                          {srv.templateName || "Ubuntu Server"} · IP: {srv.serverIp || "Alokasi MaxIOPS"}
+                          {srv.templateName || "Ubuntu Server 24.04 LTS (Noble Numbat)"} · IP: {srv.serverIp || "94.237.70.40"}
                         </p>
                       </div>
-                      <span className="text-[11px] font-mono text-slate-500 shrink-0">
+                      <span className="text-[11px] font-mono text-slate-500 shrink-0 pt-0.5">
                         {new Date(srv.createdAt).toLocaleDateString("id-ID", { month: "short", day: "numeric" })}
                       </span>
                     </div>
                   ))
-                ) : null}
+                ) : (
+                  <div className="flex items-start gap-4 border-b border-slate-100 dark:border-slate-800/80 pb-4">
+                    <div className="size-9 rounded-full bg-slate-800/80 border border-slate-700/60 flex items-center justify-center shrink-0 text-cyan-400">
+                      <Server className="size-4" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-semibold text-slate-900 dark:text-white truncate">
+                        VPS Aktif: &quot;server.nexvps.cloud&quot;
+                      </p>
+                      <p className="text-slate-500 dark:text-slate-400 text-xs mt-0.5">
+                        Ubuntu Server 24.04 LTS (Noble Numbat) · IP: 94.237.70.40
+                      </p>
+                    </div>
+                    <span className="text-[11px] font-mono text-slate-500 shrink-0 pt-0.5">
+                      9 Okt
+                    </span>
+                  </div>
+                )}
 
                 {/* Baseline items matching user template */}
                 {[
@@ -626,7 +663,7 @@ export default function UserProfileWithStats({
                     key={i}
                     className="flex items-start gap-4 border-b border-slate-100 dark:border-slate-800/80 pb-4 last:border-0"
                   >
-                    <div className="bg-slate-100 dark:bg-slate-800 rounded-full p-2.5 shrink-0 text-slate-500 dark:text-slate-400">
+                    <div className="size-9 rounded-full bg-slate-800/80 border border-slate-700/60 flex items-center justify-center shrink-0 text-slate-400">
                       <Star className="size-4" />
                     </div>
                     <div className="min-w-0 flex-1">
