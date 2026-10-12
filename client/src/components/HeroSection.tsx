@@ -67,9 +67,9 @@ export function HeroSection({ onExploreClick }: HeroSectionProps) {
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
-          className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-semibold uppercase tracking-wider mb-6 shadow-[0_0_25px_rgba(6,182,212,0.2)]"
+          className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/25 dark:border-cyan-500/30 text-cyan-700 dark:text-cyan-300 text-xs font-semibold uppercase tracking-wider mb-6 shadow-sm dark:shadow-[0_0_25px_rgba(6,182,212,0.2)]"
         >
-          <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
+          <Sparkles className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400" />
           <span>UpCloud Enterprise Cloud & QRIS Otomatis</span>
         </motion.div>
 
@@ -78,11 +78,11 @@ export function HeroSection({ onExploreClick }: HeroSectionProps) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.05 }}
-          className="mb-5 max-w-4xl text-3xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl leading-[1.12]"
+          className="mb-5 max-w-4xl text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-5xl lg:text-6xl leading-[1.12]"
         >
           The Next-Gen Cloud VPS
           <br />
-          for <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-indigo-400 bg-clip-text text-transparent">Modern Developers</span>
+          for <span className="bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-500 dark:from-cyan-400 dark:via-blue-400 dark:to-indigo-400 bg-clip-text text-transparent">Modern Developers</span>
         </motion.h1>
 
         {/* Subtitle */}
@@ -90,7 +90,7 @@ export function HeroSection({ onExploreClick }: HeroSectionProps) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.15 }}
-          className="mb-8 max-w-2xl text-base text-slate-300/90 sm:text-lg leading-relaxed font-normal"
+          className="mb-8 max-w-2xl text-base text-slate-600 dark:text-slate-300 sm:text-lg leading-relaxed font-normal"
         >
           Infrastruktur komputasi berkecepatan tinggi dengan storage MaxIOPS 100K+ IOPS. Aktivasi instan otomatis melalui gateway QRIS dinamis dalam hitungan detik.
         </motion.p>
@@ -116,11 +116,11 @@ export function HeroSection({ onExploreClick }: HeroSectionProps) {
             href="https://developers.upcloud.com/api/1.3"
             target="_blank"
             rel="noreferrer"
-            className="group cursor-pointer rounded-full border border-white/10 bg-white/5 px-7 py-3 text-sm font-medium text-slate-300 hover:bg-white/10 hover:text-white transition-all flex items-center gap-2"
+            className="group cursor-pointer rounded-full border border-slate-300 dark:border-white/10 bg-slate-100 dark:bg-white/5 px-7 py-3 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-white/10 hover:text-slate-900 dark:hover:text-white transition-all flex items-center gap-2 shadow-sm dark:shadow-none"
           >
-            <Zap className="w-4 h-4 text-cyan-400" />
+            <Zap className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
             <span>UpCloud API 1.3 Docs</span>
-            <ExternalLink className="h-3.5 w-3.5 text-slate-400 group-hover:text-white transition-colors" />
+            <ExternalLink className="h-3.5 w-3.5 text-slate-500 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors" />
           </a>
         </motion.div>
 
@@ -134,7 +134,8 @@ export function HeroSection({ onExploreClick }: HeroSectionProps) {
             initial={{ opacity: 0, y: -15, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="absolute -top-3.5 right-1 z-30 flex origin-top-right scale-[0.85] items-center gap-2 rounded-xl border border-emerald-500/30 bg-[#0B0F19] px-2.5 py-1.5 shadow-[0_16px_36px_rgba(0,0,0,0.8)] ring-1 ring-white/10 backdrop-blur-xl sm:-top-5 sm:right-0 sm:scale-95 sm:gap-2.5 sm:px-3.5 sm:py-2 md:-top-6 md:-right-2 md:scale-100 lg:-top-6 lg:-right-6 xl:-top-7 xl:-right-6"
+            data-force-dark="true"
+            className="dark absolute -top-3.5 right-1 z-30 flex origin-top-right scale-[0.85] items-center gap-2 rounded-xl border border-emerald-500/30 bg-[#0B0F19] px-2.5 py-1.5 shadow-[0_16px_36px_rgba(0,0,0,0.8)] ring-1 ring-white/10 backdrop-blur-xl sm:-top-5 sm:right-0 sm:scale-95 sm:gap-2.5 sm:px-3.5 sm:py-2 md:-top-6 md:-right-2 md:scale-100 lg:-top-6 lg:-right-6 xl:-top-7 xl:-right-6"
           >
             <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/15 text-emerald-400 shadow-inner sm:h-7 sm:w-7">
               <CheckCircle2 className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
@@ -159,7 +160,8 @@ export function HeroSection({ onExploreClick }: HeroSectionProps) {
             initial={{ opacity: 0, y: 15, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.5 }}
-            className="absolute -bottom-3.5 left-1 z-30 flex origin-bottom-left scale-[0.85] items-center gap-2 rounded-xl border border-cyan-500/30 bg-[#0B0F19] px-2.5 py-1.5 shadow-[0_16px_36px_rgba(0,0,0,0.8)] ring-1 ring-white/10 backdrop-blur-xl sm:-bottom-5 sm:left-0 sm:scale-95 sm:gap-2.5 sm:px-3.5 sm:py-2 md:-bottom-6 md:-left-2 md:scale-100 lg:-bottom-6 lg:-left-6 xl:-bottom-7 xl:-left-6"
+            data-force-dark="true"
+            className="dark absolute -bottom-3.5 left-1 z-30 flex origin-bottom-left scale-[0.85] items-center gap-2 rounded-xl border border-cyan-500/30 bg-[#0B0F19] px-2.5 py-1.5 shadow-[0_16px_36px_rgba(0,0,0,0.8)] ring-1 ring-white/10 backdrop-blur-xl sm:-bottom-5 sm:left-0 sm:scale-95 sm:gap-2.5 sm:px-3.5 sm:py-2 md:-bottom-6 md:-left-2 md:scale-100 lg:-bottom-6 lg:-left-6 xl:-bottom-7 xl:-left-6"
           >
             <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-cyan-500/30 bg-cyan-500/15 text-cyan-400 shadow-inner sm:h-7 sm:w-7">
               <Bot className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
@@ -186,7 +188,8 @@ export function HeroSection({ onExploreClick }: HeroSectionProps) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
             onMouseMove={handleMouseMove}
-            className="group relative z-10 w-full overflow-hidden rounded-2xl border border-white/15 bg-[#0B0F19]/60 text-left shadow-[0_20px_60px_rgba(0,0,0,0.6)] ring-1 ring-white/10 backdrop-blur-2xl transition-colors hover:border-cyan-500/40"
+            data-force-dark="true"
+            className="dark group relative z-10 w-full overflow-hidden rounded-2xl border border-white/15 bg-[#0B0F19]/60 text-left shadow-[0_20px_60px_rgba(0,0,0,0.6)] ring-1 ring-white/10 backdrop-blur-2xl transition-colors hover:border-cyan-500/40"
           >
             {/* Interactive Spotlight Radial Glow */}
             <motion.div

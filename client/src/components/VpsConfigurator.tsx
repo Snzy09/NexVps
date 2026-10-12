@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { useTheme } from '../contexts/ThemeContext';
 import type { 
   VpsPlan, 
   VpsZone, 
@@ -83,8 +84,9 @@ export const VpsConfigurator: React.FC<VpsConfiguratorProps> = ({
   const [copiedSshCommand, setCopiedSshCommand] = useState<boolean>(false);
   const [isGeneratingPassword, setIsGeneratingPassword] = useState<boolean>(false);
 
-  // Authenticated user
+  // Authenticated user & theme
   const { user } = useAuth();
+  const { isDark } = useTheme();
 
   // Customer info
   const [customerName, setCustomerName] = useState<string>('');
@@ -356,18 +358,18 @@ export const VpsConfigurator: React.FC<VpsConfiguratorProps> = ({
         <div className="lg:col-span-8 space-y-10">
           
           {/* STEP 1: PILIH LOKASI DATA CENTER */}
-          <section className="bg-slate-900/80 rounded-3xl p-6 sm:p-8 border border-slate-800 shadow-xl">
+          <section className="bg-white dark:bg-slate-900/80 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-xl shadow-slate-200/50 dark:shadow-2xl dark:shadow-black/40 relative overflow-hidden transition-all">
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 font-black text-sm flex items-center justify-center">
+                <div className="w-8 h-8 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-600 dark:text-cyan-400 font-black text-sm flex items-center justify-center">
                   1
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                    <Globe2 className="w-5 h-5 text-cyan-400" />
+                  <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <Globe2 className="w-5 h-5 text-cyan-500 dark:text-cyan-400" />
                     Pilih Lokasi Data Center
                   </h3>
-                  <p className="text-xs text-slate-400">Pilih lokasi server terdekat untuk latensi paling rendah</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">Pilih lokasi server terdekat untuk latensi paling rendah</p>
                 </div>
               </div>
             </div>
@@ -382,8 +384,8 @@ export const VpsConfigurator: React.FC<VpsConfiguratorProps> = ({
                     onClick={() => setSelectedZoneCode(zone.code)}
                     className={`p-3.5 rounded-2xl border text-left transition-all relative overflow-hidden group cursor-pointer ${
                       isSelected
-                        ? 'border-cyan-500 bg-cyan-950/20 shadow-md shadow-cyan-500/10'
-                        : 'border-slate-800 bg-slate-950/50 hover:border-slate-700 hover:bg-slate-800/40'
+                        ? 'border-cyan-500 bg-cyan-50/70 dark:bg-cyan-950/20 shadow-md shadow-cyan-500/10 ring-1 ring-cyan-500'
+                        : 'border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/50 hover:border-slate-300 dark:hover:border-slate-700 hover:bg-white dark:hover:bg-slate-800/40'
                     }`}
                   >
                     {isSelected && (
@@ -393,13 +395,13 @@ export const VpsConfigurator: React.FC<VpsConfiguratorProps> = ({
                         </div>
                       </div>
                     )}
-                    <div className="w-9 h-6 rounded-md overflow-hidden shadow-md border border-slate-700/60 bg-slate-900 flex items-center justify-center shrink-0">
+                    <div className="w-9 h-6 rounded-md overflow-hidden shadow-sm border border-slate-200 dark:border-slate-700/60 bg-slate-100 dark:bg-slate-900 flex items-center justify-center shrink-0">
                       <CountryFlag zoneCode={zone.code} countryName={zone.country} size="lg" className="scale-125" />
                     </div>
-                    <p className="font-semibold text-white text-sm mt-3">{zone.city}</p>
-                    <p className="text-[11px] text-slate-400">{zone.country}</p>
-                    <div className="flex items-center gap-1 mt-2 text-[11px] text-emerald-400 font-mono">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <p className="font-semibold text-slate-900 dark:text-white text-sm mt-3">{zone.city}</p>
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400">{zone.country}</p>
+                    <div className="flex items-center gap-1 mt-2 text-[11px] text-emerald-600 dark:text-emerald-400 font-mono">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-pulse"></span>
                       <span>~{zone.pingMs} ms</span>
                     </div>
                   </button>
@@ -409,18 +411,18 @@ export const VpsConfigurator: React.FC<VpsConfiguratorProps> = ({
           </section>
 
           {/* STEP 2: PILIH SISTEM OPERASI & VERSI */}
-          <section className="bg-slate-900/80 rounded-3xl p-6 sm:p-8 border border-slate-800 shadow-xl space-y-6">
+          <section className="bg-white dark:bg-slate-900/80 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-xl shadow-slate-200/50 dark:shadow-2xl dark:shadow-black/40 relative overflow-hidden transition-all space-y-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400 font-black text-sm flex items-center justify-center">
+                <div className="w-8 h-8 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-600 dark:text-blue-400 font-black text-sm flex items-center justify-center">
                   2
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                    <Cpu className="w-5 h-5 text-blue-400" />
+                  <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <Cpu className="w-5 h-5 text-blue-500 dark:text-blue-400" />
                     Pilih Sistem Operasi & Versi
                   </h3>
-                  <p className="text-xs text-slate-400">Pilih distribusi sistem operasi, lalu tentukan versi yang ingin diinstal</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">Pilih distribusi sistem operasi, lalu tentukan versi yang ingin diinstal</p>
                 </div>
               </div>
             </div>
@@ -428,10 +430,10 @@ export const VpsConfigurator: React.FC<VpsConfiguratorProps> = ({
             {/* Sub-step A: Pilih Distribusi OS */}
             <div>
               <div className="flex items-center justify-between mb-3">
-                <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-400 uppercase tracking-wider">
                   Distribusi Sistem Operasi
                 </label>
-                <span className="text-[11px] text-cyan-400 font-mono">
+                <span className="text-[11px] text-cyan-600 dark:text-cyan-400 font-mono font-medium">
                   {DISTRO_METAS.length} Distribusi Tersedia
                 </span>
               </div>
@@ -450,17 +452,17 @@ export const VpsConfigurator: React.FC<VpsConfiguratorProps> = ({
                       onClick={() => handleSelectDistro(distro.id)}
                       className={`p-3.5 rounded-2xl border text-left transition-all relative flex flex-col justify-between group cursor-pointer ${
                         isSelected
-                          ? 'border-blue-500 bg-blue-950/25 shadow-lg shadow-blue-500/10 ring-1 ring-blue-500/40'
-                          : 'border-slate-800 bg-slate-950/60 hover:border-slate-700 hover:bg-slate-800/40'
+                          ? 'border-blue-500 bg-blue-50/80 dark:bg-blue-950/25 shadow-lg shadow-blue-500/10 ring-1 ring-blue-500/40'
+                          : 'border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/60 hover:border-slate-300 dark:hover:border-slate-700 hover:bg-white dark:hover:bg-slate-800/40'
                       }`}
                     >
                       <div className="flex items-start justify-between gap-2 mb-3">
-                        <div className="w-10 h-10 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center p-1.5 shadow-sm shrink-0">
+                        <div className="w-10 h-10 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center justify-center p-1.5 shadow-sm shrink-0">
                           <OsIcon distro={distro.id} size="md" />
                         </div>
                         {distro.badge ? (
                           <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full shrink-0 ${
-                            isSelected ? 'bg-blue-500 text-slate-950' : 'bg-slate-800 text-slate-400 border border-slate-700/50'
+                            isSelected ? 'bg-blue-500 text-white dark:text-slate-950' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700/50'
                           }`}>
                             {distro.badge}
                           </span>
@@ -472,18 +474,18 @@ export const VpsConfigurator: React.FC<VpsConfiguratorProps> = ({
                       </div>
 
                       <div className="min-w-0">
-                        <p className="font-bold text-white text-sm truncate">{distro.name}</p>
-                        <p className="text-[11px] text-slate-400 line-clamp-1 mt-0.5">{distro.tagline}</p>
+                        <p className="font-bold text-slate-900 dark:text-white text-sm truncate">{distro.name}</p>
+                        <p className="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-1 mt-0.5">{distro.tagline}</p>
                       </div>
 
-                      <div className="mt-3.5 pt-2.5 border-t border-slate-800/60 flex items-center justify-between text-[11px]">
+                      <div className="mt-3.5 pt-2.5 border-t border-slate-200 dark:border-slate-800/60 flex items-center justify-between text-[11px]">
                         {isSelected ? (
-                          <span className="inline-flex items-center gap-1 text-blue-400 font-semibold">
+                          <span className="inline-flex items-center gap-1 text-blue-600 dark:text-blue-400 font-semibold">
                             <Check className="w-3.5 h-3.5 stroke-[3]" />
                             <span>Dipilih</span>
                           </span>
                         ) : (
-                          <span className="text-slate-500 group-hover:text-slate-300">Pilih OS &rarr;</span>
+                          <span className="text-slate-500 group-hover:text-slate-800 dark:group-hover:text-slate-300">Pilih OS &rarr;</span>
                         )}
                         <span className="text-[10px] text-slate-500 font-mono">{count} opsi</span>
                       </div>
@@ -496,17 +498,17 @@ export const VpsConfigurator: React.FC<VpsConfiguratorProps> = ({
             {/* Sub-step B: Pilih Versi OS */}
             <div className="pt-2">
               <div className="flex items-center justify-between mb-3">
-                <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                  Pilih Versi untuk <span className="text-white font-bold">{activeDistroInfo.name}</span>
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-400 uppercase tracking-wider">
+                  Pilih Versi untuk <span className="text-slate-900 dark:text-white font-bold">{activeDistroInfo.name}</span>
                 </label>
-                <span className="text-xs text-slate-400 font-mono flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-blue-400"></span>
+                <span className="text-xs text-slate-500 dark:text-slate-400 font-mono flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
                   Cloud-Init & MaxIOPS Ready
                 </span>
               </div>
 
               {availableVersionsForDistro.length === 0 ? (
-                <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 text-center text-slate-400 text-sm">
+                <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 text-center text-slate-500 dark:text-slate-400 text-sm">
                   Tidak ada template versi yang tersedia untuk distribusi ini.
                 </div>
               ) : (
@@ -520,8 +522,8 @@ export const VpsConfigurator: React.FC<VpsConfiguratorProps> = ({
                         onClick={() => setSelectedTemplateUuid(tpl.uuid)}
                         className={`p-3.5 rounded-2xl border text-left transition-all relative flex items-start gap-3.5 cursor-pointer ${
                           isSelected
-                            ? 'border-blue-500 bg-blue-950/30 ring-1 ring-blue-500 shadow-md shadow-blue-500/15'
-                            : 'border-slate-800 bg-slate-950/50 hover:border-slate-700 hover:bg-slate-800/30'
+                            ? 'border-blue-500 bg-blue-50/80 dark:bg-blue-950/30 ring-1 ring-blue-500 shadow-md shadow-blue-500/15'
+                            : 'border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/50 hover:border-slate-300 dark:hover:border-slate-700 hover:bg-white dark:hover:bg-slate-800/30'
                         }`}
                       >
                         <div className="mt-0.5 shrink-0">
@@ -530,22 +532,22 @@ export const VpsConfigurator: React.FC<VpsConfiguratorProps> = ({
 
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-1.5 flex-wrap">
-                            <p className="font-semibold text-white text-sm truncate">
+                            <p className="font-semibold text-slate-900 dark:text-white text-sm truncate">
                               {tpl.version || tpl.name}
                             </p>
                             {tpl.isLatest && (
-                              <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                              <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30">
                                 Latest
                               </span>
                             )}
                           </div>
-                          <p className="text-[11px] text-slate-400 mt-1 line-clamp-2">
+                          <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 line-clamp-2">
                             {tpl.description || tpl.name}
                           </p>
                           <div className="flex items-center gap-2 mt-2.5 text-[10px] text-slate-500 font-mono">
                             <span>Min {tpl.minDiskGb} GB Storage</span>
                             <span>•</span>
-                            <span className="text-cyan-400/80">MaxIOPS</span>
+                            <span className="text-cyan-600 dark:text-cyan-400/80 font-medium">MaxIOPS</span>
                           </div>
                         </div>
 
@@ -553,8 +555,8 @@ export const VpsConfigurator: React.FC<VpsConfiguratorProps> = ({
                           <div
                             className={`w-4 h-4 rounded-full border flex items-center justify-center transition-all ${
                               isSelected
-                                ? 'border-blue-500 bg-blue-500 text-slate-950'
-                                : 'border-slate-700 bg-slate-900'
+                                ? 'border-blue-500 bg-blue-500 text-white dark:text-slate-950'
+                                : 'border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900'
                             }`}
                           >
                             {isSelected && <Check className="w-3 h-3 stroke-[3]" />}
@@ -569,28 +571,28 @@ export const VpsConfigurator: React.FC<VpsConfiguratorProps> = ({
           </section>
 
           {/* STEP 3: PILIH PAKET CLOUD VPS & BILLING CYCLE */}
-          <section className="bg-slate-900/80 rounded-3xl p-6 sm:p-8 border border-slate-800 shadow-xl">
+          <section className="bg-white dark:bg-slate-900/80 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-xl shadow-slate-200/50 dark:shadow-2xl dark:shadow-black/40 relative overflow-hidden transition-all">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 font-black text-sm flex items-center justify-center">
+                <div className="w-8 h-8 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-600 dark:text-cyan-400 font-black text-sm flex items-center justify-center">
                   3
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                    <Zap className="w-5 h-5 text-cyan-400" />
+                  <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <Zap className="w-5 h-5 text-cyan-500 dark:text-cyan-400" />
                     Pilih Spesifikasi Paket VPS
                   </h3>
-                  <p className="text-xs text-slate-400">Resource terdedikasi tanpa overselling</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">Resource terdedikasi tanpa overselling</p>
                 </div>
               </div>
 
               {/* Billing Cycle Switcher */}
-              <div className="flex items-center bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs">
+              <div className="flex items-center bg-slate-100 dark:bg-slate-950 p-1 rounded-xl border border-slate-200 dark:border-slate-800 text-xs">
                 <button
                   type="button"
                   onClick={() => setBillingCycle('monthly')}
                   className={`px-3 py-1.5 rounded-lg font-medium transition-all cursor-pointer ${
-                    billingCycle === 'monthly' ? 'bg-cyan-500 text-slate-950 font-bold' : 'text-slate-400 hover:text-white'
+                    billingCycle === 'monthly' ? 'bg-cyan-500 text-slate-950 font-bold shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
                   Bulanan
@@ -599,7 +601,7 @@ export const VpsConfigurator: React.FC<VpsConfiguratorProps> = ({
                   type="button"
                   onClick={() => setBillingCycle('quarterly')}
                   className={`px-3 py-1.5 rounded-lg font-medium transition-all cursor-pointer ${
-                    billingCycle === 'quarterly' ? 'bg-cyan-500 text-slate-950 font-bold' : 'text-slate-400 hover:text-white'
+                    billingCycle === 'quarterly' ? 'bg-cyan-500 text-slate-950 font-bold shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
                   3 Bulan (-5%)
@@ -608,7 +610,7 @@ export const VpsConfigurator: React.FC<VpsConfiguratorProps> = ({
                   type="button"
                   onClick={() => setBillingCycle('annually')}
                   className={`px-3 py-1.5 rounded-lg font-medium transition-all cursor-pointer ${
-                    billingCycle === 'annually' ? 'bg-cyan-500 text-slate-950 font-bold' : 'text-slate-400 hover:text-white'
+                    billingCycle === 'annually' ? 'bg-cyan-500 text-slate-950 font-bold shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
                   1 Tahun (-15%)
@@ -632,29 +634,29 @@ export const VpsConfigurator: React.FC<VpsConfiguratorProps> = ({
 
                     <div className="flex items-center justify-between mb-4">
                       <div>
-                        <h4 className="text-xl font-bold text-white">{plan.name}</h4>
-                        <p className="text-xs text-cyan-400 font-mono mt-0.5">{plan.upcloudPlan}</p>
+                        <h4 className="text-xl font-bold text-slate-900 dark:text-white">{plan.name}</h4>
+                        <p className="text-xs text-cyan-600 dark:text-cyan-400 font-mono mt-0.5 font-semibold">{plan.upcloudPlan}</p>
                       </div>
-                      <div className={`w-5 h-5 rounded-full border flex items-center justify-center ${
-                        isSelected ? 'border-cyan-500 bg-cyan-500 text-slate-950' : 'border-slate-700'
+                      <div className={`w-5 h-5 rounded-full border flex items-center justify-center transition-all ${
+                        isSelected ? 'border-cyan-500 bg-cyan-500 text-white dark:text-slate-950' : 'border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900'
                       }`}>
                         {isSelected && <Check className="w-3.5 h-3.5 stroke-[3]" />}
                       </div>
                     </div>
 
                     {/* Price display */}
-                    <div className="my-4 pb-4 border-b border-slate-800">
+                    <div className="my-4 pb-4 border-b border-slate-200 dark:border-slate-800">
                       <div className="flex items-baseline gap-1">
-                        <span className="text-xs text-slate-400">Rp</span>
-                        <span className="text-3xl font-black text-white">
+                        <span className="text-xs text-slate-500 dark:text-slate-400">Rp</span>
+                        <span className="text-3xl font-black text-slate-900 dark:text-white">
                           {periodPrice.toLocaleString('id-ID')}
                         </span>
-                        <span className="text-xs text-slate-400">
+                        <span className="text-xs text-slate-500 dark:text-slate-400">
                           / {billingCycle === 'monthly' ? 'bln' : billingCycle === 'quarterly' ? '3 bln' : 'tahun'}
                         </span>
                       </div>
                       {cycleInfo.discount > 0 && (
-                        <p className="text-[11px] text-emerald-400 mt-1">
+                        <p className="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold mt-1">
                           Hemat {Math.round(cycleInfo.discount * 100)}% dibanding bayar bulanan
                         </p>
                       )}
@@ -662,29 +664,29 @@ export const VpsConfigurator: React.FC<VpsConfiguratorProps> = ({
 
                     {/* Specs Grid */}
                     <div className="grid grid-cols-2 gap-2.5 mb-5 text-xs">
-                      <div className="flex items-center gap-2 p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-200">
-                        <Cpu className="w-4 h-4 text-cyan-400" />
+                      <div className="flex items-center gap-2 p-2 rounded-xl bg-slate-100/90 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 font-medium">
+                        <Cpu className="w-4 h-4 text-cyan-500 dark:text-cyan-400" />
                         <span>{plan.coreNumber} vCPU Cores</span>
                       </div>
-                      <div className="flex items-center gap-2 p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-200">
-                        <Activity className="w-4 h-4 text-blue-400" />
+                      <div className="flex items-center gap-2 p-2 rounded-xl bg-slate-100/90 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 font-medium">
+                        <Activity className="w-4 h-4 text-blue-500 dark:text-blue-400" />
                         <span>{plan.memoryAmountMb / 1024} GB RAM</span>
                       </div>
-                      <div className="flex items-center gap-2 p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-200">
-                        <HardDrive className="w-4 h-4 text-emerald-400" />
+                      <div className="flex items-center gap-2 p-2 rounded-xl bg-slate-100/90 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 font-medium">
+                        <HardDrive className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
                         <span>{plan.storageSizeGb} GB MaxIOPS</span>
                       </div>
-                      <div className="flex items-center gap-2 p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-200">
-                        <Globe2 className="w-4 h-4 text-indigo-400" />
+                      <div className="flex items-center gap-2 p-2 rounded-xl bg-slate-100/90 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 font-medium">
+                        <Globe2 className="w-4 h-4 text-indigo-500 dark:text-indigo-400" />
                         <span>{plan.bandwidthTb} TB Kuota</span>
                       </div>
                     </div>
 
                     {/* Features list */}
-                    <ul className="space-y-1.5 text-xs text-slate-400">
+                    <ul className="space-y-1.5 text-xs text-slate-600 dark:text-slate-400">
                       {plan.features.slice(0, 4).map((f, i) => (
                         <li key={i} className="flex items-center gap-2">
-                          <Check className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+                          <Check className="w-3.5 h-3.5 text-cyan-500 dark:text-cyan-400 shrink-0" />
                           <span>{f}</span>
                         </li>
                       ))}
@@ -698,7 +700,7 @@ export const VpsConfigurator: React.FC<VpsConfiguratorProps> = ({
                       key={plan.id}
                       edgeSensitivity={32}
                       glowColor="190 95 65"
-                      backgroundColor={isSelected ? '#0c1b30' : '#090e17'}
+                      backgroundColor={isDark ? (isSelected ? '#0c1b30' : '#090e17') : (isSelected ? '#f0f9ff' : '#ffffff')}
                       borderRadius={24}
                       glowRadius={36}
                       glowIntensity={1.25}
@@ -707,8 +709,8 @@ export const VpsConfigurator: React.FC<VpsConfiguratorProps> = ({
                       colors={['#06b6d4', '#3b82f6', '#8b5cf6']}
                       className={`cursor-pointer transition-all ${
                         isSelected
-                          ? 'ring-1 ring-cyan-500 shadow-xl shadow-cyan-500/15'
-                          : 'hover:border-slate-700'
+                          ? 'ring-2 ring-cyan-500 shadow-xl shadow-cyan-500/15'
+                          : 'hover:border-slate-300 dark:hover:border-slate-700'
                       }`}
                       onClick={() => setSelectedPlanId(plan.id)}
                     >
@@ -723,8 +725,8 @@ export const VpsConfigurator: React.FC<VpsConfiguratorProps> = ({
                     onClick={() => setSelectedPlanId(plan.id)}
                     className={`rounded-3xl border cursor-pointer transition-all relative ${
                       isSelected
-                        ? 'border-cyan-500 bg-gradient-to-b from-cyan-950/20 to-slate-900 shadow-xl shadow-cyan-500/10 ring-1 ring-cyan-500'
-                        : 'border-slate-800 bg-slate-950/60 hover:border-slate-700 hover:bg-slate-900/60'
+                        ? 'border-cyan-500 bg-cyan-50/70 dark:bg-gradient-to-b dark:from-cyan-950/20 dark:to-slate-900 shadow-xl shadow-cyan-500/10 ring-1 ring-cyan-500'
+                        : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950/60 hover:border-slate-300 dark:hover:border-slate-700 hover:bg-slate-50/80 dark:hover:bg-slate-900/60 shadow-md shadow-slate-100 dark:shadow-none'
                     }`}
                   >
                     {innerContent}
@@ -1218,7 +1220,7 @@ export const VpsConfigurator: React.FC<VpsConfiguratorProps> = ({
           <BorderGlow
             edgeSensitivity={30}
             glowColor="190 90 60"
-            backgroundColor="#0b1120"
+            backgroundColor={isDark ? "#0b1120" : "#ffffff"}
             borderRadius={28}
             glowRadius={36}
             glowIntensity={1.2}
@@ -1230,114 +1232,114 @@ export const VpsConfigurator: React.FC<VpsConfiguratorProps> = ({
             <div className="p-6 sm:p-7 relative overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
-              <h3 className="text-xl font-bold text-white mb-5 flex items-center justify-between">
-              <span>Ringkasan Order</span>
-              <span className="text-xs px-2.5 py-1 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 font-mono">
-                NexVps
-              </span>
-            </h3>
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-5 flex items-center justify-between">
+                <span>Ringkasan Order</span>
+                <span className="text-xs px-2.5 py-1 rounded-full bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border border-cyan-500/20 font-mono font-semibold">
+                  NexVps
+                </span>
+              </h3>
 
-            {/* Config Breakdown */}
-            <div className="space-y-3 pb-6 border-b border-slate-800/80 text-sm">
-              <div className="flex items-center justify-between">
-                <span className="text-slate-400">Paket VPS</span>
-                <span className="font-semibold text-white">{selectedPlan.name}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-slate-400">Spesifikasi</span>
-                <span className="text-slate-300 font-mono text-xs">
-                  {selectedPlan.coreNumber}C / {selectedPlan.memoryAmountMb / 1024}GB / {selectedPlan.storageSizeGb}GB
-                </span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-slate-400">Lokasi DC</span>
-                <span className="text-slate-300 flex items-center gap-2 font-medium">
-                  <CountryFlag zoneCode={selectedZone.code} countryName={selectedZone.country} size="sm" />
-                  <span>{selectedZone.city}</span>
-                </span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-slate-400">Sistem Operasi</span>
-                <span className="text-slate-300 flex items-center gap-1.5 font-medium truncate max-w-[170px]">
-                  <OsIcon distro={selectedTemplate.distro} size="xs" />
-                  <span className="truncate">{selectedTemplate.version || selectedTemplate.name.split('(')[0]}</span>
-                </span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-slate-400">Periode</span>
-                <span className="text-slate-300 font-medium">{cycleInfo.label}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-slate-400">Hostname</span>
-                <span className="text-slate-300 font-mono text-xs truncate max-w-[150px]">
-                  {hostname}
-                </span>
-              </div>
-            </div>
-
-            {/* Price Calculation */}
-            <div className="py-5 space-y-2 border-b border-slate-800/80">
-              <div className="flex items-center justify-between text-xs text-slate-400">
-                <span>Harga Dasar</span>
-                <span>Rp {(baseMonthlyPrice * cycleInfo.months).toLocaleString('id-ID')}</span>
-              </div>
-              {cycleInfo.discount > 0 && (
-                <div className="flex items-center justify-between text-xs text-emerald-400">
-                  <span>Diskon Periode ({Math.round(cycleInfo.discount * 100)}%)</span>
-                  <span>- Rp {Math.round(baseMonthlyPrice * cycleInfo.months * cycleInfo.discount).toLocaleString('id-ID')}</span>
+              {/* Config Breakdown */}
+              <div className="space-y-3 pb-6 border-b border-slate-200 dark:border-slate-800/80 text-sm">
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-500 dark:text-slate-400">Paket VPS</span>
+                  <span className="font-semibold text-slate-900 dark:text-white">{selectedPlan.name}</span>
                 </div>
-              )}
-              <div className="flex items-center justify-between text-xs text-slate-400">
-                <span>Metode Pembayaran</span>
-                <span className="text-cyan-400 font-semibold">QRIS (Semua Bank)</span>
-              </div>
-            </div>
-
-            {/* Total */}
-            <div className="pt-5 pb-6">
-              <div className="flex items-baseline justify-between">
-                <span className="text-slate-300 font-semibold text-sm">Total Tagihan:</span>
-                <div className="text-right">
-                  <span className="text-xs text-cyan-400 font-bold mr-1">Rp</span>
-                  <span className="text-3xl font-black text-white">
-                    {totalPrice.toLocaleString('id-ID')}
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-500 dark:text-slate-400">Spesifikasi</span>
+                  <span className="text-slate-700 dark:text-slate-300 font-mono text-xs font-medium">
+                    {selectedPlan.coreNumber}C / {selectedPlan.memoryAmountMb / 1024}GB / {selectedPlan.storageSizeGb}GB
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-500 dark:text-slate-400">Lokasi DC</span>
+                  <span className="text-slate-700 dark:text-slate-300 flex items-center gap-2 font-medium">
+                    <CountryFlag zoneCode={selectedZone.code} countryName={selectedZone.country} size="sm" />
+                    <span>{selectedZone.city}</span>
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-500 dark:text-slate-400">Sistem Operasi</span>
+                  <span className="text-slate-700 dark:text-slate-300 flex items-center gap-1.5 font-medium truncate max-w-[170px]">
+                    <OsIcon distro={selectedTemplate.distro} size="xs" />
+                    <span className="truncate">{selectedTemplate.version || selectedTemplate.name.split('(')[0]}</span>
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-500 dark:text-slate-400">Periode</span>
+                  <span className="text-slate-700 dark:text-slate-300 font-medium">{cycleInfo.label}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-500 dark:text-slate-400">Hostname</span>
+                  <span className="text-slate-700 dark:text-slate-300 font-mono text-xs truncate max-w-[150px]">
+                    {hostname}
                   </span>
                 </div>
               </div>
-              <p className="text-[11px] text-slate-500 mt-1 text-right">
-                *Kode unik verifikasi otomatis akan disertakan pada QRIS
-              </p>
-            </div>
 
-            {formError && (
-              <div className="mb-4 p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs">
-                {formError}
+              {/* Price Calculation */}
+              <div className="py-5 space-y-2 border-b border-slate-200 dark:border-slate-800/80">
+                <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+                  <span>Harga Dasar</span>
+                  <span className="text-slate-700 dark:text-slate-300 font-medium">Rp {(baseMonthlyPrice * cycleInfo.months).toLocaleString('id-ID')}</span>
+                </div>
+                {cycleInfo.discount > 0 && (
+                  <div className="flex items-center justify-between text-xs text-emerald-600 dark:text-emerald-400 font-semibold">
+                    <span>Diskon Periode ({Math.round(cycleInfo.discount * 100)}%)</span>
+                    <span>- Rp {Math.round(baseMonthlyPrice * cycleInfo.months * cycleInfo.discount).toLocaleString('id-ID')}</span>
+                  </div>
+                )}
+                <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+                  <span>Metode Pembayaran</span>
+                  <span className="text-cyan-600 dark:text-cyan-400 font-semibold">QRIS (Semua Bank)</span>
+                </div>
               </div>
-            )}
 
-            {/* Slide to Commit / Pay Action */}
-            <div className="w-full">
-              <SlideCommit
-                label="Geser untuk Bayar QRIS"
-                doneLabel="Menyiapkan Pembayaran..."
-                errorLabel={formError ? "Lengkapi Data Server" : "Lengkapi Form Server"}
-                onConfirm={handleSlideCheckout}
-                trackColor="#090e17"
-                handleColor="#06b6d4"
-                successColor="#10b981"
-                dangerColor="#f43f5e"
-                width="100%"
-                height={58}
-                radius={20}
-                speed={50}
-              />
-              <p className="text-[11px] text-slate-500 mt-2.5 text-center flex items-center justify-center gap-1.5">
-                <span>👉</span> Geser handle cyan ke kanan untuk konfirmasi & buka QRIS
-              </p>
-            </div>
+              {/* Total */}
+              <div className="pt-5 pb-6">
+                <div className="flex items-baseline justify-between">
+                  <span className="text-slate-700 dark:text-slate-300 font-semibold text-sm">Total Tagihan:</span>
+                  <div className="text-right">
+                    <span className="text-xs text-cyan-600 dark:text-cyan-400 font-bold mr-1">Rp</span>
+                    <span className="text-3xl font-black text-slate-900 dark:text-white">
+                      {totalPrice.toLocaleString('id-ID')}
+                    </span>
+                  </div>
+                </div>
+                <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-1 text-right">
+                  *Kode unik verifikasi otomatis akan disertakan pada QRIS
+                </p>
+              </div>
+
+              {formError && (
+                <div className="mb-4 p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 text-xs font-medium">
+                  {formError}
+                </div>
+              )}
+
+              {/* Slide to Commit / Pay Action */}
+              <div className="w-full">
+                <SlideCommit
+                  label="Geser untuk Bayar QRIS"
+                  doneLabel="Menyiapkan Pembayaran..."
+                  errorLabel={formError ? "Lengkapi Data Server" : "Lengkapi Form Server"}
+                  onConfirm={handleSlideCheckout}
+                  trackColor={isDark ? "#090e17" : "#f1f5f9"}
+                  handleColor="#06b6d4"
+                  successColor="#10b981"
+                  dangerColor="#f43f5e"
+                  width="100%"
+                  height={58}
+                  radius={20}
+                  speed={50}
+                />
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-2.5 text-center flex items-center justify-center gap-1.5 font-medium">
+                  <span>👉</span> Geser handle cyan ke kanan untuk konfirmasi & buka QRIS
+                </p>
+              </div>
 
               {/* Security badges */}
-              <div className="mt-5 pt-4 border-t border-slate-800/80 text-center flex items-center justify-center gap-4 text-slate-500 text-[11px]">
+              <div className="mt-5 pt-4 border-t border-slate-200 dark:border-slate-800/80 text-center flex items-center justify-center gap-4 text-slate-500 dark:text-slate-400 text-[11px] font-medium">
                 <span>🔒 256-bit Encrypted</span>
                 <span>⚡ UpCloud API 1.3</span>
                 <span>📱 QRIS Resmi</span>

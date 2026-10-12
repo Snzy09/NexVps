@@ -152,12 +152,12 @@ export const RealtimeStatsWidget: React.FC<RealtimeStatsWidgetProps> = ({
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
           </span>
-          <h3 className="text-xs font-bold uppercase tracking-wider text-slate-300">
+          <h3 className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
             Telemetri Realtime UpCloud MaxIOPS & QRIS
           </h3>
         </div>
-        <span className="text-[11px] font-mono text-cyan-400/90 flex items-center gap-1">
-          <Sparkles className="w-3 h-3 text-cyan-400" />
+        <span className="text-[11px] font-mono text-cyan-600 dark:text-cyan-400/90 flex items-center gap-1 font-semibold">
+          <Sparkles className="w-3 h-3 text-cyan-500 dark:text-cyan-400" />
           Live Metrics
         </span>
       </div>
@@ -170,38 +170,38 @@ export const RealtimeStatsWidget: React.FC<RealtimeStatsWidgetProps> = ({
           return (
             <div
               key={stat.id}
-              className="group relative flex h-full flex-col justify-between overflow-hidden rounded-2xl border border-slate-800/80 bg-slate-900/80 p-5 text-white shadow-xl backdrop-blur-md transition-all duration-300 hover:border-slate-700 hover:shadow-2xl hover:-translate-y-0.5"
+              className="group relative flex h-full flex-col justify-between overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800/80 bg-white dark:bg-slate-900/80 p-5 text-slate-900 dark:text-white shadow-lg shadow-slate-200/50 dark:shadow-xl backdrop-blur-md transition-all duration-300 hover:border-slate-300 dark:hover:border-slate-700 hover:shadow-xl dark:hover:shadow-2xl hover:-translate-y-0.5"
             >
               {/* Top-Right Glow */}
               <div
-                className={`pointer-events-none absolute -top-10 -right-10 h-32 w-32 rounded-full opacity-40 blur-2xl transition-opacity duration-300 group-hover:opacity-80 ${style.glow}`}
+                className={`pointer-events-none absolute -top-10 -right-10 h-32 w-32 rounded-full opacity-30 dark:opacity-40 blur-2xl transition-opacity duration-300 group-hover:opacity-70 dark:group-hover:opacity-80 ${style.glow}`}
                 aria-hidden="true"
               />
 
               {/* Title & Icon Header */}
               <div className="relative z-10 flex items-center gap-3">
                 <div
-                  className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border p-2 shadow-md transition-transform duration-300 group-hover:scale-105 ${style.iconBg}`}
+                  className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border p-2 shadow-sm transition-transform duration-300 group-hover:scale-105 ${style.iconBg}`}
                 >
                   <Icon className="h-5 w-5" />
                 </div>
-                <span className="text-xs sm:text-sm font-semibold text-slate-200">
+                <span className="text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-200">
                   {stat.title}
                 </span>
               </div>
 
               {/* Metric Value & Trend Row */}
               <div className="relative z-10 mt-4 flex items-center gap-3.5">
-                <span className="text-2xl font-bold tracking-tight whitespace-nowrap text-white sm:text-3xl font-mono">
+                <span className="text-2xl font-bold tracking-tight whitespace-nowrap text-slate-900 dark:text-white sm:text-3xl font-mono">
                   {stat.value}
                 </span>
 
                 <div className="flex flex-col gap-0.5">
-                  <div className="flex items-center gap-1 text-xs font-semibold text-emerald-400 sm:text-sm">
+                  <div className="flex items-center gap-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400 sm:text-sm">
                     <ArrowUp className="h-3.5 w-3.5 stroke-[2.5]" />
                     <span>{stat.change}</span>
                   </div>
-                  <span className="text-[11px] font-normal whitespace-nowrap text-slate-400 sm:text-xs">
+                  <span className="text-[11px] font-normal whitespace-nowrap text-slate-500 dark:text-slate-400 sm:text-xs">
                     {stat.comparison}
                   </span>
                 </div>

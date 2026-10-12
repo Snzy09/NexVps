@@ -90,8 +90,8 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
 
           {!isCollapsed && (
             <div className="min-w-0 animate-in fade-in">
-              <span className="font-black text-white text-sm sm:text-base tracking-tight truncate block">
-                NexVps <span className="text-cyan-400 font-mono text-xs">Cloud</span>
+              <span className="font-black text-slate-900 dark:text-white text-sm sm:text-base tracking-tight truncate block">
+                NexVps <span className="text-cyan-600 dark:text-cyan-400 font-mono text-xs">Cloud</span>
               </span>
               <span className="text-[10px] text-slate-500 font-mono block -mt-0.5">
                 MAXIOPS & QRIS
@@ -246,7 +246,7 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
             <button
               type="button"
               onClick={() => setUserMenuOpen(!userMenuOpen)}
-              className="flex w-full items-center justify-between p-1.5 rounded-xl hover:bg-slate-900 transition-colors cursor-pointer text-left"
+              className="flex w-full items-center justify-between p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-900 transition-colors cursor-pointer text-left"
             >
               <div className="flex items-center gap-2.5 min-w-0">
                 {user.photoURL ? (
@@ -267,7 +267,7 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
 
                 {!isCollapsed && (
                   <div className="min-w-0 flex-1">
-                    <p className="text-xs font-bold text-white truncate leading-tight">
+                    <p className="text-xs font-bold text-slate-900 dark:text-white truncate leading-tight">
                       {user.displayName || user.email.split('@')[0]}
                     </p>
                     <span className="block text-[10px] text-slate-500 truncate font-mono">
@@ -278,57 +278,57 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
               </div>
 
               {!isCollapsed && (
-                <ChevronsUpDown className="w-4 h-4 text-slate-500 shrink-0 ml-1" />
+                <ChevronsUpDown className="w-4 h-4 text-slate-400 dark:text-slate-500 shrink-0 ml-1" />
               )}
             </button>
 
             {/* Dropdown Menu */}
             {userMenuOpen && (
-              <div className="absolute left-2 bottom-full mb-2 w-56 rounded-2xl bg-slate-900 border border-slate-700/90 shadow-2xl p-1.5 z-50 animate-in fade-in zoom-in-95 duration-150">
-                <div className="p-2.5 border-b border-slate-800 mb-1">
-                  <p className="text-xs font-bold text-white truncate">{user.displayName || 'Akun Cloud'}</p>
-                  <p className="text-[10px] text-slate-400 font-mono truncate">{user.email}</p>
+              <div className="absolute left-2 bottom-full mb-2 w-56 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700/90 shadow-2xl p-1.5 z-50 animate-in fade-in zoom-in-95 duration-150">
+                <div className="p-2.5 border-b border-slate-200 dark:border-slate-800 mb-1">
+                  <p className="text-xs font-bold text-slate-900 dark:text-white truncate">{user.displayName || 'Akun Cloud'}</p>
+                  <p className="text-[10px] text-slate-500 dark:text-slate-400 font-mono truncate">{user.email}</p>
                 </div>
 
                 <button
                   onClick={() => { setCurrentTab('profile'); setUserMenuOpen(false); }}
-                  className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer text-left"
+                  className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer text-left"
                 >
-                  <User className="w-3.5 h-3.5 text-cyan-400" />
+                  <User className="w-3.5 h-3.5 text-cyan-500 dark:text-cyan-400" />
                   <span>Profil & Pengaturan Akun</span>
                 </button>
 
                 <button
                   onClick={() => { setCurrentTab('servers'); setUserMenuOpen(false); }}
-                  className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer text-left"
+                  className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer text-left"
                 >
-                  <Terminal className="w-3.5 h-3.5 text-cyan-400" />
+                  <Terminal className="w-3.5 h-3.5 text-cyan-500 dark:text-cyan-400" />
                   <span>Server Saya ({activeServersCount})</span>
                 </button>
 
                 {user.isAdmin && (
                   <button
                     onClick={() => { setCurrentTab('admin'); setUserMenuOpen(false); }}
-                    className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-purple-300 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer text-left"
+                    className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-purple-700 dark:text-purple-300 hover:text-purple-900 dark:hover:text-white hover:bg-purple-50 dark:hover:bg-slate-800 transition-colors cursor-pointer text-left"
                   >
-                    <Sliders className="w-3.5 h-3.5 text-purple-400" />
+                    <Sliders className="w-3.5 h-3.5 text-purple-500 dark:text-purple-400" />
                     <span>Panel Administrator</span>
                   </button>
                 )}
 
-                <div className="my-1 border-t border-slate-800" />
+                <div className="my-1 border-t border-slate-200 dark:border-slate-800" />
 
                 {/* Theme Switcher in Profile Menu */}
                 <div className="px-3 py-1.5 flex items-center justify-between">
-                  <span className="text-xs font-medium text-slate-300">Tema Tampilan</span>
+                  <span className="text-xs font-medium text-slate-700 dark:text-slate-300">Tema Tampilan</span>
                   <SwitchAnimatedTheme variant="stretchy" size="sm" showLabel={false} />
                 </div>
 
-                <div className="my-1 border-t border-slate-800" />
+                <div className="my-1 border-t border-slate-200 dark:border-slate-800" />
 
                 <button
                   onClick={() => { logout(); setUserMenuOpen(false); }}
-                  className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-rose-400 hover:text-rose-300 hover:bg-rose-950/40 transition-colors cursor-pointer text-left"
+                  className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-rose-600 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors cursor-pointer text-left"
                 >
                   <LogOut className="w-3.5 h-3.5" />
                   <span>Log out (Keluar)</span>

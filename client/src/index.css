@@ -135,8 +135,13 @@ html.light .bg-slate-950:not(.dark):not(.dark *):not([data-force-dark]):not(butt
 html.light .bg-slate-950\/95:not(.dark):not(.dark *),
 html.light .bg-slate-950\/90:not(.dark):not(.dark *),
 html.light .bg-slate-950\/80:not(.dark):not(.dark *),
-html.light .bg-slate-950\/70:not(.dark):not(.dark *) {
-  background-color: rgba(248, 250, 252, 0.95);
+html.light .bg-slate-950\/70:not(.dark):not(.dark *),
+html.light .bg-slate-950\/60:not(.dark):not(.dark *),
+html.light .bg-slate-950\/50:not(.dark):not(.dark *),
+html.light .bg-slate-950\/40:not(.dark):not(.dark *),
+html.light .bg-slate-950\/30:not(.dark):not(.dark *),
+html.light .bg-slate-950\/20:not(.dark):not(.dark *) {
+  background-color: #ffffff;
 }
 
 html.light .bg-slate-900:not(.dark):not(.dark *):not([data-force-dark]):not(button[role="switch"]) {
@@ -151,7 +156,7 @@ html.light .bg-slate-900\/60:not(.dark):not(.dark *),
 html.light .bg-slate-900\/50:not(.dark):not(.dark *),
 html.light .bg-slate-900\/40:not(.dark):not(.dark *),
 html.light .bg-slate-900\/30:not(.dark):not(.dark *) {
-  background-color: rgba(255, 255, 255, 0.95);
+  background-color: #ffffff;
 }
 
 html.light .bg-slate-800:not(.dark):not(.dark *):not([data-force-dark]) {
@@ -167,18 +172,22 @@ html.light .bg-slate-800\/30:not(.dark):not(.dark *) {
 }
 
 /* Light mode borders */
+html.light .border-slate-900:not(.dark):not(.dark *),
+html.light .border-slate-850:not(.dark):not(.dark *),
 html.light .border-slate-800:not(.dark):not(.dark *),
 html.light .border-slate-800\/80:not(.dark):not(.dark *),
 html.light .border-slate-800\/60:not(.dark):not(.dark *),
 html.light .border-slate-800\/50:not(.dark):not(.dark *),
 html.light .border-slate-800\/40:not(.dark):not(.dark *),
-html.light .border-slate-850:not(.dark):not(.dark *),
+html.light .border-slate-700:not(.dark):not(.dark *),
+html.light .border-slate-700\/80:not(.dark):not(.dark *),
 html.light .border-slate-700\/60:not(.dark):not(.dark *),
+html.light .border-slate-700\/50:not(.dark):not(.dark *),
 html.light .border-slate-700\/40:not(.dark):not(.dark *) {
   border-color: #e2e8f0;
 }
 
-/* Light mode text hierarchy */
+/* Light mode text hierarchy with high WCAG contrast */
 html.light .text-slate-100:not(.dark):not(.dark *),
 html.light .text-slate-200:not(.dark):not(.dark *) {
   color: #0f172a;
@@ -188,11 +197,23 @@ html.light .text-slate-300:not(.dark):not(.dark *) {
   color: #1e293b;
 }
 
+html.light [class*="text-slate-300\/"]:not(.dark):not(.dark *) {
+  color: #334155;
+}
+
 html.light .text-slate-400:not(.dark):not(.dark *) {
   color: #475569;
 }
 
+html.light [class*="text-slate-400\/"]:not(.dark):not(.dark *) {
+  color: #475569;
+}
+
 html.light .text-slate-500:not(.dark):not(.dark *) {
+  color: #64748b;
+}
+
+html.light [class*="text-slate-500\/"]:not(.dark):not(.dark *) {
   color: #64748b;
 }
 
