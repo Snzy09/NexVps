@@ -208,12 +208,12 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
                 </SidebarItem>
 
                 <SidebarItem 
-                  tooltip="Chat Dukungan Admin"
+                  tooltip="Dukungan WhatsApp & Email"
                   isCurrent={currentTab === 'support'}
                   onClick={() => setCurrentTab('support')}
                 >
                   <LifeBuoy className="h-3.5 w-3.5 text-emerald-400" />
-                  <SidebarLabel>Chat Dukungan CS</SidebarLabel>
+                  <SidebarLabel>Dukungan WhatsApp & Email</SidebarLabel>
                 </SidebarItem>
 
                 <SidebarItem 
