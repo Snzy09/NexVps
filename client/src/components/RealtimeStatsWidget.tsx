@@ -27,25 +27,33 @@ interface RealtimeStatsWidgetProps {
 
 const colorStyles = {
   cyan: {
-    glow: 'bg-cyan-500/10',
+    border: 'border-slate-200 dark:border-cyan-500/40 dark:hover:border-cyan-400',
+    glow: 'dark:shadow-[0_0_15px_-2px_rgba(6,182,212,0.3),inset_0_0_12px_rgba(6,182,212,0.05)] dark:hover:shadow-[0_0_24px_-1px_rgba(6,182,212,0.5),inset_0_0_16px_rgba(6,182,212,0.1)]',
+    cornerGlow: 'bg-cyan-500/10',
     iconBg: 'bg-cyan-600/25 border-cyan-500/30 text-cyan-400 shadow-cyan-500/10',
     stroke: '#06b6d4',
     stopColor: '#06b6d4',
   },
   blue: {
-    glow: 'bg-blue-500/10',
+    border: 'border-slate-200 dark:border-blue-500/40 dark:hover:border-blue-400',
+    glow: 'dark:shadow-[0_0_15px_-2px_rgba(59,130,246,0.3),inset_0_0_12px_rgba(59,130,246,0.05)] dark:hover:shadow-[0_0_24px_-1px_rgba(59,130,246,0.5),inset_0_0_16px_rgba(59,130,246,0.1)]',
+    cornerGlow: 'bg-blue-500/10',
     iconBg: 'bg-blue-600/25 border-blue-500/30 text-blue-400 shadow-blue-500/10',
     stroke: '#3b82f6',
     stopColor: '#3b82f6',
   },
   emerald: {
-    glow: 'bg-emerald-500/10',
+    border: 'border-slate-200 dark:border-emerald-500/40 dark:hover:border-emerald-400',
+    glow: 'dark:shadow-[0_0_15px_-2px_rgba(16,185,129,0.3),inset_0_0_12px_rgba(16,185,129,0.05)] dark:hover:shadow-[0_0_24px_-1px_rgba(16,185,129,0.5),inset_0_0_16px_rgba(16,185,129,0.1)]',
+    cornerGlow: 'bg-emerald-500/10',
     iconBg: 'bg-emerald-600/25 border-emerald-500/30 text-emerald-400 shadow-emerald-500/10',
     stroke: '#10b981',
     stopColor: '#10b981',
   },
   purple: {
-    glow: 'bg-purple-500/10',
+    border: 'border-slate-200 dark:border-purple-500/40 dark:hover:border-purple-400',
+    glow: 'dark:shadow-[0_0_15px_-2px_rgba(168,85,247,0.3),inset_0_0_12px_rgba(168,85,247,0.05)] dark:hover:shadow-[0_0_24px_-1px_rgba(168,85,247,0.5),inset_0_0_16px_rgba(168,85,247,0.1)]',
+    cornerGlow: 'bg-purple-500/10',
     iconBg: 'bg-purple-600/25 border-purple-500/30 text-purple-400 shadow-purple-500/10',
     stroke: '#a855f7',
     stopColor: '#a855f7',
@@ -170,11 +178,11 @@ export const RealtimeStatsWidget: React.FC<RealtimeStatsWidgetProps> = ({
           return (
             <div
               key={stat.id}
-              className="group relative flex h-full flex-col justify-between overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800/80 bg-white dark:bg-slate-900/80 p-5 text-slate-900 dark:text-white shadow-lg shadow-slate-200/50 dark:shadow-xl backdrop-blur-md transition-all duration-300 hover:border-slate-300 dark:hover:border-slate-700 hover:shadow-xl dark:hover:shadow-2xl hover:-translate-y-0.5"
+              className={`group relative flex h-full flex-col justify-between overflow-hidden rounded-2xl border ${style.border} bg-white dark:bg-slate-900/90 p-5 text-slate-900 dark:text-white shadow-sm shadow-slate-200/50 dark:shadow-none ${style.glow} backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5`}
             >
-              {/* Top-Right Glow */}
+              {/* Top-Right Corner Accent */}
               <div
-                className={`pointer-events-none absolute -top-10 -right-10 h-32 w-32 rounded-full opacity-30 dark:opacity-40 blur-2xl transition-opacity duration-300 group-hover:opacity-70 dark:group-hover:opacity-80 ${style.glow} hidden dark:block`}
+                className={`pointer-events-none absolute -top-10 -right-10 h-32 w-32 rounded-full opacity-20 dark:opacity-30 blur-2xl transition-opacity duration-300 group-hover:opacity-50 dark:group-hover:opacity-60 ${style.cornerGlow} hidden dark:block`}
                 aria-hidden="true"
               />
 
