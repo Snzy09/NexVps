@@ -51,16 +51,6 @@ export function HeroSection({ onExploreClick }: HeroSectionProps) {
 
   return (
     <section className="relative overflow-hidden pt-8 pb-6 sm:pb-8 text-slate-900 dark:text-white">
-      {/* Background Multi-layer Radial Glow */}
-      <div 
-        className="pointer-events-none absolute top-1/3 left-1/2 h-[450px] w-[750px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-600/15 blur-[140px] hidden dark:block" 
-        aria-hidden="true" 
-      />
-      <div 
-        className="pointer-events-none absolute top-1/2 left-1/2 h-[350px] w-[550px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-indigo-600/15 blur-[120px] hidden dark:block" 
-        aria-hidden="true" 
-      />
-
       <div className="relative z-10 container mx-auto flex flex-col items-center px-4 text-center">
         {/* Eyebrow Badge */}
         <motion.div
@@ -126,8 +116,6 @@ export function HeroSection({ onExploreClick }: HeroSectionProps) {
 
         {/* Mockup UI Showcase (Glassmorphic + Spotlight) */}
         <div className="relative mt-2 w-full max-w-4xl">
-          {/* Ambient Multi-layer Glow Behind Mockup */}
-          <div className="pointer-events-none absolute -inset-4 rounded-3xl bg-gradient-to-tr from-cyan-600/30 via-indigo-500/20 to-blue-600/30 opacity-70 blur-2xl hidden dark:block" />
 
           {/* Floating Metric Badge 1 (Top Right) */}
           <motion.div

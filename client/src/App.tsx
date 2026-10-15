@@ -171,13 +171,6 @@ const AppContent: React.FC = () => {
   return (
     <SidebarProvider defaultOpen={true}>
       <div className="min-h-screen w-full bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex transition-colors duration-300 selection:bg-cyan-500 selection:text-black">
-        {/* Background visual effects */}
-        <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden hidden dark:block">
-          <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-cyan-500/10 rounded-full blur-[140px]" />
-          <div className="absolute top-[600px] -left-40 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[160px]" />
-          <div className="absolute top-[800px] -right-40 w-[500px] h-[500px] bg-indigo-600/10 rounded-full blur-[160px]" />
-        </div>
-
         {/* Collapsible Intent UI AppSidebar */}
         <AppSidebar
           collapsible="dock"
