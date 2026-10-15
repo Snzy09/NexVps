@@ -50,7 +50,7 @@ export function HeroSection({ onExploreClick }: HeroSectionProps) {
   };
 
   return (
-    <section className="relative overflow-hidden pt-8 pb-6 sm:pb-8 text-slate-900 dark:text-white">
+    <section className="relative overflow-x-clip pt-8 pb-12 sm:pb-16 text-slate-900 dark:text-white">
       <div className="relative z-10 container mx-auto flex flex-col items-center px-4 text-center">
         {/* Eyebrow Badge */}
         <motion.div
@@ -116,6 +116,11 @@ export function HeroSection({ onExploreClick }: HeroSectionProps) {
 
         {/* Mockup UI Showcase (Glassmorphic + Spotlight) */}
         <div className="relative mt-2 w-full max-w-4xl">
+          {/* Seamless Ambient Atmosphere - Fades gracefully to transparent at bottom to prevent cut-offs */}
+          <div 
+            className="pointer-events-none absolute -inset-x-8 -inset-y-6 sm:-inset-x-14 sm:-inset-y-10 rounded-[2.5rem] bg-gradient-to-b from-cyan-500/15 via-blue-600/10 to-transparent blur-3xl [mask-image:linear-gradient(to_bottom,black_40%,transparent_100%)] hidden dark:block"
+            aria-hidden="true" 
+          />
 
           {/* Floating Metric Badge 1 (Top Right) */}
           <motion.div

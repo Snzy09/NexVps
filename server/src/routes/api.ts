@@ -511,9 +511,18 @@ router.post('/admin/settings', requireAdmin, (req: Request, res: Response) => {
   }
 });
 
-router.post('/admin/test-upcloud', requireAdmin, async (req: Request, res: Response) => {
+router.all('/admin/test-upcloud', requireAdmin, async (req: Request, res: Response) => {
   try {
-    const customTokens = req.body?.tokens || req.body?.upcloudApiTokens;
+    const rawTokens = req.body?.tokens || req.body?.upcloudApiTokens;
+    let customTokens: { key: string; value: string }[] | undefined = undefined;
+    if (Array.isArray(rawTokens)) {
+      customTokens = rawTokens.map((t: any, idx: number) => {
+        if (typeof t === 'string') {
+          return { key: `TOKEN_${idx + 1}`, value: t };
+        }
+        return { key: t.key || `TOKEN_${idx + 1}`, value: t.value || '' };
+      });
+    }
     const result = await upcloudService.testAllTokens(customTokens);
     res.json(result);
   } catch (err: any) {
@@ -521,10 +530,11 @@ router.post('/admin/test-upcloud', requireAdmin, async (req: Request, res: Respo
   }
 });
 
-router.post('/admin/test-buatqris', requireAdmin, async (req: Request, res: Response) => {
+router.all('/admin/test-buatqris', requireAdmin, async (req: Request, res: Response) => {
   try {
-    const { accountId, secretToken } = req.body || {};
-    const result = await buatqrisService.testConnection(accountId, secretToken);
+    const accountId = req.body?.accountId || req.query?.accountId;
+    const secretToken = req.body?.secretToken || req.query?.secretToken;
+    const result = await buatqrisService.testConnection(accountId as string, secretToken as string);
     res.json(result);
   } catch (err: any) {
     res.status(500).json({ success: false, message: err.message });
