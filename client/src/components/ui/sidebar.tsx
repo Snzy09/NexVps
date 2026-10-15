@@ -276,7 +276,7 @@ export const SidebarSection: React.FC<SidebarSectionProps> = ({
   return (
     <div className={`space-y-1 ${className}`} {...props}>
       {label && !isCollapsed && (
-        <span className="px-3 text-[10px] font-bold uppercase tracking-wider text-slate-500 block mb-1.5 animate-in fade-in">
+        <span className="px-3 text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block mb-1.5 animate-in fade-in">
           {label}
         </span>
       )}
@@ -325,8 +325,8 @@ export const SidebarItem: React.FC<SidebarItemProps> = ({
           isCollapsed ? 'justify-center px-2' : 'justify-between'
         } ${
           isCurrent
-            ? 'bg-cyan-50 dark:bg-gradient-to-r dark:from-cyan-500/20 dark:to-blue-600/20 text-cyan-900 dark:text-cyan-300 border border-cyan-300/80 dark:border-cyan-500/30 shadow-sm dark:shadow-md dark:shadow-cyan-500/10 font-bold'
-            : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-900 border border-transparent'
+            ? 'bg-cyan-50 dark:bg-cyan-500/15 text-cyan-900 dark:text-white border border-cyan-300/80 dark:border-cyan-500/40 shadow-sm dark:shadow-[0_0_15px_-3px_rgba(6,182,212,0.25)] font-bold'
+            : 'text-slate-600 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60 border border-transparent'
         } ${className}`}
       >
         <div className={`flex items-center gap-3 min-w-0 ${isCollapsed ? 'justify-center' : ''}`}>
@@ -334,7 +334,7 @@ export const SidebarItem: React.FC<SidebarItemProps> = ({
         </div>
 
         {badge !== undefined && !isCollapsed && (
-          <span className="shrink-0 px-2 py-0.5 rounded-full text-[10px] font-bold font-mono bg-cyan-500/10 dark:bg-cyan-500/15 text-cyan-700 dark:text-cyan-300 border border-cyan-500/20 dark:border-cyan-500/30">
+          <span className="shrink-0 px-2 py-0.5 rounded-full text-[10px] font-bold font-mono bg-cyan-500/10 dark:bg-cyan-500/20 text-cyan-700 dark:text-cyan-300 border border-cyan-500/20 dark:border-cyan-500/40">
             {badge}
           </span>
         )}
@@ -485,11 +485,11 @@ export const SidebarDisclosureTrigger: React.FC<React.ButtonHTMLAttributes<HTMLB
     <button
       type="button"
       onClick={() => toggleKey(id)}
-      className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-900/60 transition-colors cursor-pointer ${className}`}
+      className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-colors cursor-pointer ${className}`}
       {...props}
     >
       <div className="flex items-center gap-2.5 truncate">{children}</div>
-      <ChevronDown className={`w-3.5 h-3.5 text-slate-400 dark:text-slate-500 transition-transform duration-200 ${isOpen ? 'rotate-180 text-slate-900 dark:text-white' : ''}`} />
+      <ChevronDown className={`w-3.5 h-3.5 text-slate-400 dark:text-slate-400 transition-transform duration-200 ${isOpen ? 'rotate-180 text-slate-900 dark:text-white' : ''}`} />
     </button>
   );
 };

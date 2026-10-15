@@ -92,7 +92,7 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
               <span className="font-black text-slate-900 dark:text-white text-sm sm:text-base tracking-tight truncate block">
                 NexVps <span className="text-cyan-600 dark:text-cyan-400 font-mono text-xs">Cloud</span>
               </span>
-              <span className="text-[10px] text-slate-500 font-mono block -mt-0.5">
+              <span className="text-[10px] text-slate-500 dark:text-slate-400 font-mono block -mt-0.5">
                 MAXIOPS & QRIS
               </span>
             </div>
@@ -195,7 +195,7 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
             {/* Disclosure 1: Dukungan & Bantuan */}
             <SidebarDisclosure id={1}>
               <SidebarDisclosureTrigger>
-                <HelpCircle className="h-4 w-4 text-slate-400 shrink-0" />
+                <HelpCircle className="h-4 w-4 text-slate-500 dark:text-slate-300 shrink-0" />
                 <SidebarLabel>Dukungan & Bantuan</SidebarLabel>
               </SidebarDisclosureTrigger>
               <SidebarDisclosurePanel>
@@ -203,7 +203,7 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
                   tooltip="Dokumentasi API"
                   onClick={() => window.open('https://developers.upcloud.com/api/1.3', '_blank')}
                 >
-                  <FileText className="h-3.5 w-3.5 text-slate-400" />
+                  <FileText className="h-3.5 w-3.5 text-slate-500 dark:text-slate-300" />
                   <SidebarLabel>Dokumentasi UpCloud</SidebarLabel>
                 </SidebarItem>
 
@@ -230,7 +230,7 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
             {/* Disclosure 2: Infrastruktur Cloud */}
             <SidebarDisclosure id={2}>
               <SidebarDisclosureTrigger>
-                <Building2 className="h-4 w-4 text-slate-400 shrink-0" />
+                <Building2 className="h-4 w-4 text-slate-500 dark:text-slate-300 shrink-0" />
                 <SidebarLabel>Infrastruktur Node</SidebarLabel>
               </SidebarDisclosureTrigger>
               <SidebarDisclosurePanel>
