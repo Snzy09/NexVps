@@ -57,9 +57,21 @@ export class UpCloudService {
     // Fallback to single legacy token if list is empty
     if (tokens.length === 0 && settings.upcloudApiToken?.trim() && !settings.upcloudApiToken.includes('••••')) {
       tokens.push({
-        key: 'UPCLOUD_API_TOKEN_1',
+        key: 'UPCLOUD_API_TOKEN_PRIMARY',
         value: settings.upcloudApiToken.trim()
       });
+    }
+
+    // Fallback directly to process.env if still empty
+    if (tokens.length === 0) {
+      if (process.env.UPCLOUD_API_TOKEN?.trim()) {
+        tokens.push({ key: 'UPCLOUD_API_TOKEN_PRIMARY', value: process.env.UPCLOUD_API_TOKEN.trim() });
+      }
+      for (const [k, v] of Object.entries(process.env)) {
+        if (k.startsWith('UPCLOUD_API_TOKEN_') && v?.trim() && !tokens.some(t => t.key === k)) {
+          tokens.push({ key: k, value: v.trim() });
+        }
+      }
     }
 
     return tokens;
@@ -151,7 +163,7 @@ export class UpCloudService {
   /**
    * Test all configured UpCloud tokens individually and return diagnostic report
    */
-  async testAllTokens(): Promise<{
+  async testAllTokens(customTokens?: { key: string; value: string }[]): Promise<{
     success: boolean;
     totalTokens: number;
     activeToken?: string;
@@ -159,7 +171,27 @@ export class UpCloudService {
     data?: any;
     results: UpCloudTokenTestResult[];
   }> {
-    const tokens = this.getAllTokens();
+    const existingTokens = this.getAllTokens();
+    let tokens: { key: string; value: string }[] = [];
+
+    if (Array.isArray(customTokens) && customTokens.length > 0) {
+      for (let i = 0; i < customTokens.length; i++) {
+        const item = customTokens[i];
+        const key = item.key?.trim() || `UPCLOUD_API_TOKEN_${i + 1}`;
+        let val = item.value?.trim() || '';
+        if (val.includes('••••')) {
+          const matched = existingTokens.find(e => e.key === key) || existingTokens[i];
+          if (matched) val = matched.value;
+        }
+        if (val && !val.includes('••••')) {
+          tokens.push({ key, value: val });
+        }
+      }
+    }
+
+    if (tokens.length === 0) {
+      tokens = existingTokens;
+    }
     const settings = store.getSettings();
 
     if (tokens.length === 0) {

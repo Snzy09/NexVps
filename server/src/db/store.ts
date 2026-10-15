@@ -424,20 +424,31 @@ export const DEFAULT_TEMPLATES: VpsTemplate[] = [
   }
 ];
 
+export const getEnvTokens = (): { key: string; value: string }[] => {
+  const tokens: { key: string; value: string }[] = [];
+  if (process.env.UPCLOUD_API_TOKEN?.trim()) {
+    tokens.push({ key: 'UPCLOUD_API_TOKEN_PRIMARY', value: process.env.UPCLOUD_API_TOKEN.trim() });
+  }
+  for (const [k, v] of Object.entries(process.env)) {
+    if (k.startsWith('UPCLOUD_API_TOKEN_') && v?.trim() && !tokens.some(t => t.key === k)) {
+      tokens.push({ key: k, value: v.trim() });
+    }
+  }
+  return tokens;
+};
+
 export const DEFAULT_SETTINGS: AppSettings = {
   upcloudApiToken: process.env.UPCLOUD_API_TOKEN || '',
-  upcloudApiTokens: process.env.UPCLOUD_API_TOKEN 
-    ? [{ key: 'UPCLOUD_API_TOKEN_1', value: process.env.UPCLOUD_API_TOKEN }]
-    : [],
+  upcloudApiTokens: getEnvTokens(),
   upcloudUsername: process.env.UPCLOUD_USERNAME || '',
   upcloudPassword: process.env.UPCLOUD_PASSWORD || '',
   useTokenAuth: true,
   buatqrisAccountId: process.env.BUATQRIS_ACCOUNT_ID || '',
   buatqrisSecretToken: process.env.BUATQRIS_SECRET_TOKEN || '',
   buatqrisSigningSecret: process.env.BUATQRIS_SIGNING_SECRET || '',
-  buatqrisMethod: 'qris_two',
-  buatqrisFeeBy: 'user',
-  isSandbox: false,
+  buatqrisMethod: (process.env.BUATQRIS_METHOD as any) || 'qris_two',
+  buatqrisFeeBy: (process.env.BUATQRIS_FEE_BY as any) || 'user',
+  isSandbox: process.env.IS_SANDBOX === 'true',
   storeName: 'NexVps Cloud',
   storeTagline: 'Ultra-Fast Cloud VPS with Instant QRIS Activation',
   supportEmail: 'support@nexvps.cloud',
@@ -467,21 +478,116 @@ class Store {
     }
   }
 
+  private syncToEnv(settings: AppSettings) {
+    try {
+      const serverEnvPath = path.join(__dirname, '../../.env');
+      const innerEnvPath = path.join(__dirname, '../.env');
+      const targetPaths = [innerEnvPath];
+      if (fs.existsSync(serverEnvPath)) targetPaths.push(serverEnvPath);
+
+      for (const target of targetPaths) {
+        let content = fs.existsSync(target) ? fs.readFileSync(target, 'utf-8') : '';
+
+        const setOrUpdateVar = (key: string, value: string) => {
+          const regex = new RegExp(`^${key}=.*$`, 'm');
+          if (regex.test(content)) {
+            content = content.replace(regex, `${key}=${value}`);
+          } else {
+            content += (content.endsWith('\n') ? '' : '\n') + `${key}=${value}\n`;
+          }
+          process.env[key] = value;
+        };
+
+        if (settings.upcloudApiToken && !settings.upcloudApiToken.includes('••••')) {
+          setOrUpdateVar('UPCLOUD_API_TOKEN', settings.upcloudApiToken);
+        }
+        if (settings.upcloudUsername !== undefined) {
+          setOrUpdateVar('UPCLOUD_USERNAME', settings.upcloudUsername);
+        }
+        if (settings.upcloudPassword !== undefined && !settings.upcloudPassword.includes('••••')) {
+          setOrUpdateVar('UPCLOUD_PASSWORD', settings.upcloudPassword);
+        }
+        if (settings.buatqrisAccountId !== undefined) {
+          setOrUpdateVar('BUATQRIS_ACCOUNT_ID', settings.buatqrisAccountId);
+        }
+        if (settings.buatqrisSecretToken !== undefined && !settings.buatqrisSecretToken.includes('••••')) {
+          setOrUpdateVar('BUATQRIS_SECRET_TOKEN', settings.buatqrisSecretToken);
+        }
+        if (settings.buatqrisSigningSecret !== undefined && !settings.buatqrisSigningSecret.includes('••••')) {
+          setOrUpdateVar('BUATQRIS_SIGNING_SECRET', settings.buatqrisSigningSecret);
+        }
+        if (settings.buatqrisMethod !== undefined) {
+          setOrUpdateVar('BUATQRIS_METHOD', settings.buatqrisMethod);
+        }
+        if (settings.buatqrisFeeBy !== undefined) {
+          setOrUpdateVar('BUATQRIS_FEE_BY', settings.buatqrisFeeBy);
+        }
+        if (settings.isSandbox !== undefined) {
+          setOrUpdateVar('IS_SANDBOX', String(settings.isSandbox));
+        }
+
+        if (Array.isArray(settings.upcloudApiTokens)) {
+          settings.upcloudApiTokens.forEach((t) => {
+            if (t.key && t.value && !t.value.includes('••••')) {
+              setOrUpdateVar(t.key, t.value);
+            }
+          });
+        }
+
+        fs.writeFileSync(target, content, 'utf-8');
+      }
+    } catch (err) {
+      console.warn('Could not sync settings to .env file:', err);
+    }
+  }
+
   private load(): StoreSchema {
     if (fs.existsSync(STORE_FILE)) {
       try {
         const raw = fs.readFileSync(STORE_FILE, 'utf-8');
         const parsed = JSON.parse(raw);
         const loadedSettings: AppSettings = { ...DEFAULT_SETTINGS, ...parsed.settings };
-        if (!loadedSettings.upcloudApiTokens || loadedSettings.upcloudApiTokens.length === 0) {
+
+        // Keep .env variables authoritative if set
+        const envTokens = getEnvTokens();
+        if (envTokens.length > 0) {
+          loadedSettings.upcloudApiTokens = envTokens;
+          loadedSettings.upcloudApiToken = envTokens[0].value;
+        } else if (!loadedSettings.upcloudApiTokens || loadedSettings.upcloudApiTokens.length === 0) {
           if (loadedSettings.upcloudApiToken) {
             loadedSettings.upcloudApiTokens = [
-              { key: 'UPCLOUD_API_TOKEN_1', value: loadedSettings.upcloudApiToken }
+              { key: 'UPCLOUD_API_TOKEN_PRIMARY', value: loadedSettings.upcloudApiToken }
             ];
           } else {
             loadedSettings.upcloudApiTokens = [];
           }
         }
+
+        if (process.env.UPCLOUD_USERNAME?.trim()) {
+          loadedSettings.upcloudUsername = process.env.UPCLOUD_USERNAME.trim();
+        }
+        if (process.env.UPCLOUD_PASSWORD?.trim()) {
+          loadedSettings.upcloudPassword = process.env.UPCLOUD_PASSWORD.trim();
+        }
+        if (process.env.BUATQRIS_ACCOUNT_ID?.trim()) {
+          loadedSettings.buatqrisAccountId = process.env.BUATQRIS_ACCOUNT_ID.trim();
+        }
+        if (process.env.BUATQRIS_SECRET_TOKEN?.trim()) {
+          loadedSettings.buatqrisSecretToken = process.env.BUATQRIS_SECRET_TOKEN.trim();
+        }
+        if (process.env.BUATQRIS_SIGNING_SECRET?.trim()) {
+          loadedSettings.buatqrisSigningSecret = process.env.BUATQRIS_SIGNING_SECRET.trim();
+        }
+        if (process.env.BUATQRIS_METHOD?.trim()) {
+          loadedSettings.buatqrisMethod = process.env.BUATQRIS_METHOD.trim() as any;
+        }
+        if (process.env.BUATQRIS_FEE_BY?.trim()) {
+          loadedSettings.buatqrisFeeBy = process.env.BUATQRIS_FEE_BY.trim() as any;
+        }
+        if (process.env.IS_SANDBOX !== undefined) {
+          loadedSettings.isSandbox = process.env.IS_SANDBOX === 'true';
+        }
+
         return {
           settings: loadedSettings,
           plans: parsed.plans || DEFAULT_PLANS,
@@ -520,10 +626,11 @@ class Store {
     if (partial.upcloudApiTokens && partial.upcloudApiTokens.length > 0) {
       nextSettings.upcloudApiToken = partial.upcloudApiTokens[0]?.value || '';
     } else if (partial.upcloudApiToken && (!partial.upcloudApiTokens || partial.upcloudApiTokens.length === 0)) {
-      nextSettings.upcloudApiTokens = [{ key: 'UPCLOUD_API_TOKEN_1', value: partial.upcloudApiToken }];
+      nextSettings.upcloudApiTokens = [{ key: 'UPCLOUD_API_TOKEN_PRIMARY', value: partial.upcloudApiToken }];
     }
     this.data.settings = nextSettings;
     this.save();
+    this.syncToEnv(nextSettings);
     return this.getSettings();
   }
 

@@ -511,14 +511,24 @@ router.post('/admin/settings', requireAdmin, (req: Request, res: Response) => {
   }
 });
 
-router.post('/admin/test-upcloud', requireAdmin, async (_req: Request, res: Response) => {
-  const result = await upcloudService.testAllTokens();
-  res.json(result);
+router.post('/admin/test-upcloud', requireAdmin, async (req: Request, res: Response) => {
+  try {
+    const customTokens = req.body?.tokens || req.body?.upcloudApiTokens;
+    const result = await upcloudService.testAllTokens(customTokens);
+    res.json(result);
+  } catch (err: any) {
+    res.status(500).json({ success: false, message: err.message, results: [] });
+  }
 });
 
-router.post('/admin/test-buatqris', requireAdmin, async (_req: Request, res: Response) => {
-  const result = await buatqrisService.testConnection();
-  res.json(result);
+router.post('/admin/test-buatqris', requireAdmin, async (req: Request, res: Response) => {
+  try {
+    const { accountId, secretToken } = req.body || {};
+    const result = await buatqrisService.testConnection(accountId, secretToken);
+    res.json(result);
+  } catch (err: any) {
+    res.status(500).json({ success: false, message: err.message });
+  }
 });
 
 // ==========================================

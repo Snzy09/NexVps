@@ -305,7 +305,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
   const handleTestUpCloud = async () => {
     setUpcloudTestStatus({ loading: true });
     try {
-      const res = await api.testUpCloud();
+      const currentTokens = (formSettings.upcloudApiTokens && formSettings.upcloudApiTokens.length > 0)
+        ? formSettings.upcloudApiTokens
+        : (formSettings.upcloudApiToken ? [{ key: 'UPCLOUD_API_TOKEN_PRIMARY', value: formSettings.upcloudApiToken }] : []);
+      const res = await api.testUpCloud(currentTokens);
       setUpcloudTestStatus({ loading: false, result: res });
     } catch (err: any) {
       setUpcloudTestStatus({ loading: false, result: { success: false, message: err.message } });
@@ -315,7 +318,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
   const handleTestBuatQris = async () => {
     setBuatqrisTestStatus({ loading: true });
     try {
-      const res = await api.testBuatQris();
+      const res = await api.testBuatQris({
+        accountId: formSettings.buatqrisAccountId,
+        secretToken: formSettings.buatqrisSecretToken
+      });
       setBuatqrisTestStatus({ loading: false, result: res });
     } catch (err: any) {
       setBuatqrisTestStatus({ loading: false, result: { success: false, message: err.message } });

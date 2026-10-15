@@ -35,9 +35,17 @@ export class BuatQrisService {
   /**
    * Test connection to BuatQRIS API
    */
-  async testConnection(): Promise<{ success: boolean; message: string; data?: any }> {
+  async testConnection(customAccountId?: string, customSecretToken?: string): Promise<{ success: boolean; message: string; data?: any }> {
     const settings = store.getSettings();
-    if (!settings.buatqrisAccountId || !settings.buatqrisSecretToken) {
+    const accountId = (customAccountId && !customAccountId.includes('••••'))
+      ? customAccountId.trim()
+      : (settings.buatqrisAccountId?.trim() || process.env.BUATQRIS_ACCOUNT_ID?.trim());
+
+    let secretToken = (customSecretToken && !customSecretToken.includes('••••'))
+      ? customSecretToken.trim()
+      : (settings.buatqrisSecretToken?.trim() || process.env.BUATQRIS_SECRET_TOKEN?.trim());
+
+    if (!accountId || !secretToken) {
       return {
         success: false,
         message: 'Kredensial BuatQRIS belum dikonfigurasi (Account ID atau Secret Token kosong).'
@@ -45,7 +53,7 @@ export class BuatQrisService {
     }
 
     try {
-      // Create a test 1000 IDR sandbox transaction to check credentials
+      // Create a test 1000 IDR transaction to check credentials
       const res = await this.createQris({
         amount: 1000,
         description: 'Test API Connection NexVps',

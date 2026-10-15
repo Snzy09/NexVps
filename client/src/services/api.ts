@@ -738,19 +738,51 @@ export const api = {
     saveStoredPlans(updatedList);
   },
 
-  async testUpCloud(): Promise<{ success: boolean; message: string; data?: any; totalTokens?: number; activeToken?: string; results?: import('../types').UpCloudTokenTestResult[] }> {
-    const res = await fetch(`${API_BASE}/admin/test-upcloud`, { 
-      method: 'POST',
-      headers: getHeaders() 
-    });
-    return await res.json();
+  async testUpCloud(tokens?: { key: string; value: string }[]): Promise<{ success: boolean; message: string; data?: any; totalTokens?: number; activeToken?: string; results?: import('../types').UpCloudTokenTestResult[] }> {
+    try {
+      const res = await fetch(`${API_BASE}/admin/test-upcloud`, { 
+        method: 'POST',
+        headers: getHeaders({ 'Content-Type': 'application/json' }),
+        body: JSON.stringify({ tokens })
+      });
+      const contentType = res.headers.get('content-type') || '';
+      if (!contentType.includes('application/json')) {
+        return {
+          success: false,
+          totalTokens: tokens?.length || 0,
+          message: `Server backend port 5000 mengembalikan respons non-JSON (HTTP ${res.status}). Pastikan backend server ('npm run server:dev') berjalan normal di port 5000.`
+        };
+      }
+      return await res.json();
+    } catch (err: any) {
+      return {
+        success: false,
+        totalTokens: tokens?.length || 0,
+        message: `Koneksi gagal: ${err.message}. Pastikan backend server 'npm run server:dev' aktif di http://localhost:5000.`
+      };
+    }
   },
 
-  async testBuatQris(): Promise<{ success: boolean; message: string; data?: any }> {
-    const res = await fetch(`${API_BASE}/admin/test-buatqris`, { 
-      method: 'POST',
-      headers: getHeaders() 
-    });
-    return await res.json();
+  async testBuatQris(credentials?: { accountId?: string; secretToken?: string }): Promise<{ success: boolean; message: string; data?: any }> {
+    try {
+      const res = await fetch(`${API_BASE}/admin/test-buatqris`, { 
+        method: 'POST',
+        headers: getHeaders({ 'Content-Type': 'application/json' }),
+        body: JSON.stringify(credentials || {})
+      });
+      const contentType = res.headers.get('content-type') || '';
+      if (!contentType.includes('application/json')) {
+        return {
+          success: false,
+          message: `Server backend port 5000 mengembalikan respons non-JSON (HTTP ${res.status}). Pastikan backend server ('npm run server:dev') berjalan normal di port 5000.`
+        };
+      }
+      return await res.json();
+    } catch (err: any) {
+      return {
+        success: false,
+        message: `Koneksi gagal: ${err.message}. Pastikan backend server 'npm run server:dev' aktif di http://localhost:5000.`
+      };
+    }
   }
 };
