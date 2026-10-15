@@ -134,22 +134,21 @@ export function HeroSection({ onExploreClick }: HeroSectionProps) {
             initial={{ opacity: 0, y: -15, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            data-force-dark="true"
-            className="dark absolute -top-3.5 right-1 z-30 flex origin-top-right scale-[0.85] items-center gap-2 rounded-xl border border-emerald-500/30 bg-[#0B0F19] px-2.5 py-1.5 shadow-lg shadow-slate-950/20 dark:shadow-[0_16px_36px_rgba(0,0,0,0.8)] ring-1 ring-slate-900/10 dark:ring-white/10 backdrop-blur-xl sm:-top-5 sm:right-0 sm:scale-95 sm:gap-2.5 sm:px-3.5 sm:py-2 md:-top-6 md:-right-2 md:scale-100 lg:-top-6 lg:-right-6 xl:-top-7 xl:-right-6"
+            className="absolute -top-3.5 right-1 z-30 flex origin-top-right scale-[0.85] items-center gap-2 rounded-xl border border-emerald-500/30 bg-white/95 dark:bg-[#0B0F19]/95 px-2.5 py-1.5 shadow-lg shadow-slate-200/60 dark:shadow-[0_16px_36px_rgba(0,0,0,0.8)] ring-1 ring-slate-200 dark:ring-white/10 backdrop-blur-xl sm:-top-5 sm:right-0 sm:scale-95 sm:gap-2.5 sm:px-3.5 sm:py-2 md:-top-6 md:-right-2 md:scale-100 lg:-top-6 lg:-right-6 xl:-top-7 xl:-right-6"
           >
-            <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/15 text-emerald-400 shadow-inner sm:h-7 sm:w-7">
+            <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 shadow-inner sm:h-7 sm:w-7">
               <CheckCircle2 className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
             </div>
             <div className="text-left">
               <div className="flex items-center gap-2">
-                <span className="text-xs font-semibold text-white">
+                <span className="text-xs font-semibold text-slate-900 dark:text-white">
                   UpCloud MaxIOPS
                 </span>
-                <span className="rounded-full border border-emerald-500/30 bg-emerald-500/15 px-2 py-0.5 text-[10px] font-semibold text-emerald-400">
+                <span className="rounded-full border border-emerald-500/30 bg-emerald-500/15 px-2 py-0.5 text-[10px] font-semibold text-emerald-600 dark:text-emerald-400">
                   100% SLA
                 </span>
               </div>
-              <span className="text-[10px] text-gray-400">
+              <span className="text-[10px] text-slate-500 dark:text-gray-400 font-mono">
                 100K+ IOPS • 1 Gbps Port
               </span>
             </div>
@@ -160,23 +159,22 @@ export function HeroSection({ onExploreClick }: HeroSectionProps) {
             initial={{ opacity: 0, y: 15, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.5 }}
-            data-force-dark="true"
-            className="dark absolute -bottom-3.5 left-1 z-30 flex origin-bottom-left scale-[0.85] items-center gap-2 rounded-xl border border-cyan-500/30 bg-[#0B0F19] px-2.5 py-1.5 shadow-lg shadow-slate-950/20 dark:shadow-[0_16px_36px_rgba(0,0,0,0.8)] ring-1 ring-slate-900/10 dark:ring-white/10 backdrop-blur-xl sm:-bottom-5 sm:left-0 sm:scale-95 sm:gap-2.5 sm:px-3.5 sm:py-2 md:-bottom-6 md:-left-2 md:scale-100 lg:-bottom-6 lg:-left-6 xl:-bottom-7 xl:-left-6"
+            className="absolute -bottom-3.5 left-1 z-30 flex origin-bottom-left scale-[0.85] items-center gap-2 rounded-xl border border-cyan-500/30 bg-white/95 dark:bg-[#0B0F19]/95 px-2.5 py-1.5 shadow-lg shadow-slate-200/60 dark:shadow-[0_16px_36px_rgba(0,0,0,0.8)] ring-1 ring-slate-200 dark:ring-white/10 backdrop-blur-xl sm:-bottom-5 sm:left-0 sm:scale-95 sm:gap-2.5 sm:px-3.5 sm:py-2 md:-bottom-6 md:-left-2 md:scale-100 lg:-bottom-6 lg:-left-6 xl:-bottom-7 xl:-left-6"
           >
-            <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-cyan-500/30 bg-cyan-500/15 text-cyan-400 shadow-inner sm:h-7 sm:w-7">
+            <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-cyan-500/30 bg-cyan-500/15 text-cyan-600 dark:text-cyan-400 shadow-inner sm:h-7 sm:w-7">
               <Bot className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
             </div>
             <div className="text-left">
               <div className="flex items-center gap-2">
-                <span className="text-xs font-semibold text-white">
+                <span className="text-xs font-semibold text-slate-900 dark:text-white">
                   QRIS Gateway Ready
                 </span>
-                <span className="flex items-center gap-1 rounded-full border border-cyan-500/30 bg-cyan-500/15 px-2 py-0.5 text-[10px] font-semibold text-cyan-300">
-                  <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-cyan-400" />
+                <span className="flex items-center gap-1 rounded-full border border-cyan-500/30 bg-cyan-500/15 px-2 py-0.5 text-[10px] font-semibold text-cyan-700 dark:text-cyan-300">
+                  <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-cyan-500 dark:bg-cyan-400" />
                   Live Webhook
                 </span>
               </div>
-              <span className="text-[10px] text-gray-400">
+              <span className="text-[10px] text-slate-500 dark:text-gray-400 font-mono">
                 &lt; 30s Auto Provisioning
               </span>
             </div>

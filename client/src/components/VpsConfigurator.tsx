@@ -300,26 +300,30 @@ export const VpsConfigurator: React.FC<VpsConfiguratorProps> = ({
       setFormError('');
 
       if (!customerName.trim()) {
-        const err = 'Silakan masukkan nama lengkap Anda.';
+        const err = 'Silakan masukkan nama lengkap Anda pada Informasi Kontak.';
         setFormError(err);
+        document.getElementById('step-customer-info')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         reject(new Error(err));
         return;
       }
       if (!customerEmail.trim() || !customerEmail.includes('@')) {
         const err = 'Silakan masukkan alamat email yang valid.';
         setFormError(err);
+        document.getElementById('step-customer-info')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         reject(new Error(err));
         return;
       }
       if (!hostname.trim()) {
         const err = 'Silakan tentukan hostname server.';
         setFormError(err);
+        document.getElementById('step-server-access')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         reject(new Error(err));
         return;
       }
       if (!rootPassword.trim() || rootPassword.length < 8) {
         const err = 'Password root minimal 8 karakter.';
         setFormError(err);
+        document.getElementById('step-server-access')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         reject(new Error(err));
         return;
       }
@@ -412,7 +416,7 @@ export const VpsConfigurator: React.FC<VpsConfiguratorProps> = ({
                     <p className="text-[11px] text-slate-500 dark:text-slate-400">{zone.country}</p>
                     <div className="flex items-center gap-1 mt-2 text-[11px] text-emerald-600 dark:text-emerald-400 font-mono">
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-pulse"></span>
-                      <span>~{zone.pingMs} ms</span>
+                      <span className="tabular-nums">~{zone.pingMs} ms</span>
                     </div>
                   </button>
                 );
@@ -658,7 +662,7 @@ export const VpsConfigurator: React.FC<VpsConfiguratorProps> = ({
                     <div className="my-4 pb-4 border-b border-slate-200 dark:border-slate-800">
                       <div className="flex items-baseline gap-1">
                         <span className="text-xs text-slate-500 dark:text-slate-400">Rp</span>
-                        <span className="text-3xl font-black text-slate-900 dark:text-white">
+                        <span className="text-3xl font-black text-slate-900 dark:text-white tabular-nums">
                           {periodPrice.toLocaleString('id-ID')}
                         </span>
                         <span className="text-xs text-slate-500 dark:text-slate-400">
@@ -747,7 +751,7 @@ export const VpsConfigurator: React.FC<VpsConfiguratorProps> = ({
           </section>
 
           {/* STEP 4: KONFIGURASI SERVER ACCESS */}
-          <section className="bg-white dark:bg-slate-900/80 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-xl shadow-slate-200/50 dark:shadow-2xl dark:shadow-black/40 relative overflow-hidden transition-all">
+          <section id="step-server-access" className="bg-white dark:bg-slate-900/80 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-xl shadow-slate-200/50 dark:shadow-2xl dark:shadow-black/40 relative overflow-hidden transition-all">
             <div className="absolute top-0 right-0 w-72 h-72 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none hidden dark:block" />
 
             {/* Header */}
@@ -1055,7 +1059,7 @@ export const VpsConfigurator: React.FC<VpsConfiguratorProps> = ({
           </section>
 
           {/* STEP 5: DATA PEMBELI */}
-          <section className="bg-white dark:bg-slate-900/80 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-xl shadow-slate-200/50 dark:shadow-2xl dark:shadow-black/40 relative overflow-hidden transition-all">
+          <section id="step-customer-info" className="bg-white dark:bg-slate-900/80 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-xl shadow-slate-200/50 dark:shadow-2xl dark:shadow-black/40 relative overflow-hidden transition-all">
             <div className="absolute top-0 right-0 w-72 h-72 bg-indigo-500/5 rounded-full blur-3xl pointer-events-none hidden dark:block" />
 
             {/* Header */}
@@ -1311,7 +1315,7 @@ export const VpsConfigurator: React.FC<VpsConfiguratorProps> = ({
                   <span className="text-slate-700 dark:text-slate-300 font-semibold text-sm">Total Tagihan:</span>
                   <div className="text-right">
                     <span className="text-xs text-cyan-600 dark:text-cyan-400 font-bold mr-1">Rp</span>
-                    <span className="text-3xl font-black text-slate-900 dark:text-white">
+                    <span className="text-3xl font-black text-slate-900 dark:text-white tabular-nums">
                       {totalPrice.toLocaleString('id-ID')}
                     </span>
                   </div>

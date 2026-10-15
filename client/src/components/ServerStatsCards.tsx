@@ -76,10 +76,10 @@ export const ServerStatsCards: React.FC<ServerStatsCardsProps> = ({ servers }) =
           <div className="space-y-1 mb-6">
             <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">Instance Active Rate</p>
             <div className="flex items-center gap-3">
-              <span className="text-4xl sm:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
+              <span className="text-4xl sm:text-5xl font-black text-slate-900 dark:text-white tracking-tight tabular-nums">
                 {totalServers > 0 ? `${healthRate}%` : '100%'}
               </span>
-              <span className="inline-flex items-center gap-0.5 px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 dark:text-emerald-400 text-xs font-semibold">
+              <span className="inline-flex items-center gap-0.5 px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 dark:text-emerald-400 text-xs font-semibold tabular-nums">
                 <ArrowUpRight className="w-3.5 h-3.5 stroke-[2.5]" />
                 <span>{totalServers > 0 ? `${runningServers}/${totalServers} Live` : 'Ready'}</span>
               </span>
@@ -100,7 +100,7 @@ export const ServerStatsCards: React.FC<ServerStatsCardsProps> = ({ servers }) =
 
         {/* Footer sentence */}
         <p className="text-xs text-slate-500 dark:text-slate-400 pt-4 border-t border-slate-100 dark:border-slate-800/70 leading-relaxed">
-          Total kapasitas komputasi <strong className="text-slate-800 dark:text-white font-semibold">{totalCores} vCPU / {totalRamGb} GB RAM</strong> di UpCloud MaxIOPS.
+          Total kapasitas komputasi <strong className="text-slate-800 dark:text-white font-semibold tabular-nums">{totalCores} vCPU / {totalRamGb} GB RAM</strong> di UpCloud MaxIOPS.
         </p>
       </div>
 
@@ -126,10 +126,10 @@ export const ServerStatsCards: React.FC<ServerStatsCardsProps> = ({ servers }) =
           <div className="space-y-1 mb-6">
             <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">High SLA Guarantee</p>
             <div className="flex items-center gap-3">
-              <span className="text-4xl sm:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
+              <span className="text-4xl sm:text-5xl font-black text-slate-900 dark:text-white tracking-tight tabular-nums">
                 99.9%
               </span>
-              <span className="inline-flex items-center gap-0.5 px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 dark:text-emerald-400 text-xs font-semibold">
+              <span className="inline-flex items-center gap-0.5 px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 dark:text-emerald-400 text-xs font-semibold tabular-nums">
                 <ArrowUpRight className="w-3.5 h-3.5 stroke-[2.5]" />
                 <span>100% SLA</span>
               </span>
@@ -170,7 +170,7 @@ export const ServerStatsCards: React.FC<ServerStatsCardsProps> = ({ servers }) =
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 shadow-xl shadow-slate-950/20">
               <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 text-white dark:bg-white dark:text-slate-900 text-xs font-bold shadow-md">
                 <span className="w-2.5 h-2.5 rounded-[3px] bg-blue-500 shrink-0 animate-pulse"></span>
-                <span>Latency ~{liveLatency}ms</span>
+                <span className="font-mono tabular-nums">Latency ~{liveLatency}ms</span>
               </div>
             </div>
           </div>
@@ -204,10 +204,10 @@ export const ServerStatsCards: React.FC<ServerStatsCardsProps> = ({ servers }) =
           <div className="space-y-1 mb-4">
             <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">Throughput & Disk I/O</p>
             <div className="flex items-center gap-3">
-              <span className="text-4xl sm:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
+              <span className="text-4xl sm:text-5xl font-black text-slate-900 dark:text-white tracking-tight tabular-nums">
                 {liveIopsValue}
               </span>
-              <span className="inline-flex items-center gap-0.5 px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 dark:text-emerald-400 text-xs font-semibold">
+              <span className="inline-flex items-center gap-0.5 px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 dark:text-emerald-400 text-xs font-semibold tabular-nums">
                 <ArrowUpRight className="w-3.5 h-3.5 stroke-[2.5]" />
                 <span>IOPS Peak</span>
               </span>

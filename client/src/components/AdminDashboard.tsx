@@ -522,7 +522,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
                         ) : (
                           <div className="flex items-baseline gap-1">
                             <span className="text-xs text-cyan-600 dark:text-cyan-400 font-bold">Rp</span>
-                            <span className="text-3xl font-black text-slate-900 dark:text-white font-mono">
+                            <span className="text-3xl font-black text-slate-900 dark:text-white font-mono tabular-nums">
                               {p.pricePerMonthIdr.toLocaleString('id-ID')}
                             </span>
                             <span className="text-xs text-slate-500 dark:text-slate-400">/ bulan</span>
@@ -532,13 +532,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
                         <div className="pt-2 border-t border-slate-200 dark:border-slate-800/80 grid grid-cols-2 gap-2 text-[11px] text-slate-500 dark:text-slate-400">
                           <div>
                             <span>Tagihan 3 Bulan (-5%): </span>
-                            <strong className="text-slate-700 dark:text-slate-200">
+                            <strong className="text-slate-700 dark:text-slate-200 tabular-nums">
                               Rp {Math.round((currentForm.pricePerMonthIdr || 0) * 3 * 0.95).toLocaleString('id-ID')}
                             </strong>
                           </div>
                           <div>
                             <span>Tagihan 1 Tahun (-15%): </span>
-                            <strong className="text-slate-700 dark:text-slate-200">
+                            <strong className="text-slate-700 dark:text-slate-200 tabular-nums">
                               Rp {Math.round((currentForm.pricePerMonthIdr || 0) * 12 * 0.85).toLocaleString('id-ID')}
                             </strong>
                           </div>
@@ -1269,7 +1269,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
                       <DollarSign className="w-5 h-5" />
                     </div>
                   </div>
-                  <p className="text-3xl font-black text-slate-900 dark:text-white mt-3 font-mono">
+                  <p className="text-3xl font-black text-slate-900 dark:text-white mt-3 font-mono tabular-nums">
                     Rp {metrics.totalRevenueIdr.toLocaleString('id-ID')}
                   </p>
                   <p className="text-xs text-emerald-600 dark:text-emerald-400 mt-1 font-medium">Pembayaran QRIS lunas</p>
@@ -1282,7 +1282,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
                       <Server className="w-5 h-5" />
                     </div>
                   </div>
-                  <p className="text-3xl font-black text-slate-900 dark:text-white mt-3">
+                  <p className="text-3xl font-black text-slate-900 dark:text-white mt-3 tabular-nums">
                     {metrics.activeServersCount}
                   </p>
                   <p className="text-xs text-cyan-600 dark:text-cyan-400 mt-1 font-medium">Cloud VPS Running</p>
@@ -1295,7 +1295,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
                       <Clock className="w-5 h-5" />
                     </div>
                   </div>
-                  <p className="text-3xl font-black text-slate-900 dark:text-white mt-3">
+                  <p className="text-3xl font-black text-slate-900 dark:text-white mt-3 tabular-nums">
                     {metrics.pendingOrdersCount}
                   </p>
                   <p className="text-xs text-amber-600 dark:text-amber-400 mt-1 font-medium">QRIS Pending</p>
@@ -1308,7 +1308,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
                       <ShoppingBag className="w-5 h-5" />
                     </div>
                   </div>
-                  <p className="text-3xl font-black text-slate-900 dark:text-white mt-3">
+                  <p className="text-3xl font-black text-slate-900 dark:text-white mt-3 tabular-nums">
                     {metrics.totalOrders}
                   </p>
                   <p className="text-xs text-blue-600 dark:text-blue-400 mt-1 font-medium">Pesanan masuk</p>
@@ -1333,7 +1333,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
                   <h3 className="font-bold text-slate-900 dark:text-white text-base">Daftar Semua Pesanan VPS</h3>
                   <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Riwayat transaksi dan status server pelanggan</p>
                 </div>
-                <span className="px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+                <span className="px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 tabular-nums">
                   {orders.length} pesanan tercatat
                 </span>
               </div>
@@ -1360,7 +1360,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
                     <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                       {orders.map((o) => (
                         <tr key={o.id} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/30 transition-colors">
-                          <td className="p-4 font-mono font-bold text-cyan-600 dark:text-cyan-400">{o.orderNumber}</td>
+                          <td className="p-4 font-mono font-bold text-cyan-600 dark:text-cyan-400 tabular-nums">{o.orderNumber}</td>
                           <td className="p-4">
                             <p className="font-semibold text-slate-900 dark:text-white">{o.customerName}</p>
                             <p className="text-slate-500 dark:text-slate-400 text-[11px]">{o.customerEmail}</p>
@@ -1369,7 +1369,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
                             <p className="font-medium text-slate-800 dark:text-slate-200">{o.planId}</p>
                             <p className="text-slate-500 dark:text-slate-400 text-[11px]">{o.zoneCode} • {o.hostname}</p>
                           </td>
-                          <td className="p-4 font-mono font-bold text-slate-900 dark:text-white">
+                          <td className="p-4 font-mono font-bold text-slate-900 dark:text-white tabular-nums">
                             Rp {o.totalAmountIdr.toLocaleString('id-ID')}
                           </td>
                           <td className="p-4">
@@ -1397,7 +1397,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
                           <td className="p-4 font-mono text-cyan-600 dark:text-cyan-300">
                             {o.serverIp || '-'}
                           </td>
-                          <td className="p-4 text-slate-500 dark:text-slate-400">
+                          <td className="p-4 text-slate-500 dark:text-slate-400 tabular-nums">
                             {new Date(o.createdAt).toLocaleDateString('id-ID')}
                           </td>
                         </tr>

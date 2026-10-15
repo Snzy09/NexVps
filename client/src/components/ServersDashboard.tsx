@@ -335,12 +335,12 @@ export const ServersDashboard: React.FC<ServersDashboardProps> = ({ onOrderNew, 
   // Unauthenticated screen
   if (!user) {
     return (
-      <div className="py-20 text-center bg-slate-900/40 rounded-3xl border border-slate-800 p-8 space-y-4 max-w-md mx-auto my-8">
-        <div className="w-16 h-16 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 flex items-center justify-center mx-auto shadow-lg shadow-cyan-500/10">
+      <div className="py-20 text-center bg-white dark:bg-slate-900/40 rounded-3xl border border-slate-200 dark:border-slate-800 p-8 space-y-4 max-w-md mx-auto my-8 shadow-xl shadow-slate-200/50 dark:shadow-none">
+        <div className="w-16 h-16 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-600 dark:text-cyan-400 flex items-center justify-center mx-auto shadow-lg shadow-cyan-500/10">
           <Terminal className="w-8 h-8" />
         </div>
-        <h3 className="text-xl font-bold text-white">Silakan Masuk Terlebih Dahulu</h3>
-        <p className="text-xs text-slate-400 max-w-sm mx-auto">
+        <h3 className="text-xl font-bold text-slate-900 dark:text-white">Silakan Masuk Terlebih Dahulu</h3>
+        <p className="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto">
           Anda perlu login ke akun Anda untuk melihat dan mengontrol server Cloud VPS milik Anda.
         </p>
         <button
@@ -370,22 +370,22 @@ export const ServersDashboard: React.FC<ServersDashboardProps> = ({ onOrderNew, 
   return (
     <div className="space-y-8 max-w-7xl mx-auto pb-12">
       {/* Top Header & Global Controls */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-slate-800/80">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-slate-200 dark:border-slate-800/80">
         <div className="space-y-1.5">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-blue-600/20 border border-cyan-500/30 text-cyan-400 flex items-center justify-center shadow-lg shadow-cyan-500/10">
+            <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-blue-600/20 border border-cyan-500/30 text-cyan-600 dark:text-cyan-400 flex items-center justify-center shadow-lg shadow-cyan-500/10">
               <Server className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-2xl sm:text-3xl font-black text-white flex items-center gap-2.5">
+              <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white flex items-center gap-2.5">
                 <span>Dashboard Server Cloud</span>
                 {isAdmin && (
-                  <span className="px-2.5 py-0.5 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-400 text-xs font-mono font-bold">
+                  <span className="px-2.5 py-0.5 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-700 dark:text-purple-400 text-xs font-mono font-bold">
                     Admin View
                   </span>
                 )}
               </h2>
-              <p className="text-xs sm:text-sm text-slate-400">
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
                 Kelola instans UpCloud MaxIOPS: monitor status daya, kontrol start/stop, dan detail SSH real-time.
               </p>
             </div>
@@ -541,15 +541,15 @@ export const ServersDashboard: React.FC<ServersDashboardProps> = ({ onOrderNew, 
         <ServerTableSkeleton />
       ) : filteredServers.length === 0 ? (
         /* Empty State */
-        <div className="py-20 text-center bg-slate-900/40 rounded-3xl border border-slate-800 p-8 space-y-5 max-w-lg mx-auto">
-          <div className="w-16 h-16 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 flex items-center justify-center mx-auto shadow-lg shadow-cyan-500/10">
+        <div className="py-20 text-center bg-white dark:bg-slate-900/40 rounded-3xl border border-slate-200 dark:border-slate-800 p-8 space-y-5 max-w-lg mx-auto shadow-xl shadow-slate-200/50 dark:shadow-none">
+          <div className="w-16 h-16 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-600 dark:text-cyan-400 flex items-center justify-center mx-auto shadow-lg shadow-cyan-500/10">
             <Server className="w-8 h-8" />
           </div>
           <div className="space-y-1.5">
-            <h3 className="text-xl font-bold text-white">
+            <h3 className="text-xl font-bold text-slate-900 dark:text-white">
               {servers.length === 0 ? 'Belum Ada Server Aktif' : 'Tidak Ada Server yang Cocok'}
             </h3>
-            <p className="text-xs text-slate-400 max-w-sm mx-auto">
+            <p className="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto">
               {servers.length === 0 
                 ? 'Anda belum memiliki server VPS yang aktif. Pesan instans baru dengan aktivasi instan otomatis sekarang!' 
                 : 'Tidak ada server yang memenuhi filter pencarian saat ini.'}
@@ -558,14 +558,14 @@ export const ServersDashboard: React.FC<ServersDashboardProps> = ({ onOrderNew, 
           {servers.length === 0 ? (
             <button
               onClick={onOrderNew}
-              className="px-6 py-3 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-950 font-bold text-xs shadow-xl shadow-cyan-500/20 hover:scale-105 transition-all cursor-pointer"
+              className="px-6 py-3 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-950 font-bold text-xs shadow-xl shadow-cyan-500/20 hover:scale-105 active:scale-[0.98] transition-all cursor-pointer"
             >
               Pesan Cloud VPS Sekarang
             </button>
           ) : (
             <button
               onClick={() => { setSearchQuery(''); setStatusFilter('all'); }}
-              className="px-4 py-2 rounded-xl bg-slate-800 text-white text-xs font-semibold hover:bg-slate-700 transition-colors"
+              className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-white text-xs font-semibold hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors cursor-pointer"
             >
               Reset Filter
             </button>
@@ -668,10 +668,10 @@ export const ServersDashboard: React.FC<ServersDashboardProps> = ({ onOrderNew, 
                 <div
                   key={server.id}
                   onClick={() => setSelectedServerDetail(server)}
-                  className={`group relative flex items-center justify-between gap-4 px-4 sm:px-6 py-4 rounded-xl border transition-all cursor-pointer shadow-md ${
+                  className={`group relative flex items-center justify-between gap-4 px-4 sm:px-6 py-4 rounded-xl border transition-all cursor-pointer shadow-sm hover:shadow-md ${
                     isSelected 
-                      ? 'bg-slate-900 border-[#7000FF]/50 ring-1 ring-[#7000FF]/30' 
-                      : 'bg-slate-900/70 border-slate-800/90 hover:bg-slate-900 hover:border-slate-700'
+                      ? 'bg-cyan-50/80 dark:bg-slate-900 border-cyan-500/80 dark:border-cyan-500/50 ring-1 ring-cyan-500/30' 
+                      : 'bg-white dark:bg-slate-900/70 border-slate-200 dark:border-slate-800/90 hover:bg-slate-50 dark:hover:bg-slate-900 hover:border-slate-300 dark:hover:border-slate-700'
                   }`}
                 >
                   {/* Checkbox */}
@@ -680,7 +680,7 @@ export const ServersDashboard: React.FC<ServersDashboardProps> = ({ onOrderNew, 
                       type="checkbox"
                       checked={isSelected}
                       onChange={() => {}}
-                      className="w-4 h-4 rounded border-slate-700 bg-slate-950 text-[#7000FF] focus:ring-[#7000FF] cursor-pointer"
+                      className="w-4 h-4 rounded border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-cyan-600 focus:ring-cyan-500 cursor-pointer"
                     />
                   </div>
 
@@ -691,17 +691,17 @@ export const ServersDashboard: React.FC<ServersDashboardProps> = ({ onOrderNew, 
                         isOnline ? 'bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]' :
                         isStopped ? 'bg-rose-500' :
                         isBuilding ? 'bg-amber-400 animate-pulse' :
-                        isError ? 'bg-rose-600' : 'bg-slate-600'
+                        isError ? 'bg-rose-600' : 'bg-slate-400 dark:bg-slate-600'
                       }`} />
-                      <span className="font-bold text-white text-sm sm:text-base tracking-tight group-hover:text-cyan-400 transition-colors">
+                      <span className="font-bold text-slate-900 dark:text-white text-sm sm:text-base tracking-tight group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors">
                         {server.hostname}
                       </span>
                     </div>
 
-                    <div className="flex items-center gap-3 mt-1.5 text-xs text-slate-400 flex-wrap">
+                    <div className="flex items-center gap-3 mt-1.5 text-xs text-slate-500 dark:text-slate-400 flex-wrap">
                       <div className="flex items-center gap-1.5">
                         <OsIcon distro={getDistroFromTemplateName(server.templateName)} size="xs" />
-                        <span className="text-slate-300 font-medium">
+                        <span className="text-slate-700 dark:text-slate-300 font-medium">
                           {server.templateName ? server.templateName.split('(')[0].trim() : 'Ubuntu Server 24.04 LTS'}
                         </span>
                       </div>
@@ -712,14 +712,14 @@ export const ServersDashboard: React.FC<ServersDashboardProps> = ({ onOrderNew, 
                             e.stopPropagation();
                             copyText(server.serverIp!, `ip-${server.id}`, 'Alamat IP');
                           }}
-                          className="flex items-center gap-1.5 text-slate-400 hover:text-white cursor-pointer px-1.5 py-0.5 rounded-md hover:bg-slate-800 transition-colors font-mono"
+                          className="flex items-center gap-1.5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white cursor-pointer px-1.5 py-0.5 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors font-mono"
                           title="Salin Alamat IP"
                         >
-                          <span>IP {server.serverIp}</span>
+                          <span className="tabular-nums">IP {server.serverIp}</span>
                           {copiedKey === `ip-${server.id}` ? (
-                            <Check className="w-3.5 h-3.5 text-emerald-400" />
+                            <Check className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400" />
                           ) : (
-                            <Copy className="w-3.5 h-3.5 text-[#7000FF]" />
+                            <Copy className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400" />
                           )}
                         </div>
                       )}
@@ -728,35 +728,35 @@ export const ServersDashboard: React.FC<ServersDashboardProps> = ({ onOrderNew, 
 
                   {/* Column 2: CPU */}
                   <div className="w-24 text-left hidden sm:block">
-                    <span className="text-xs sm:text-sm font-semibold text-slate-200">
+                    <span className="text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-200 tabular-nums">
                       {server.coreNumber || 2} cores
                     </span>
                   </div>
 
                   {/* Column 3: STORAGE */}
                   <div className="w-24 text-left hidden md:block">
-                    <span className="text-xs sm:text-sm font-semibold text-slate-200">
+                    <span className="text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-200 tabular-nums">
                       {server.storageSizeGb || 50} GB
                     </span>
                   </div>
 
                   {/* Column 4: MEMORY */}
                   <div className="w-24 text-left hidden md:block">
-                    <span className="text-xs sm:text-sm font-semibold text-slate-200">
+                    <span className="text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-200 tabular-nums">
                       {Math.round((server.memoryAmountMb || 2048) / 1024)} GB
                     </span>
                   </div>
 
                   {/* Column 5: LOCATION */}
                   <div className="w-28 text-left hidden sm:block">
-                    <span className="text-xs sm:text-sm font-semibold text-slate-200 uppercase font-mono">
+                    <span className="text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-200 uppercase font-mono">
                       {server.zoneCode?.toUpperCase() || 'SG-SIN1'}
                     </span>
                   </div>
 
                   {/* Column 6: Action Chevron Right */}
                   <div className="shrink-0 flex items-center pr-1">
-                    <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-white group-hover:translate-x-1 transition-all" />
+                    <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white group-hover:translate-x-1 transition-all" />
                   </div>
                 </div>
               );

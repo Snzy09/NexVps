@@ -3,10 +3,35 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
   body {
-    @apply bg-slate-950 text-slate-100 antialiased selection:bg-cyan-500 selection:text-black;
+    @apply bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 antialiased selection:bg-cyan-500 selection:text-black;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     min-height: 100vh;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+  img {
+    outline: 1px solid rgba(0, 0, 0, 0.08);
+    outline-offset: -1px;
+  }
+  html.dark img {
+    outline-color: rgba(255, 255, 255, 0.08);
+  }
+  button:active:not(:disabled), [role="button"]:active:not(:disabled) {
+    transform: scale(0.98);
   }
 }
 
