@@ -51,6 +51,10 @@ export const getDistroFromTemplateName = (name?: string): string => {
   if (lower.includes('centos')) return 'centos';
   if (lower.includes('fedora')) return 'fedora';
   if (lower.includes('windows')) return 'windows';
+  if (lower.includes('alpine')) return 'alpine';
+  if (lower.includes('arch')) return 'arch';
+  if (lower.includes('suse') || lower.includes('opensuse')) return 'opensuse';
+  if (lower.includes('freebsd') || lower.includes('bsd')) return 'freebsd';
   return 'linux';
 };
 

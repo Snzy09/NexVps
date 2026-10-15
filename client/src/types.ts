@@ -28,7 +28,7 @@ export interface VpsTemplate {
   id: string;
   uuid: string;
   name: string;
-  distro: 'ubuntu' | 'debian' | 'rocky' | 'almalinux' | 'centos' | 'fedora' | 'windows' | string;
+  distro: 'ubuntu' | 'debian' | 'rocky' | 'almalinux' | 'centos' | 'fedora' | 'windows' | 'alpine' | 'arch' | 'opensuse' | 'freebsd' | string;
   version: string;
   icon: string;
   minDiskGb: number;

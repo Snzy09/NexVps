@@ -48,10 +48,14 @@ export interface DistroMeta {
 export const DISTRO_METAS: DistroMeta[] = [
   { id: 'ubuntu', name: 'Ubuntu', tagline: 'Paling Populer & User-friendly', badge: 'Terpopuler' },
   { id: 'debian', name: 'Debian', tagline: 'Ultra-Stabil & Hemat Resource', badge: 'Paling Stabil' },
+  { id: 'alpine', name: 'Alpine Linux', tagline: 'Ultra-ringan & Container Ready', badge: 'Ringan (<50MB)' },
+  { id: 'arch', name: 'Arch Linux', tagline: 'Bleeding-edge Rolling Release', badge: 'Rolling' },
   { id: 'almalinux', name: 'AlmaLinux', tagline: '1:1 Binary Compatible RHEL', badge: 'Enterprise' },
   { id: 'rocky', name: 'Rocky Linux', tagline: 'Produksi Kompatibel RHEL', badge: 'Enterprise' },
   { id: 'centos', name: 'CentOS Stream', tagline: 'Upstream Red Hat Enterprise' },
   { id: 'fedora', name: 'Fedora Cloud', tagline: 'Kernel & Fitur Linux Terbaru' },
+  { id: 'opensuse', name: 'openSUSE', tagline: 'Enterprise YaST & Btrfs Native', badge: 'SysAdmin' },
+  { id: 'freebsd', name: 'FreeBSD', tagline: 'Advanced Unix, ZFS & Jails', badge: 'BSD Unix' },
   { id: 'windows', name: 'Windows Server', tagline: 'Remote Desktop & .NET Framework' }
 ];
 

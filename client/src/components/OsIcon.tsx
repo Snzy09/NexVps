@@ -8,6 +8,10 @@ export type OsDistro =
   | 'centos' 
   | 'fedora' 
   | 'windows' 
+  | 'alpine'
+  | 'arch'
+  | 'opensuse'
+  | 'freebsd'
   | 'linux'
   | string;
 
@@ -216,7 +220,103 @@ export const OsIcon: React.FC<OsIconProps> = ({
     );
   }
 
-  // 8. DEFAULT / LINUX TUX (SVG from svgrepo vectors/linux)
+  // 8. ALPINE LINUX (Triple Mountain Peaks)
+  if (normDistro.includes('alpine')) {
+    return (
+      <svg
+        viewBox="0 0 32 32"
+        className={`${dimensionClass} ${className} shrink-0`}
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <rect width="32" height="32" rx="16" fill="#0D597F" />
+        <path
+          d="M16 8L7 24h18L16 8z"
+          fill="#FFFFFF"
+          fillOpacity="0.9"
+        />
+        <path
+          d="M16 8l-4.5 8 3.5 8h10L16 8z"
+          fill="#3B82A6"
+        />
+        <path
+          d="M16 8v16"
+          stroke="#0D597F"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+        />
+      </svg>
+    );
+  }
+
+  // 9. ARCH LINUX (Iconic Arch Chevron)
+  if (normDistro.includes('arch')) {
+    return (
+      <svg
+        viewBox="0 0 32 32"
+        className={`${dimensionClass} ${className} shrink-0`}
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle cx="16" cy="16" r="16" fill="#1793D1" fillOpacity="0.18" />
+        <path
+          d="M16 5.5L7 25c3-1.5 6-2.5 9-2.5s6 1 9 2.5L16 5.5z"
+          fill="#1793D1"
+        />
+        <path
+          d="M16 11l-3 7.5c2 .5 4 .5 6 0L16 11z"
+          fill="#38BDF8"
+        />
+        <circle cx="16" cy="15" r="1.5" fill="#FFFFFF" />
+      </svg>
+    );
+  }
+
+  // 10. OPENSUSE (Chameleon Geeko)
+  if (normDistro.includes('suse') || normDistro.includes('opensuse')) {
+    return (
+      <svg
+        viewBox="0 0 32 32"
+        className={`${dimensionClass} ${className} shrink-0`}
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle cx="16" cy="16" r="16" fill="#73BA25" />
+        <path
+          d="M8 20c0-5.5 3.5-10 10-10 3.5 0 5.5 1.5 6.5 3.5-1.2-.5-2.5-.7-4-.4-2.2.4-4 2.2-4 4.5 0 2.5 2 4.5 4.5 4.5 2 0 3.8-1.3 4.3-3.2.1 1-.2 2.3-1.2 3.5-1.8 2.2-4.5 3.1-7.6 3.1-4.8 0-8.5-2.8-8.5-5.5z"
+          fill="#FFFFFF"
+        />
+        <circle cx="16" cy="14" r="2" fill="#73BA25" />
+        <circle cx="16.5" cy="13.5" r="0.7" fill="#FFFFFF" />
+      </svg>
+    );
+  }
+
+  // 11. FREEBSD (Red Sphere with Beastie Horns)
+  if (normDistro.includes('freebsd') || normDistro.includes('bsd')) {
+    return (
+      <svg
+        viewBox="0 0 32 32"
+        className={`${dimensionClass} ${className} shrink-0`}
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle cx="16" cy="16" r="16" fill="#AB2B28" fillOpacity="0.18" />
+        <circle cx="16" cy="16.5" r="9" fill="#C8102E" />
+        <path
+          d="M9.5 12c-1-2.5-.5-5 1.5-6.5.5 2.5 2 4.5 4 5-2.5.5-4.5 1-5.5 1.5z"
+          fill="#C8102E"
+        />
+        <path
+          d="M22.5 12c1-2.5.5-5-1.5-6.5-.5 2.5-2 4.5-4 5 2.5.5 4.5 1 5.5 1.5z"
+          fill="#C8102E"
+        />
+        <ellipse cx="14" cy="13" rx="3.5" ry="1.8" fill="#FFFFFF" fillOpacity="0.35" />
+      </svg>
+    );
+  }
+
+  // 12. DEFAULT / LINUX TUX (SVG from svgrepo vectors/linux)
   return (
     <svg
       viewBox="0 0 32 32"

@@ -114,12 +114,62 @@ export const FALLBACK_CATALOG: CatalogData = {
     { id: 'nl-ams1', code: 'nl-ams1', name: 'Amsterdam #1', city: 'Amsterdam', country: 'Netherlands', flag: 'nl', pingMs: 168, available: true }
   ],
   templates: [
-    { id: 'ubuntu-24', uuid: '01000000-0000-4000-8000-000030240200', name: 'Ubuntu Server 24.04 LTS (Noble Numbat)', distro: 'ubuntu', version: '24.04 LTS', icon: 'ubuntu', minDiskGb: 10, tier: 'maxiops', description: 'Versi LTS terbaru dengan dukungan jangka panjang', isLatest: true },
-    { id: 'ubuntu-22', uuid: '01000000-0000-4000-8000-000030220200', name: 'Ubuntu Server 22.04 LTS (Jammy Jellyfish)', distro: 'ubuntu', version: '22.04 LTS', icon: 'ubuntu', minDiskGb: 10, tier: 'maxiops', description: 'Stabil & kompatibilitas aplikasi luas' },
-    { id: 'debian-12', uuid: '01000000-0000-4000-8000-000020120100', name: 'Debian GNU/Linux 12 (Bookworm)', distro: 'debian', version: '12 (Bookworm)', icon: 'debian', minDiskGb: 10, tier: 'maxiops', description: 'Ultra-stabil, ringan, cocok untuk server produksi', isLatest: true },
-    { id: 'debian-11', uuid: '01000000-0000-4000-8000-000020110100', name: 'Debian GNU/Linux 11 (Bullseye)', distro: 'debian', version: '11 (Bullseye)', icon: 'debian', minDiskGb: 10, tier: 'maxiops', description: 'Distro Linux paling stabil dan teruji' },
-    { id: 'almalinux-9', uuid: '01000000-0000-4000-8000-000070090100', name: 'AlmaLinux 9', distro: 'almalinux', version: '9', icon: 'almalinux', minDiskGb: 15, tier: 'maxiops', description: '1:1 kompatibel RHEL tingkat enterprise', isLatest: true },
-    { id: 'rocky-9', uuid: '01000000-0000-4000-8000-000080090100', name: 'Rocky Linux 9', distro: 'rocky', version: '9', icon: 'rocky', minDiskGb: 15, tier: 'maxiops', description: 'Kompatibilitas RHEL untuk beban kerja berat', isLatest: true }
+    // Ubuntu
+    { id: 'ubuntu-24-04', uuid: '01000000-0000-4000-8000-000030240200', name: 'Ubuntu Server 24.04 LTS (Noble Numbat)', distro: 'ubuntu', version: '24.04 LTS', icon: 'ubuntu', minDiskGb: 10, tier: 'maxiops', description: 'Versi LTS terbaru dengan dukungan jangka panjang 5 tahun', isLatest: true },
+    { id: 'ubuntu-22-04', uuid: '01000000-0000-4000-8000-000030220200', name: 'Ubuntu Server 22.04 LTS (Jammy Jellyfish)', distro: 'ubuntu', version: '22.04 LTS', icon: 'ubuntu', minDiskGb: 10, tier: 'maxiops', description: 'Stabil & kompatibilitas aplikasi luas' },
+    { id: 'ubuntu-20-04', uuid: '01000000-0000-4000-8000-000030200200', name: 'Ubuntu Server 20.04 LTS (Focal Fossa)', distro: 'ubuntu', version: '20.04 LTS', icon: 'ubuntu', minDiskGb: 10, tier: 'maxiops', description: 'Versi LTS mature untuk aplikasi legacy enterprise' },
+    { id: 'ubuntu-24-04-cuda', uuid: '01000000-0000-4000-8000-000030700200', name: 'Ubuntu Server 24.04 LTS (NVIDIA & CUDA)', distro: 'ubuntu', version: '24.04 CUDA', icon: 'ubuntu', minDiskGb: 20, tier: 'maxiops', description: 'Driver NVIDIA & Toolkit CUDA pre-installed untuk AI/ML' },
+    { id: 'ubuntu-26-04', uuid: '01000000-0000-4000-8000-000030260200', name: 'Ubuntu Server 26.04 LTS (Resolute Raccoon)', distro: 'ubuntu', version: '26.04 LTS', icon: 'ubuntu', minDiskGb: 10, tier: 'maxiops', description: 'Next-gen kernel & fitur cloud computing mutakhir' },
+
+    // Debian
+    { id: 'debian-12', uuid: '01000000-0000-4000-8000-000020070100', name: 'Debian GNU/Linux 12 (Bookworm)', distro: 'debian', version: '12 (Bookworm)', icon: 'debian', minDiskGb: 10, tier: 'maxiops', description: 'Ultra-stabil, ringan, cocok untuk server produksi', isLatest: true },
+    { id: 'debian-11', uuid: '01000000-0000-4000-8000-000020060100', name: 'Debian GNU/Linux 11 (Bullseye)', distro: 'debian', version: '11 (Bullseye)', icon: 'debian', minDiskGb: 5, tier: 'maxiops', description: 'Versi LTS teruji hemat resource memori' },
+    { id: 'debian-10', uuid: '01000000-0000-4000-8000-000020050100', name: 'Debian GNU/Linux 10 (Buster)', distro: 'debian', version: '10 (Buster)', icon: 'debian', minDiskGb: 5, tier: 'maxiops', description: 'Dukungan extended LTS untuk workload warisan' },
+    { id: 'debian-13', uuid: '01000000-0000-4000-8000-000020080100', name: 'Debian GNU/Linux 13 (Trixie)', distro: 'debian', version: '13 (Trixie)', icon: 'debian', minDiskGb: 10, tier: 'maxiops', description: 'Debian generasi berikutnya (Testing channel)' },
+
+    // Alpine Linux
+    { id: 'alpine-3-21', uuid: '01000000-0000-4000-8000-000070032100', name: 'Alpine Linux 3.21 (Cloud-Init)', distro: 'alpine', version: '3.21', icon: 'alpine', minDiskGb: 5, tier: 'maxiops', description: 'Ultra-ringan (<50MB RAM), berorientasi keamanan, ideal untuk Docker & microservices', isLatest: true },
+    { id: 'alpine-3-20', uuid: '01000000-0000-4000-8000-000070032000', name: 'Alpine Linux 3.20', distro: 'alpine', version: '3.20', icon: 'alpine', minDiskGb: 5, tier: 'maxiops', description: 'Distribusi minimalis berbasis musl libc & busybox' },
+    { id: 'alpine-3-19', uuid: '01000000-0000-4000-8000-000070031900', name: 'Alpine Linux 3.19', distro: 'alpine', version: '3.19', icon: 'alpine', minDiskGb: 5, tier: 'maxiops', description: 'Versi stabil teruji dengan paket APK cepat & ringan' },
+
+    // Arch Linux
+    { id: 'arch-rolling', uuid: '01000000-0000-4000-8000-000060010100', name: 'Arch Linux (Rolling Release)', distro: 'arch', version: 'Rolling (Latest)', icon: 'arch', minDiskGb: 10, tier: 'maxiops', description: 'Bleeding-edge, pacman package manager, kernel Linux mutakhir', isLatest: true },
+    { id: 'arch-lts', uuid: '01000000-0000-4000-8000-000060010200', name: 'Arch Linux (LTS Kernel)', distro: 'arch', version: 'LTS Kernel', icon: 'arch', minDiskGb: 10, tier: 'maxiops', description: 'Arch Linux dengan kernel Long Term Support untuk stabilitas ekstra' },
+
+    // AlmaLinux
+    { id: 'almalinux-9', uuid: '01000000-0000-4000-8000-000140020100', name: 'AlmaLinux 9', distro: 'almalinux', version: '9', icon: 'almalinux', minDiskGb: 10, tier: 'maxiops', description: '100% 1:1 Binary Compatible Red Hat Enterprise Linux 9', isLatest: true },
+    { id: 'almalinux-8', uuid: '01000000-0000-4000-8000-000140010100', name: 'AlmaLinux 8', distro: 'almalinux', version: '8', icon: 'almalinux', minDiskGb: 5, tier: 'maxiops', description: 'Kompatibel RHEL 8 untuk aplikasi enterprise' },
+    { id: 'almalinux-10', uuid: '01000000-0000-4000-8000-000141000200', name: 'AlmaLinux 10', distro: 'almalinux', version: '10', icon: 'almalinux', minDiskGb: 10, tier: 'maxiops', description: 'Generasi terbaru platform enterprise AlmaLinux' },
+
+    // Rocky Linux
+    { id: 'rocky-9', uuid: '01000000-0000-4000-8000-000150020100', name: 'Rocky Linux 9', distro: 'rocky', version: '9', icon: 'rocky', minDiskGb: 10, tier: 'maxiops', description: 'Enterprise OS alternatif CentOS oleh pendiri CentOS asli', isLatest: true },
+    { id: 'rocky-8', uuid: '01000000-0000-4000-8000-000150010100', name: 'Rocky Linux 8', distro: 'rocky', version: '8', icon: 'rocky', minDiskGb: 5, tier: 'maxiops', description: 'Kompatibilitas RHEL 8 yang tangguh' },
+    { id: 'rocky-10', uuid: '01000000-0000-4000-8000-000151000200', name: 'Rocky Linux 10', distro: 'rocky', version: '10', icon: 'rocky', minDiskGb: 10, tier: 'maxiops', description: 'Generasi baru Rocky Linux' },
+
+    // CentOS Stream
+    { id: 'centos-9', uuid: '01000000-0000-4000-8000-000050010600', name: 'CentOS Stream 9', distro: 'centos', version: 'Stream 9', icon: 'centos', minDiskGb: 10, tier: 'maxiops', description: 'Upstream resmi Red Hat Enterprise Linux', isLatest: true },
+    { id: 'centos-8', uuid: '01000000-0000-4000-8000-000050010500', name: 'CentOS Stream 8', distro: 'centos', version: 'Stream 8', icon: 'centos', minDiskGb: 10, tier: 'maxiops', description: 'Platform CentOS Stream stabil untuk aplikasi lawas' },
+    { id: 'centos-10', uuid: '01000000-0000-4000-8000-000050010700', name: 'CentOS Stream 10', distro: 'centos', version: 'Stream 10', icon: 'centos', minDiskGb: 10, tier: 'maxiops', description: 'Platform pengembangan Red Hat Enterprise Linux generasi baru' },
+
+    // Fedora
+    { id: 'fedora-41', uuid: '01000000-0000-4000-8000-000044203700', name: 'Fedora 41 Cloud', distro: 'fedora', version: '41 Cloud', icon: 'fedora', minDiskGb: 10, tier: 'maxiops', description: 'Fitur Linux paling mutakhir, kernel modern & inovatif', isLatest: true },
+    { id: 'fedora-40', uuid: '01000000-0000-4000-8000-000044202700', name: 'Fedora 40 Cloud', distro: 'fedora', version: '40 Cloud', icon: 'fedora', minDiskGb: 10, tier: 'maxiops', description: 'Stabil & modern untuk cloud developer' },
+    { id: 'fedora-42', uuid: '01000000-0000-4000-8000-000044204700', name: 'Fedora 42 Cloud', distro: 'fedora', version: '42 Cloud', icon: 'fedora', minDiskGb: 10, tier: 'maxiops', description: 'Next-gen Fedora Cloud environment' },
+
+    // openSUSE
+    { id: 'opensuse-15-6', uuid: '01000000-0000-4000-8000-000090150600', name: 'openSUSE Leap 15.6', distro: 'opensuse', version: 'Leap 15.6', icon: 'opensuse', minDiskGb: 10, tier: 'maxiops', description: 'Distribusi enterprise Jerman dengan YaST & snapshot Btrfs otomatis', isLatest: true },
+    { id: 'opensuse-15-5', uuid: '01000000-0000-4000-8000-000090150500', name: 'openSUSE Leap 15.5', distro: 'opensuse', version: 'Leap 15.5', icon: 'opensuse', minDiskGb: 10, tier: 'maxiops', description: 'Stabilitas tinggi berbasis source code SUSE Linux Enterprise (SLE)' },
+    { id: 'opensuse-tumbleweed', uuid: '01000000-0000-4000-8000-000090200100', name: 'openSUSE Tumbleweed', distro: 'opensuse', version: 'Tumbleweed', icon: 'opensuse', minDiskGb: 10, tier: 'maxiops', description: 'Versi rolling release dengan paket perangkat lunak paling mutakhir' },
+
+    // FreeBSD
+    { id: 'freebsd-14-1', uuid: '01000000-0000-4000-8000-000120140100', name: 'FreeBSD 14.1-RELEASE', distro: 'freebsd', version: '14.1-RELEASE', icon: 'freebsd', minDiskGb: 10, tier: 'maxiops', description: 'Sistem operasi Unix canggih dengan ZFS native & Jails containerization', isLatest: true },
+    { id: 'freebsd-13-3', uuid: '01000000-0000-4000-8000-000120130300', name: 'FreeBSD 13.3-RELEASE', distro: 'freebsd', version: '13.3-RELEASE', icon: 'freebsd', minDiskGb: 10, tier: 'maxiops', description: 'Rilisan stabil branch 13 dengan performa network stack legendaris' },
+
+    // Windows Server
+    { id: 'windows-2025', uuid: '01000000-0000-4000-8000-000010090300', name: 'Windows Server 2025 Standard', distro: 'windows', version: '2025 Standard', icon: 'windows', minDiskGb: 25, tier: 'maxiops', description: 'Edisi Windows Server terbaru dengan keamanan AI & SMB over QUIC', isLatest: true },
+    { id: 'windows-2022', uuid: '01000000-0000-4000-8000-000010080300', name: 'Windows Server 2022 Standard', distro: 'windows', version: '2022 Standard', icon: 'windows', minDiskGb: 20, tier: 'maxiops', description: 'Pilihan terpopuler dengan RDP & ekosistem .NET' },
+    { id: 'windows-2019', uuid: '01000000-0000-4000-8000-000010070300', name: 'Windows Server 2019 Standard', distro: 'windows', version: '2019 Standard', icon: 'windows', minDiskGb: 25, tier: 'maxiops', description: 'Kompatibilitas legacy aplikasi Windows Server' },
+    { id: 'windows-2016', uuid: '01000000-0000-4000-8000-000010060300', name: 'Windows Server 2016 Standard', distro: 'windows', version: '2016 Standard', icon: 'windows', minDiskGb: 25, tier: 'maxiops', description: 'Dukungan stabil jangka panjang untuk sistem enterprise lawas' }
   ],
   store: {
     name: 'NexVps Cloud',

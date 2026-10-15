@@ -192,7 +192,7 @@ export const DEFAULT_TEMPLATES: VpsTemplate[] = [
     icon: 'ubuntu',
     minDiskGb: 10,
     tier: 'maxiops',
-    description: 'Versi LTS terbaru dengan dukungan jangka panjang',
+    description: 'Versi LTS terbaru dengan dukungan jangka panjang 5 tahun',
     isLatest: true
   },
   {
@@ -207,6 +207,17 @@ export const DEFAULT_TEMPLATES: VpsTemplate[] = [
     description: 'Stabil & kompatibilitas aplikasi luas'
   },
   {
+    id: 'ubuntu-20-04',
+    uuid: '01000000-0000-4000-8000-000030200200',
+    name: 'Ubuntu Server 20.04 LTS (Focal Fossa)',
+    distro: 'ubuntu',
+    version: '20.04 LTS',
+    icon: 'ubuntu',
+    minDiskGb: 10,
+    tier: 'maxiops',
+    description: 'Versi LTS mature untuk aplikasi legacy enterprise'
+  },
+  {
     id: 'ubuntu-24-04-cuda',
     uuid: '01000000-0000-4000-8000-000030700200',
     name: 'Ubuntu Server 24.04 LTS (NVIDIA & CUDA)',
@@ -215,7 +226,7 @@ export const DEFAULT_TEMPLATES: VpsTemplate[] = [
     icon: 'ubuntu',
     minDiskGb: 20,
     tier: 'maxiops',
-    description: 'Driver NVIDIA & Toolkit CUDA pre-installed'
+    description: 'Driver NVIDIA & Toolkit CUDA pre-installed untuk AI/ML'
   },
   {
     id: 'ubuntu-26-04',
@@ -226,7 +237,7 @@ export const DEFAULT_TEMPLATES: VpsTemplate[] = [
     icon: 'ubuntu',
     minDiskGb: 10,
     tier: 'maxiops',
-    description: 'Next-gen kernel & fitur terbaru'
+    description: 'Next-gen kernel & fitur cloud computing mutakhir'
   },
 
   // Debian
@@ -251,7 +262,18 @@ export const DEFAULT_TEMPLATES: VpsTemplate[] = [
     icon: 'debian',
     minDiskGb: 5,
     tier: 'maxiops',
-    description: 'Versi LTS teruji hemat resource'
+    description: 'Versi LTS teruji hemat resource memori'
+  },
+  {
+    id: 'debian-10',
+    uuid: '01000000-0000-4000-8000-000020050100',
+    name: 'Debian GNU/Linux 10 (Buster)',
+    distro: 'debian',
+    version: '10 (Buster)',
+    icon: 'debian',
+    minDiskGb: 5,
+    tier: 'maxiops',
+    description: 'Dukungan extended LTS untuk workload warisan'
   },
   {
     id: 'debian-13',
@@ -263,6 +285,67 @@ export const DEFAULT_TEMPLATES: VpsTemplate[] = [
     minDiskGb: 10,
     tier: 'maxiops',
     description: 'Debian generasi berikutnya (Testing channel)'
+  },
+
+  // Alpine Linux (Ultra-lightweight container & microVM OS)
+  {
+    id: 'alpine-3-21',
+    uuid: '01000000-0000-4000-8000-000070032100',
+    name: 'Alpine Linux 3.21 (Cloud-Init)',
+    distro: 'alpine',
+    version: '3.21',
+    icon: 'alpine',
+    minDiskGb: 5,
+    tier: 'maxiops',
+    description: 'Ultra-ringan (<50MB RAM), berorientasi keamanan, ideal untuk Docker & microservices',
+    isLatest: true
+  },
+  {
+    id: 'alpine-3-20',
+    uuid: '01000000-0000-4000-8000-000070032000',
+    name: 'Alpine Linux 3.20',
+    distro: 'alpine',
+    version: '3.20',
+    icon: 'alpine',
+    minDiskGb: 5,
+    tier: 'maxiops',
+    description: 'Distribusi minimalis berbasis musl libc & busybox'
+  },
+  {
+    id: 'alpine-3-19',
+    uuid: '01000000-0000-4000-8000-000070031900',
+    name: 'Alpine Linux 3.19',
+    distro: 'alpine',
+    version: '3.19',
+    icon: 'alpine',
+    minDiskGb: 5,
+    tier: 'maxiops',
+    description: 'Versi stabil teruji dengan paket APK cepat & ringan'
+  },
+
+  // Arch Linux (Bleeding Edge Rolling Release)
+  {
+    id: 'arch-rolling',
+    uuid: '01000000-0000-4000-8000-000060010100',
+    name: 'Arch Linux (Rolling Release)',
+    distro: 'arch',
+    version: 'Rolling (Latest)',
+    icon: 'arch',
+    minDiskGb: 10,
+    tier: 'maxiops',
+    description: 'Bleeding-edge, pacman package manager, kernel Linux mutakhir',
+    isLatest: true
+  },
+  {
+    id: 'arch-lts',
+    uuid: '01000000-0000-4000-8000-000060010200',
+    name: 'Arch Linux (LTS Kernel)',
+    distro: 'arch',
+    version: 'LTS Kernel',
+    icon: 'arch',
+    minDiskGb: 10,
+    tier: 'maxiops',
+    description: 'Arch Linux dengan kernel Long Term Support untuk stabilitas ekstra'
   },
 
   // AlmaLinux
@@ -351,6 +434,17 @@ export const DEFAULT_TEMPLATES: VpsTemplate[] = [
     isLatest: true
   },
   {
+    id: 'centos-8',
+    uuid: '01000000-0000-4000-8000-000050010500',
+    name: 'CentOS Stream 8',
+    distro: 'centos',
+    version: 'Stream 8',
+    icon: 'centos',
+    minDiskGb: 10,
+    tier: 'maxiops',
+    description: 'Platform CentOS Stream stabil untuk aplikasi lawas'
+  },
+  {
     id: 'centos-10',
     uuid: '01000000-0000-4000-8000-000050010700',
     name: 'CentOS Stream 10',
@@ -364,11 +458,11 @@ export const DEFAULT_TEMPLATES: VpsTemplate[] = [
 
   // Fedora
   {
-    id: 'fedora-43',
-    uuid: '01000000-0000-4000-8000-000044204700',
-    name: 'Fedora 43 Cloud',
+    id: 'fedora-41',
+    uuid: '01000000-0000-4000-8000-000044203700',
+    name: 'Fedora 41 Cloud',
     distro: 'fedora',
-    version: '43 Cloud',
+    version: '41 Cloud',
     icon: 'fedora',
     minDiskGb: 10,
     tier: 'maxiops',
@@ -376,15 +470,87 @@ export const DEFAULT_TEMPLATES: VpsTemplate[] = [
     isLatest: true
   },
   {
+    id: 'fedora-40',
+    uuid: '01000000-0000-4000-8000-000044202700',
+    name: 'Fedora 40 Cloud',
+    distro: 'fedora',
+    version: '40 Cloud',
+    icon: 'fedora',
+    minDiskGb: 10,
+    tier: 'maxiops',
+    description: 'Stabil & modern untuk cloud developer'
+  },
+  {
     id: 'fedora-42',
-    uuid: '01000000-0000-4000-8000-000044203700',
+    uuid: '01000000-0000-4000-8000-000044204700',
     name: 'Fedora 42 Cloud',
     distro: 'fedora',
     version: '42 Cloud',
     icon: 'fedora',
     minDiskGb: 10,
     tier: 'maxiops',
-    description: 'Stabil & modern untuk cloud developer'
+    description: 'Next-gen Fedora Cloud environment'
+  },
+
+  // openSUSE (Enterprise Linux with YaST & Btrfs)
+  {
+    id: 'opensuse-15-6',
+    uuid: '01000000-0000-4000-8000-000090150600',
+    name: 'openSUSE Leap 15.6',
+    distro: 'opensuse',
+    version: 'Leap 15.6',
+    icon: 'opensuse',
+    minDiskGb: 10,
+    tier: 'maxiops',
+    description: 'Distribusi enterprise Jerman dengan YaST & snapshot Btrfs otomatis',
+    isLatest: true
+  },
+  {
+    id: 'opensuse-15-5',
+    uuid: '01000000-0000-4000-8000-000090150500',
+    name: 'openSUSE Leap 15.5',
+    distro: 'opensuse',
+    version: 'Leap 15.5',
+    icon: 'opensuse',
+    minDiskGb: 10,
+    tier: 'maxiops',
+    description: 'Stabilitas tinggi berbasis source code SUSE Linux Enterprise (SLE)'
+  },
+  {
+    id: 'opensuse-tumbleweed',
+    uuid: '01000000-0000-4000-8000-000090200100',
+    name: 'openSUSE Tumbleweed',
+    distro: 'opensuse',
+    version: 'Tumbleweed',
+    icon: 'opensuse',
+    minDiskGb: 10,
+    tier: 'maxiops',
+    description: 'Versi rolling release dengan paket perangkat lunak paling mutakhir'
+  },
+
+  // FreeBSD (Advanced Unix System)
+  {
+    id: 'freebsd-14-1',
+    uuid: '01000000-0000-4000-8000-000120140100',
+    name: 'FreeBSD 14.1-RELEASE',
+    distro: 'freebsd',
+    version: '14.1-RELEASE',
+    icon: 'freebsd',
+    minDiskGb: 10,
+    tier: 'maxiops',
+    description: 'Sistem operasi Unix canggih dengan ZFS native & Jails containerization',
+    isLatest: true
+  },
+  {
+    id: 'freebsd-13-3',
+    uuid: '01000000-0000-4000-8000-000120130300',
+    name: 'FreeBSD 13.3-RELEASE',
+    distro: 'freebsd',
+    version: '13.3-RELEASE',
+    icon: 'freebsd',
+    minDiskGb: 10,
+    tier: 'maxiops',
+    description: 'Rilisan stabil branch 13 dengan performa network stack legendaris'
   },
 
   // Windows Server
@@ -421,6 +587,17 @@ export const DEFAULT_TEMPLATES: VpsTemplate[] = [
     minDiskGb: 25,
     tier: 'maxiops',
     description: 'Kompatibilitas legacy aplikasi Windows Server'
+  },
+  {
+    id: 'windows-2016',
+    uuid: '01000000-0000-4000-8000-000010060300',
+    name: 'Windows Server 2016 Standard',
+    distro: 'windows',
+    version: '2016 Standard',
+    icon: 'windows',
+    minDiskGb: 25,
+    tier: 'maxiops',
+    description: 'Dukungan stabil jangka panjang untuk sistem enterprise lawas'
   }
 ];
 
@@ -588,13 +765,29 @@ class Store {
           loadedSettings.isSandbox = process.env.IS_SANDBOX === 'true';
         }
 
-        return {
+        const loadedTemplates: VpsTemplate[] = parsed.templates || DEFAULT_TEMPLATES;
+        let templatesUpdated = false;
+        const mergedTemplates = [...loadedTemplates];
+        for (const defT of DEFAULT_TEMPLATES) {
+          if (!mergedTemplates.some(t => t.id === defT.id || t.uuid === defT.uuid)) {
+            mergedTemplates.push(defT);
+            templatesUpdated = true;
+          }
+        }
+
+        const result: StoreSchema = {
           settings: loadedSettings,
           plans: parsed.plans || DEFAULT_PLANS,
           zones: parsed.zones || DEFAULT_ZONES,
-          templates: parsed.templates || DEFAULT_TEMPLATES,
+          templates: mergedTemplates,
           orders: parsed.orders || []
         };
+
+        if (templatesUpdated) {
+          this.save(result);
+        }
+
+        return result;
       } catch (e) {
         console.error('Error loading store, using defaults:', e);
       }
