@@ -184,12 +184,12 @@ export const ServerDetailView: React.FC<ServerDetailViewProps> = ({
       {/* ========================================================
           1. TOP NAVIGATION & PURPLE ACTION BUTTON
           ======================================================== */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-800/80">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-200 dark:border-slate-800/80">
         <div className="space-y-2">
           {/* Back button */}
           <button
             onClick={onBack}
-            className="inline-flex items-center gap-2 text-xs font-semibold text-slate-400 hover:text-white transition-colors cursor-pointer group"
+            className="inline-flex items-center gap-2 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer group"
           >
             <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
             <span>Kembali ke Semua Server</span>
@@ -201,24 +201,24 @@ export const ServerDetailView: React.FC<ServerDetailViewProps> = ({
               isOnline ? 'bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.8)]' : 
               isStopped ? 'bg-rose-500' : 'bg-amber-400 animate-ping'
             }`} />
-            <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
               {server.hostname}
             </h1>
 
             <span className={`px-2.5 py-0.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider ${
-              isOnline ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30' :
-              isStopped ? 'bg-rose-500/10 text-rose-400 border border-rose-500/30' :
-              'bg-amber-500/10 text-amber-400 border border-amber-500/30'
+              isOnline ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30' :
+              isStopped ? 'bg-rose-500/10 text-rose-700 dark:text-rose-400 border border-rose-500/30' :
+              'bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/30'
             }`}>
               {isOnline ? 'Running' : isStopped ? 'Stopped' : isBuilding ? 'Building' : 'Offline'}
             </span>
 
             <button
               onClick={onRefresh}
-              className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+              className="p-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
               title="Perbarui Status"
             >
-              <RefreshCw className={`w-3.5 h-3.5 ${currentAction === 'sync' ? 'animate-spin text-cyan-400' : ''}`} />
+              <RefreshCw className={`w-3.5 h-3.5 ${currentAction === 'sync' ? 'animate-spin text-cyan-500 dark:text-cyan-400' : ''}`} />
             </button>
           </div>
         </div>
@@ -249,14 +249,14 @@ export const ServerDetailView: React.FC<ServerDetailViewProps> = ({
 
               {/* Dropdown Menu (Image 2 style) */}
               {dropdownOpen && (
-                <div className="absolute right-0 top-full mt-2 w-56 rounded-2xl bg-slate-900 border border-slate-700/80 shadow-2xl p-1.5 z-50 animate-in fade-in zoom-in-95 duration-150">
+                <div className="absolute right-0 top-full mt-2 w-56 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700/80 shadow-2xl p-1.5 z-50 animate-in fade-in zoom-in-95 duration-150">
                   {/* Start */}
                   <button
                     onClick={() => handleTriggerAction('start')}
                     disabled={isOnline || Boolean(currentAction) || isBuilding}
-                    className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-200 hover:text-white hover:bg-slate-800/90 transition-colors disabled:opacity-40 disabled:cursor-not-allowed group text-left cursor-pointer"
+                    className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/90 transition-colors disabled:opacity-40 disabled:cursor-not-allowed group text-left cursor-pointer"
                   >
-                    <Power className="w-4 h-4 text-slate-400 group-hover:text-emerald-400" />
+                    <Power className="w-4 h-4 text-slate-400 group-hover:text-emerald-500 dark:group-hover:text-emerald-400" />
                     <span>Start</span>
                   </button>
 
@@ -264,9 +264,9 @@ export const ServerDetailView: React.FC<ServerDetailViewProps> = ({
                   <button
                     onClick={() => handleTriggerAction('stop')}
                     disabled={isStopped || Boolean(currentAction) || isBuilding}
-                    className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-200 hover:text-white hover:bg-slate-800/90 transition-colors disabled:opacity-40 disabled:cursor-not-allowed group text-left cursor-pointer"
+                    className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/90 transition-colors disabled:opacity-40 disabled:cursor-not-allowed group text-left cursor-pointer"
                   >
-                    <Power className="w-4 h-4 text-slate-400 group-hover:text-amber-400" />
+                    <Power className="w-4 h-4 text-slate-400 group-hover:text-amber-500 dark:group-hover:text-amber-400" />
                     <span>Shut down</span>
                   </button>
 
@@ -274,9 +274,9 @@ export const ServerDetailView: React.FC<ServerDetailViewProps> = ({
                   <button
                     onClick={() => handleTriggerAction('force_stop')}
                     disabled={isStopped || Boolean(currentAction) || isBuilding}
-                    className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-200 hover:text-white hover:bg-slate-800/90 transition-colors disabled:opacity-40 disabled:cursor-not-allowed group text-left cursor-pointer"
+                    className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/90 transition-colors disabled:opacity-40 disabled:cursor-not-allowed group text-left cursor-pointer"
                   >
-                    <Unplug className="w-4 h-4 text-slate-400 group-hover:text-rose-400" />
+                    <Unplug className="w-4 h-4 text-slate-400 group-hover:text-rose-500 dark:group-hover:text-rose-400" />
                     <span>Force Shutdown</span>
                   </button>
 
@@ -284,9 +284,9 @@ export const ServerDetailView: React.FC<ServerDetailViewProps> = ({
                   <button
                     onClick={() => handleTriggerAction('restart')}
                     disabled={Boolean(currentAction) || isBuilding}
-                    className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-200 hover:text-white hover:bg-slate-800/90 transition-colors disabled:opacity-40 disabled:cursor-not-allowed group text-left cursor-pointer"
+                    className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/90 transition-colors disabled:opacity-40 disabled:cursor-not-allowed group text-left cursor-pointer"
                   >
-                    <RotateCw className="w-4 h-4 text-slate-400 group-hover:text-cyan-400" />
+                    <RotateCw className="w-4 h-4 text-slate-400 group-hover:text-cyan-500 dark:group-hover:text-cyan-400" />
                     <span>Restart</span>
                   </button>
 
@@ -296,7 +296,7 @@ export const ServerDetailView: React.FC<ServerDetailViewProps> = ({
                       setDropdownOpen(false);
                       alert('Fitur Clone Server Snapshot UpCloud akan segera hadir pada update berikutnya.');
                     }}
-                    className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 transition-colors group text-left cursor-pointer"
+                    className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-colors group text-left cursor-pointer"
                   >
                     <Copy className="w-4 h-4 text-slate-400 group-hover:text-purple-400" />
                     <span>Clone</span>
@@ -342,25 +342,25 @@ export const ServerDetailView: React.FC<ServerDetailViewProps> = ({
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* CARD 1: CPU USAGE */}
-          <div className="relative overflow-hidden rounded-2xl border border-slate-800/80 bg-slate-900/80 p-5 text-white shadow-xl backdrop-blur-md">
+          <div className="relative overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800/80 bg-white dark:bg-slate-900/80 p-5 shadow-xl shadow-slate-200/50 dark:shadow-none backdrop-blur-md">
             <div className="pointer-events-none absolute -top-10 -right-10 h-32 w-32 rounded-full opacity-40 blur-2xl bg-cyan-500/10 hidden dark:block" />
             <div className="relative z-10 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-cyan-500/30 bg-cyan-600/25 p-2 text-cyan-400 shadow-md">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-cyan-500/30 bg-cyan-600/25 p-2 text-cyan-600 dark:text-cyan-400 shadow-md">
                   <Cpu className="h-5 w-5" />
                 </div>
                 <div>
-                  <h4 className="text-xs font-semibold text-slate-300">CPU Usage</h4>
-                  <p className="text-[11px] text-slate-400">{server.coreNumber || 2} Cores Dedikasi</p>
+                  <h4 className="text-xs font-semibold text-slate-700 dark:text-slate-300">CPU Usage</h4>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400">{server.coreNumber || 2} Cores Dedikasi</p>
                 </div>
               </div>
             </div>
 
             <div className="mt-4 flex items-baseline gap-2">
-              <span className="text-3xl font-black font-mono text-white tracking-tight">
+              <span className="text-3xl font-black font-mono text-slate-900 dark:text-white tracking-tight">
                 {isOnline ? `${cpuUsage}%` : '0.0%'}
               </span>
-              <span className="text-xs text-emerald-400 font-semibold">Normal</span>
+              <span className="text-xs text-emerald-600 dark:text-emerald-400 font-semibold">Normal</span>
             </div>
 
             {/* Sparkline */}
@@ -380,25 +380,25 @@ export const ServerDetailView: React.FC<ServerDetailViewProps> = ({
           </div>
 
           {/* CARD 2: RAM USAGE */}
-          <div className="relative overflow-hidden rounded-2xl border border-slate-800/80 bg-slate-900/80 p-5 text-white shadow-xl backdrop-blur-md">
+          <div className="relative overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800/80 bg-white dark:bg-slate-900/80 p-5 shadow-xl shadow-slate-200/50 dark:shadow-none backdrop-blur-md">
             <div className="pointer-events-none absolute -top-10 -right-10 h-32 w-32 rounded-full opacity-40 blur-2xl bg-blue-500/10 hidden dark:block" />
             <div className="relative z-10 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-blue-500/30 bg-blue-600/25 p-2 text-blue-400 shadow-md">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-blue-500/30 bg-blue-600/25 p-2 text-blue-600 dark:text-blue-400 shadow-md">
                   <Activity className="h-5 w-5" />
                 </div>
                 <div>
-                  <h4 className="text-xs font-semibold text-slate-300">Memory (RAM)</h4>
-                  <p className="text-[11px] text-slate-400">{totalRamGb} GB Total</p>
+                  <h4 className="text-xs font-semibold text-slate-700 dark:text-slate-300">Memory (RAM)</h4>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400">{totalRamGb} GB Total</p>
                 </div>
               </div>
             </div>
 
             <div className="mt-4 flex items-baseline gap-2">
-              <span className="text-3xl font-black font-mono text-white tracking-tight">
+              <span className="text-3xl font-black font-mono text-slate-900 dark:text-white tracking-tight">
                 {isOnline ? `${ramUsagePercent}%` : '0%'}
               </span>
-              <span className="text-xs text-slate-400">
+              <span className="text-xs text-slate-500 dark:text-slate-400">
                 {isOnline ? `${ramUsageMb} MB` : '0 MB'}
               </span>
             </div>
@@ -420,58 +420,58 @@ export const ServerDetailView: React.FC<ServerDetailViewProps> = ({
           </div>
 
           {/* CARD 3: STORAGE & IOPS */}
-          <div className="relative overflow-hidden rounded-2xl border border-slate-800/80 bg-slate-900/80 p-5 text-white shadow-xl backdrop-blur-md">
+          <div className="relative overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800/80 bg-white dark:bg-slate-900/80 p-5 shadow-xl shadow-slate-200/50 dark:shadow-none backdrop-blur-md">
             <div className="pointer-events-none absolute -top-10 -right-10 h-32 w-32 rounded-full opacity-40 blur-2xl bg-purple-500/10 hidden dark:block" />
             <div className="relative z-10 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-purple-500/30 bg-purple-600/25 p-2 text-purple-400 shadow-md">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-purple-500/30 bg-purple-600/25 p-2 text-purple-600 dark:text-purple-400 shadow-md">
                   <HardDrive className="h-5 w-5" />
                 </div>
                 <div>
-                  <h4 className="text-xs font-semibold text-slate-300">MaxIOPS Disk</h4>
-                  <p className="text-[11px] text-slate-400">{totalStorageGb} GB SSD</p>
+                  <h4 className="text-xs font-semibold text-slate-700 dark:text-slate-300">MaxIOPS Disk</h4>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400">{totalStorageGb} GB SSD</p>
                 </div>
               </div>
             </div>
 
             <div className="mt-4 flex items-baseline gap-2">
-              <span className="text-3xl font-black font-mono text-white tracking-tight">
+              <span className="text-3xl font-black font-mono text-slate-900 dark:text-white tracking-tight">
                 {isOnline ? `${diskIops}K` : '0K'}
               </span>
-              <span className="text-xs text-purple-400 font-semibold">IOPS Rate</span>
+              <span className="text-xs text-purple-600 dark:text-purple-400 font-semibold">IOPS Rate</span>
             </div>
 
             <div className="mt-4 space-y-1.5">
-              <div className="flex justify-between text-[11px] text-slate-400 font-mono">
+              <div className="flex justify-between text-[11px] text-slate-500 dark:text-slate-400 font-mono">
                 <span>Terpakai 12.4 GB</span>
                 <span>Tersedia {totalStorageGb - 12} GB</span>
               </div>
-              <div className="w-full h-2 rounded-full bg-slate-800 overflow-hidden">
+              <div className="w-full h-2 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
                 <div className="h-full bg-purple-500 rounded-full" style={{ width: '25%' }} />
               </div>
             </div>
           </div>
 
           {/* CARD 4: NETWORK & LATENCY */}
-          <div className="relative overflow-hidden rounded-2xl border border-slate-800/80 bg-slate-900/80 p-5 text-white shadow-xl backdrop-blur-md">
+          <div className="relative overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800/80 bg-white dark:bg-slate-900/80 p-5 shadow-xl shadow-slate-200/50 dark:shadow-none backdrop-blur-md">
             <div className="pointer-events-none absolute -top-10 -right-10 h-32 w-32 rounded-full opacity-40 blur-2xl bg-emerald-500/10 hidden dark:block" />
             <div className="relative z-10 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-emerald-500/30 bg-emerald-600/25 p-2 text-emerald-400 shadow-md">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-emerald-500/30 bg-emerald-600/25 p-2 text-emerald-600 dark:text-emerald-400 shadow-md">
                   <Zap className="h-5 w-5" />
                 </div>
                 <div>
-                  <h4 className="text-xs font-semibold text-slate-300">Jaringan SG3</h4>
-                  <p className="text-[11px] text-slate-400">Port 1 Gbps Aktif</p>
+                  <h4 className="text-xs font-semibold text-slate-700 dark:text-slate-300">Jaringan SG3</h4>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400">Port 1 Gbps Aktif</p>
                 </div>
               </div>
             </div>
 
             <div className="mt-4 flex items-baseline gap-2">
-              <span className="text-3xl font-black font-mono text-white tracking-tight">
+              <span className="text-3xl font-black font-mono text-slate-900 dark:text-white tracking-tight">
                 {isOnline ? `${networkPing} ms` : 'Offline'}
               </span>
-              <span className="text-xs text-emerald-400 font-semibold">Ultra Rendah</span>
+              <span className="text-xs text-emerald-600 dark:text-emerald-400 font-semibold">Ultra Rendah</span>
             </div>
 
             {/* Sparkline */}
@@ -498,57 +498,57 @@ export const ServerDetailView: React.FC<ServerDetailViewProps> = ({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left Column: Technical Overview */}
         <div className="lg:col-span-7 space-y-6">
-          <div className="bg-slate-900/90 rounded-3xl p-6 sm:p-7 border border-slate-800/90 shadow-xl space-y-6">
-            <h3 className="text-base font-bold text-white flex items-center gap-2">
-              <Layers className="w-5 h-5 text-cyan-400" />
+          <div className="bg-white dark:bg-slate-900/90 rounded-3xl p-6 sm:p-7 border border-slate-200 dark:border-slate-800/90 shadow-xl shadow-slate-200/50 dark:shadow-none space-y-6">
+            <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <Layers className="w-5 h-5 text-cyan-500 dark:text-cyan-400" />
               <span>Detail Spesifikasi & Konfigurasi VPS</span>
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
               {/* Hostname */}
-              <div className="p-3.5 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
+              <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800/80 space-y-1">
                 <span className="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Hostname</span>
-                <p className="font-mono font-bold text-white text-sm truncate">{server.hostname}</p>
+                <p className="font-mono font-bold text-slate-900 dark:text-white text-sm truncate">{server.hostname}</p>
               </div>
 
               {/* Order Number */}
-              <div className="p-3.5 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
+              <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800/80 space-y-1">
                 <span className="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Order ID</span>
-                <p className="font-mono font-bold text-cyan-400 text-sm truncate">{server.orderNumber}</p>
+                <p className="font-mono font-bold text-cyan-600 dark:text-cyan-400 text-sm truncate">{server.orderNumber}</p>
               </div>
 
               {/* Data Center */}
-              <div className="p-3.5 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
+              <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800/80 space-y-1">
                 <span className="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Lokasi Data Center</span>
                 <div className="flex items-center gap-2 pt-0.5">
                   <CountryFlag zoneCode={server.zoneCode} countryName={server.zoneCountry} size="sm" />
-                  <span className="font-bold text-white">{server.zoneName || server.zoneCode}</span>
-                  <span className="text-slate-400 uppercase font-mono">({server.zoneCode})</span>
+                  <span className="font-bold text-slate-900 dark:text-white">{server.zoneName || server.zoneCode}</span>
+                  <span className="text-slate-500 dark:text-slate-400 uppercase font-mono">({server.zoneCode})</span>
                 </div>
               </div>
 
               {/* Operating System */}
-              <div className="p-3.5 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
+              <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800/80 space-y-1">
                 <span className="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Sistem Operasi</span>
                 <div className="flex items-center gap-2 pt-0.5">
                   <OsIcon distro={getDistroFromTemplateName(server.templateName)} size="xs" />
-                  <span className="font-bold text-white truncate">{server.templateName}</span>
+                  <span className="font-bold text-slate-900 dark:text-white truncate">{server.templateName}</span>
                 </div>
               </div>
 
               {/* Billing Cycle */}
-              <div className="p-3.5 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
+              <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800/80 space-y-1">
                 <span className="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Siklus Penagihan</span>
-                <p className="font-bold text-white capitalize pt-0.5">
+                <p className="font-bold text-slate-900 dark:text-white capitalize pt-0.5">
                   {server.billingCycle === 'annually' ? 'Tahunan (Diskon 15%)' : 
                    server.billingCycle === 'quarterly' ? '3 Bulan (Diskon 5%)' : 'Bulanan'}
                 </p>
               </div>
 
               {/* Created Date */}
-              <div className="p-3.5 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
+              <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800/80 space-y-1">
                 <span className="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Tanggal Dibuat</span>
-                <p className="font-bold text-white pt-0.5 flex items-center gap-1.5">
+                <p className="font-bold text-slate-900 dark:text-white pt-0.5 flex items-center gap-1.5">
                   <Clock className="w-3.5 h-3.5 text-slate-400" />
                   <span>{new Date(server.createdAt).toLocaleString('id-ID')}</span>
                 </p>
@@ -556,17 +556,17 @@ export const ServerDetailView: React.FC<ServerDetailViewProps> = ({
             </div>
 
             {/* UpCloud Server UUID */}
-            <div className="p-3.5 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
+            <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800/80 space-y-1">
               <span className="text-[10px] text-slate-500 uppercase font-bold tracking-wider">UpCloud Server UUID</span>
-              <div className="flex items-center justify-between font-mono text-xs text-white">
+              <div className="flex items-center justify-between font-mono text-xs text-slate-900 dark:text-white">
                 <span className="truncate">{server.serverUuid || 'N/A (Belum teralokasi)'}</span>
                 {server.serverUuid && (
                   <button
                     onClick={() => copyText(server.serverUuid!, 'uuid')}
-                    className="p-1 rounded text-slate-400 hover:text-white hover:bg-slate-800 cursor-pointer transition-colors"
+                    className="p-1 rounded text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-slate-800 cursor-pointer transition-colors"
                     title="Salin UUID"
                   >
-                    {copiedKey === 'uuid' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                    {copiedKey === 'uuid' ? <Check className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
                   </button>
                 )}
               </div>
@@ -576,72 +576,72 @@ export const ServerDetailView: React.FC<ServerDetailViewProps> = ({
 
         {/* Right Column: Network IP & SSH Connection Command */}
         <div className="lg:col-span-5 space-y-6">
-          <div className="bg-slate-900/90 rounded-3xl p-6 sm:p-7 border border-slate-800/90 shadow-xl space-y-5">
-            <h3 className="text-base font-bold text-white flex items-center gap-2">
-              <Terminal className="w-5 h-5 text-emerald-400" />
+          <div className="bg-white dark:bg-slate-900/90 rounded-3xl p-6 sm:p-7 border border-slate-200 dark:border-slate-800/90 shadow-xl shadow-slate-200/50 dark:shadow-none space-y-5">
+            <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <Terminal className="w-5 h-5 text-emerald-500 dark:text-emerald-400" />
               <span>Akses Terminal & Jaringan</span>
             </h3>
 
             {/* IPv4 Publik */}
-            <div className="p-3.5 rounded-2xl bg-slate-950 border border-slate-800 flex items-center justify-between">
+            <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800/80 flex items-center justify-between">
               <div>
                 <span className="text-[10px] text-slate-500 uppercase font-bold tracking-wider block">Public IPv4</span>
-                <span className="font-mono font-bold text-cyan-400 text-sm">
+                <span className="font-mono font-bold text-cyan-600 dark:text-cyan-400 text-sm">
                   {server.serverIp || 'Sedang mengalokasikan...'}
                 </span>
               </div>
               {server.serverIp && (
                 <button
                   onClick={() => copyText(server.serverIp!, 'ipv4')}
-                  className="p-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white transition-colors cursor-pointer"
+                  className="p-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer shadow-sm dark:shadow-none"
                   title="Salin IPv4"
                 >
-                  {copiedKey === 'ipv4' ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
+                  {copiedKey === 'ipv4' ? <Check className="w-4 h-4 text-emerald-500 dark:text-emerald-400" /> : <Copy className="w-4 h-4" />}
                 </button>
               )}
             </div>
 
             {/* IPv6 Publik */}
-            <div className="p-3.5 rounded-2xl bg-slate-950 border border-slate-800 flex items-center justify-between">
+            <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800/80 flex items-center justify-between">
               <div className="min-w-0 pr-2">
                 <span className="text-[10px] text-slate-500 uppercase font-bold tracking-wider block">Public IPv6</span>
-                <span className="font-mono text-indigo-300 text-xs truncate block" title={server.serverIpv6}>
+                <span className="font-mono text-indigo-600 dark:text-indigo-300 text-xs truncate block" title={server.serverIpv6}>
                   {server.serverIpv6 || 'Tersedia saat online'}
                 </span>
               </div>
               {server.serverIpv6 && (
                 <button
                   onClick={() => copyText(server.serverIpv6!, 'ipv6')}
-                  className="p-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white transition-colors cursor-pointer shrink-0"
+                  className="p-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer shrink-0 shadow-sm dark:shadow-none"
                   title="Salin IPv6"
                 >
-                  {copiedKey === 'ipv6' ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
+                  {copiedKey === 'ipv6' ? <Check className="w-4 h-4 text-emerald-500 dark:text-emerald-400" /> : <Copy className="w-4 h-4" />}
                 </button>
               )}
             </div>
 
             {/* Root Password with Show/Hide */}
-            <div className="p-3.5 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
+            <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800/80 space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Root Password</span>
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => setShowPassword(!showPassword)}
-                    className="text-slate-400 hover:text-white flex items-center gap-1 text-[11px] cursor-pointer"
+                    className="text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white flex items-center gap-1 text-[11px] cursor-pointer"
                   >
                     {showPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
                     <span>{showPassword ? 'Tutup' : 'Lihat'}</span>
                   </button>
                   <button
                     onClick={() => copyText(server.rootPassword, 'pass')}
-                    className="text-cyan-400 hover:text-cyan-300 flex items-center gap-1 text-[11px] cursor-pointer font-bold"
+                    className="text-cyan-600 dark:text-cyan-400 hover:text-cyan-700 dark:hover:text-cyan-300 flex items-center gap-1 text-[11px] cursor-pointer font-bold"
                   >
-                    {copiedKey === 'pass' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                    {copiedKey === 'pass' ? <Check className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
                     <span>Salin</span>
                   </button>
                 </div>
               </div>
-              <p className="font-mono font-bold text-amber-400 text-sm select-all">
+              <p className="font-mono font-bold text-amber-600 dark:text-amber-400 text-sm select-all">
                 {showPassword ? server.rootPassword : '••••••••••••••••'}
               </p>
             </div>
@@ -649,10 +649,13 @@ export const ServerDetailView: React.FC<ServerDetailViewProps> = ({
             {/* SSH Quick Command Box */}
             {server.serverIp && (
               <div className="space-y-1.5 pt-1">
-                <span className="text-[10px] text-slate-400 uppercase font-bold tracking-wider block">
+                <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider block">
                   Perintah Login SSH (Terminal)
                 </span>
-                <div className="flex items-center justify-between gap-2 p-3 rounded-2xl bg-slate-950 border border-slate-800 font-mono text-xs text-emerald-400 shadow-inner">
+                <div 
+                  data-force-dark
+                  className="flex items-center justify-between gap-2 p-3 rounded-2xl bg-slate-950 border border-slate-800 font-mono text-xs text-emerald-400 shadow-inner"
+                >
                   <span className="truncate">ssh root@{server.serverIp}</span>
                   <button
                     onClick={() => copyText(`ssh root@${server.serverIp}`, 'ssh-cmd')}

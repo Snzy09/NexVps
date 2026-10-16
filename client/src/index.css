@@ -169,7 +169,7 @@ html.light .bg-slate-950\/20:not(.dark):not(.dark *) {
   background-color: #ffffff;
 }
 
-html.light .bg-slate-900:not(.dark):not(.dark *):not([data-force-dark]):not(button[role="switch"]) {
+html.light .bg-slate-900:not(.dark):not(.dark *):not([data-force-dark]):not(button[role="switch"]):not(button):not([role="button"]):not(button *) {
   background-color: #ffffff;
 }
 

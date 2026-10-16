@@ -168,7 +168,10 @@ export const ServerStatsCards: React.FC<ServerStatsCardsProps> = ({ servers }) =
 
             {/* Floating Tooltip Pill right in center */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 shadow-xl shadow-slate-950/20">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 text-white dark:bg-white dark:text-slate-900 text-xs font-bold shadow-md">
+              <div 
+                data-force-dark
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 text-white text-xs font-bold shadow-md"
+              >
                 <span className="w-2.5 h-2.5 rounded-[3px] bg-blue-500 shrink-0 animate-pulse"></span>
                 <span className="font-mono tabular-nums">Latency ~{liveLatency}ms</span>
               </div>

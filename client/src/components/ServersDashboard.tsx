@@ -402,8 +402,8 @@ export const ServersDashboard: React.FC<ServersDashboardProps> = ({ onOrderNew, 
             onClick={() => setAutoSync(!autoSync)}
             className={`px-3 py-2 rounded-xl border text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer ${
               autoSync 
-                ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20 shadow-sm'
-                : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'
+                ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-500/20 shadow-sm'
+                : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
             title={autoSync ? 'Auto-sync aktif setiap 8 detik' : 'Auto-sync dinonaktifkan'}
           >
@@ -417,10 +417,10 @@ export const ServersDashboard: React.FC<ServersDashboardProps> = ({ onOrderNew, 
           <button
             onClick={() => fetchServers(false, true)}
             disabled={syncingAll || loading}
-            className="px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-300 hover:text-white text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer disabled:opacity-50"
+            className="px-3.5 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer disabled:opacity-50 shadow-sm dark:shadow-none"
             title="Sinkronisasi status terbaru langsung dari UpCloud API"
           >
-            <RefreshCw className={`w-3.5 h-3.5 ${syncingAll ? 'animate-spin text-cyan-400' : ''}`} />
+            <RefreshCw className={`w-3.5 h-3.5 ${syncingAll ? 'animate-spin text-cyan-500 dark:text-cyan-400' : ''}`} />
             <span>{syncingAll ? 'Menyinkron...' : 'Sync UpCloud'}</span>
           </button>
 
@@ -428,12 +428,12 @@ export const ServersDashboard: React.FC<ServersDashboardProps> = ({ onOrderNew, 
             onClick={() => setShowTelemetryPipeline(!showTelemetryPipeline)}
             className={`px-3 py-2 rounded-xl border text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer ${
               showTelemetryPipeline
-                ? 'bg-blue-500/10 border-blue-500/30 text-blue-500 dark:text-blue-400'
-                : 'bg-slate-100 dark:bg-slate-900 border-slate-300 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
+                ? 'bg-blue-500/10 border-blue-500/30 text-blue-600 dark:text-blue-400'
+                : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white shadow-sm dark:shadow-none'
             }`}
             title="Lihat alur pipeline telemetry dan live ingestion"
           >
-            <Activity className="w-3.5 h-3.5 text-blue-500 dark:text-cyan-400" />
+            <Activity className="w-3.5 h-3.5 text-blue-600 dark:text-cyan-400" />
             <span>{showTelemetryPipeline ? 'Tutup Telemetri' : 'Live Telemetri'}</span>
           </button>
 
@@ -464,17 +464,17 @@ export const ServersDashboard: React.FC<ServersDashboardProps> = ({ onOrderNew, 
             onClick={() => setStatusFilter('all')}
             className={`px-3 py-1.5 rounded-xl font-medium transition-all whitespace-nowrap cursor-pointer ${
               statusFilter === 'all'
-                ? 'bg-slate-900 text-white dark:bg-slate-800 dark:text-white font-bold shadow'
+                ? 'bg-blue-500/10 text-blue-700 dark:bg-blue-500/20 dark:text-blue-300 font-bold border border-blue-500/30 shadow-sm'
                 : 'text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200'
             }`}
           >
-            Semua ({servers.length})
+            <span>Semua ({servers.length})</span>
           </button>
           <button
             onClick={() => setStatusFilter('running')}
             className={`px-3 py-1.5 rounded-xl font-medium transition-all whitespace-nowrap flex items-center gap-1.5 cursor-pointer ${
               statusFilter === 'running'
-                ? 'bg-emerald-500/10 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-300 font-bold border border-emerald-500/30'
+                ? 'bg-emerald-500/10 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-300 font-bold border border-emerald-500/30 shadow-sm'
                 : 'text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200'
             }`}
           >
@@ -485,7 +485,7 @@ export const ServersDashboard: React.FC<ServersDashboardProps> = ({ onOrderNew, 
             onClick={() => setStatusFilter('stopped')}
             className={`px-3 py-1.5 rounded-xl font-medium transition-all whitespace-nowrap flex items-center gap-1.5 cursor-pointer ${
               statusFilter === 'stopped'
-                ? 'bg-rose-500/10 text-rose-700 dark:bg-rose-500/20 dark:text-rose-300 font-bold border border-rose-500/30'
+                ? 'bg-rose-500/10 text-rose-700 dark:bg-rose-500/20 dark:text-rose-300 font-bold border border-rose-500/30 shadow-sm'
                 : 'text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200'
             }`}
           >
@@ -497,11 +497,11 @@ export const ServersDashboard: React.FC<ServersDashboardProps> = ({ onOrderNew, 
               onClick={() => setStatusFilter('building')}
               className={`px-3 py-1.5 rounded-xl font-medium transition-all whitespace-nowrap flex items-center gap-1.5 cursor-pointer ${
                 statusFilter === 'building'
-                  ? 'bg-amber-500/20 text-amber-300 font-bold border border-amber-500/30'
-                : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-amber-500/10 text-amber-700 dark:bg-amber-500/20 dark:text-amber-300 font-bold border border-amber-500/30 shadow-sm'
+                  : 'text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200'
               }`}
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
               <span>Building ({countBuilding})</span>
             </button>
           )}
@@ -510,8 +510,8 @@ export const ServersDashboard: React.FC<ServersDashboardProps> = ({ onOrderNew, 
               onClick={() => setStatusFilter('error')}
               className={`px-3 py-1.5 rounded-xl font-medium transition-all whitespace-nowrap flex items-center gap-1.5 cursor-pointer ${
                 statusFilter === 'error'
-                  ? 'bg-red-500/20 text-red-300 font-bold border border-red-500/30'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-red-500/10 text-red-700 dark:bg-red-500/20 dark:text-red-300 font-bold border border-red-500/30 shadow-sm'
+                  : 'text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200'
               }`}
             >
               <span>Error ({countError})</span>
@@ -581,14 +581,14 @@ export const ServersDashboard: React.FC<ServersDashboardProps> = ({ onOrderNew, 
             ======================================================== */
         <div className="space-y-3">
           {/* Table Header Row (Image 1) */}
-          <div className="flex items-center justify-between gap-4 px-4 sm:px-6 py-2.5 text-xs font-bold text-slate-400">
+          <div className="flex items-center justify-between gap-4 px-4 sm:px-6 py-2.5 text-xs font-bold text-slate-500 dark:text-slate-400">
             {/* Checkbox Header */}
             <div className="shrink-0 flex items-center pr-1">
               <input
                 type="checkbox"
                 checked={allCurrentSelected}
                 onChange={toggleSelectAll}
-                className="w-4 h-4 rounded border-slate-700 bg-slate-900 text-[#7000FF] focus:ring-[#7000FF] cursor-pointer"
+                className="w-4 h-4 rounded border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-cyan-600 focus:ring-cyan-500 cursor-pointer"
               />
             </div>
 
@@ -596,17 +596,17 @@ export const ServersDashboard: React.FC<ServersDashboardProps> = ({ onOrderNew, 
             <div className="flex-1 min-w-[220px]">
               <button
                 onClick={() => handleToggleSort('name')}
-                className="flex items-center gap-1.5 text-xs font-bold text-slate-400 hover:text-white uppercase tracking-wider transition-colors cursor-pointer"
+                className="flex items-center gap-1.5 text-xs font-bold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white uppercase tracking-wider transition-colors cursor-pointer"
               >
                 <span>NAME</span>
                 {sortField === 'name' ? (
                   sortDirection === 'asc' ? (
-                    <span className="text-[#7000FF] font-black text-sm">▲</span>
+                    <span className="text-cyan-600 dark:text-cyan-400 font-black text-sm">▲</span>
                   ) : (
-                    <span className="text-[#7000FF] font-black text-sm">▼</span>
+                    <span className="text-cyan-600 dark:text-cyan-400 font-black text-sm">▼</span>
                   )
                 ) : (
-                  <span className="text-slate-600 text-xs">▼</span>
+                  <span className="text-slate-400 dark:text-slate-600 text-xs">▼</span>
                 )}
               </button>
             </div>
@@ -615,10 +615,10 @@ export const ServersDashboard: React.FC<ServersDashboardProps> = ({ onOrderNew, 
             <div className="w-24 text-left hidden sm:block">
               <button
                 onClick={() => handleToggleSort('cpu')}
-                className="flex items-center gap-1 text-xs font-bold text-slate-400 hover:text-white uppercase tracking-wider transition-colors cursor-pointer"
+                className="flex items-center gap-1 text-xs font-bold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white uppercase tracking-wider transition-colors cursor-pointer"
               >
                 <span>CPU</span>
-                <span className={`text-xs ${sortField === 'cpu' ? 'text-[#7000FF]' : 'text-slate-600'}`}>▼</span>
+                <span className={`text-xs ${sortField === 'cpu' ? 'text-cyan-600 dark:text-cyan-400' : 'text-slate-400 dark:text-slate-600'}`}>▼</span>
               </button>
             </div>
 
@@ -626,10 +626,10 @@ export const ServersDashboard: React.FC<ServersDashboardProps> = ({ onOrderNew, 
             <div className="w-24 text-left hidden md:block">
               <button
                 onClick={() => handleToggleSort('storage')}
-                className="flex items-center gap-1 text-xs font-bold text-slate-400 hover:text-white uppercase tracking-wider transition-colors cursor-pointer"
+                className="flex items-center gap-1 text-xs font-bold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white uppercase tracking-wider transition-colors cursor-pointer"
               >
                 <span>STORAGE</span>
-                <span className={`text-xs ${sortField === 'storage' ? 'text-[#7000FF]' : 'text-slate-600'}`}>▼</span>
+                <span className={`text-xs ${sortField === 'storage' ? 'text-cyan-600 dark:text-cyan-400' : 'text-slate-400 dark:text-slate-600'}`}>▼</span>
               </button>
             </div>
 
@@ -637,10 +637,10 @@ export const ServersDashboard: React.FC<ServersDashboardProps> = ({ onOrderNew, 
             <div className="w-24 text-left hidden md:block">
               <button
                 onClick={() => handleToggleSort('memory')}
-                className="flex items-center gap-1 text-xs font-bold text-slate-400 hover:text-white uppercase tracking-wider transition-colors cursor-pointer"
+                className="flex items-center gap-1 text-xs font-bold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white uppercase tracking-wider transition-colors cursor-pointer"
               >
                 <span>MEMORY</span>
-                <span className={`text-xs ${sortField === 'memory' ? 'text-[#7000FF]' : 'text-slate-600'}`}>▼</span>
+                <span className={`text-xs ${sortField === 'memory' ? 'text-cyan-600 dark:text-cyan-400' : 'text-slate-400 dark:text-slate-600'}`}>▼</span>
               </button>
             </div>
 
@@ -648,10 +648,10 @@ export const ServersDashboard: React.FC<ServersDashboardProps> = ({ onOrderNew, 
             <div className="w-28 text-left hidden sm:block">
               <button
                 onClick={() => handleToggleSort('location')}
-                className="flex items-center gap-1 text-xs font-bold text-slate-400 hover:text-white uppercase tracking-wider transition-colors cursor-pointer"
+                className="flex items-center gap-1 text-xs font-bold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white uppercase tracking-wider transition-colors cursor-pointer"
               >
                 <span>LOCATION</span>
-                <span className={`text-xs ${sortField === 'location' ? 'text-[#7000FF]' : 'text-slate-600'}`}>▼</span>
+                <span className={`text-xs ${sortField === 'location' ? 'text-cyan-600 dark:text-cyan-400' : 'text-slate-400 dark:text-slate-600'}`}>▼</span>
               </button>
             </div>
 
@@ -768,23 +768,23 @@ export const ServersDashboard: React.FC<ServersDashboardProps> = ({ onOrderNew, 
           </div>
 
           {/* Table Footer: Server Count & Page Size Selector */}
-          <div className="flex items-center justify-between text-xs text-slate-400 pt-3 px-2">
+          <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 pt-3 px-2">
             <div>
-              <span className="font-semibold text-slate-300">{filteredServers.length} servers</span>
+              <span className="font-semibold text-slate-700 dark:text-slate-300">{filteredServers.length} servers</span>
             </div>
 
             {/* 10 per page Selector */}
             <div className="relative">
               <button
                 onClick={() => setPageSizeDropdownOpen(!pageSizeDropdownOpen)}
-                className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-800 bg-slate-900/90 hover:bg-slate-800 text-slate-300 text-xs font-semibold cursor-pointer transition-colors"
+                className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/90 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-semibold cursor-pointer transition-colors shadow-sm dark:shadow-none"
               >
                 <span>{pageSize} per page</span>
                 <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
               </button>
 
               {pageSizeDropdownOpen && (
-                <div className="absolute right-0 bottom-full mb-1 w-32 rounded-xl bg-slate-900 border border-slate-700 shadow-xl p-1 z-30 animate-in fade-in">
+                <div className="absolute right-0 bottom-full mb-1 w-32 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 shadow-xl p-1 z-30 animate-in fade-in">
                   {[5, 10, 20, 50].map((size) => (
                     <button
                       key={size}
@@ -793,7 +793,7 @@ export const ServersDashboard: React.FC<ServersDashboardProps> = ({ onOrderNew, 
                         setPageSizeDropdownOpen(false);
                       }}
                       className={`w-full text-left px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer transition-colors ${
-                        pageSize === size ? 'bg-[#7000FF] text-white' : 'text-slate-300 hover:bg-slate-800'
+                        pageSize === size ? 'bg-cyan-600 text-white' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
                       }`}
                     >
                       {size} per page
