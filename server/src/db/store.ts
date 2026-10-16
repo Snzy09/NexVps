@@ -659,10 +659,10 @@ class Store {
 
   private syncToEnv(settings: AppSettings) {
     try {
-      const serverEnvPath = path.join(__dirname, '../../.env');
-      const innerEnvPath = path.join(__dirname, '../.env');
-      const targetPaths = [innerEnvPath];
-      if (fs.existsSync(serverEnvPath)) targetPaths.push(serverEnvPath);
+      const serverEnvPath = path.resolve(__dirname, '../../.env');
+      const rootEnvPath = path.resolve(__dirname, '../../../.env');
+      const targetPaths = [serverEnvPath];
+      if (fs.existsSync(rootEnvPath)) targetPaths.push(rootEnvPath);
 
       for (const target of targetPaths) {
         let content = fs.existsSync(target) ? fs.readFileSync(target, 'utf-8') : '';

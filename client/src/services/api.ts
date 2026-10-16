@@ -798,18 +798,48 @@ export const api = {
       });
       const contentType = res.headers.get('content-type') || '';
       if (!contentType.includes('application/json')) {
+        const isDemo = !tokens || tokens.length === 0 || tokens.some(t => t.value.includes('demo') || t.value.includes('sample'));
+        if (isDemo) {
+          return {
+            success: true,
+            totalTokens: tokens?.length || 1,
+            activeToken: tokens?.[0]?.key || 'UPCLOUD_API_TOKEN_PRIMARY',
+            message: 'Mode Demo Standalone: Token UpCloud tersimpan (Simulasi MaxIOPS). Jalankan backend server ("npm run dev") untuk koneksi langsung ke UpCloud API.',
+            results: (tokens || [{ key: 'UPCLOUD_API_TOKEN_PRIMARY', value: 'demo' }]).map((t) => ({
+              key: t.key,
+              maskedToken: '••••demo',
+              status: 'valid' as const,
+              credits: 250
+            }))
+          };
+        }
         return {
           success: false,
           totalTokens: tokens?.length || 0,
-          message: `Server backend port 5000 mengembalikan respons non-JSON (HTTP ${res.status}). Pastikan backend server ('npm run server:dev') berjalan normal di port 5000.`
+          message: `Backend server (port 5000) belum berjalan atau tidak terjangkau (HTTP ${res.status}). Pastikan Anda menjalankan perintah 'npm run dev' di terminal.`
         };
       }
       return await res.json();
     } catch (err: any) {
+      const isDemo = !tokens || tokens.length === 0 || tokens.some(t => t.value.includes('demo') || t.value.includes('sample'));
+      if (isDemo) {
+        return {
+          success: true,
+          totalTokens: tokens?.length || 1,
+          activeToken: tokens?.[0]?.key || 'UPCLOUD_API_TOKEN_PRIMARY',
+          message: 'Mode Demo Standalone: Token UpCloud tersimpan (Simulasi MaxIOPS). Jalankan backend server ("npm run dev") untuk koneksi langsung ke UpCloud API.',
+          results: (tokens || [{ key: 'UPCLOUD_API_TOKEN_PRIMARY', value: 'demo' }]).map((t) => ({
+            key: t.key,
+            maskedToken: '••••demo',
+            status: 'valid' as const,
+            credits: 250
+          }))
+        };
+      }
       return {
         success: false,
         totalTokens: tokens?.length || 0,
-        message: `Koneksi gagal: ${err.message}. Pastikan backend server 'npm run server:dev' aktif di http://localhost:5000.`
+        message: `Koneksi ke backend gagal (${err.message}). Pastikan server aktif di port 5000 dengan 'npm run dev'.`
       };
     }
   },
@@ -823,16 +853,41 @@ export const api = {
       });
       const contentType = res.headers.get('content-type') || '';
       if (!contentType.includes('application/json')) {
+        const accId = credentials?.accountId || '';
+        const secTok = credentials?.secretToken || '';
+        const isDemo = !accId || accId.startsWith('bq_acc_') || secTok.includes('••••') || secTok.startsWith('bq_sec_');
+        if (isDemo) {
+          return {
+            success: true,
+            message: 'Mode Demo Standalone: Kredensial BuatQRIS tersimpan (Simulasi Sandbox). Jalankan backend server ("npm run dev") untuk verifikasi live API.',
+            data: {
+              transaction_id: '1000' + Math.floor(10000000 + Math.random() * 90000000).toString(),
+              status: 'pending'
+            }
+          };
+        }
         return {
           success: false,
-          message: `Server backend port 5000 mengembalikan respons non-JSON (HTTP ${res.status}). Pastikan backend server ('npm run server:dev') berjalan normal di port 5000.`
+          message: `Backend server (port 5000) belum berjalan atau tidak terjangkau (HTTP ${res.status}). Pastikan Anda menjalankan perintah 'npm run dev' di terminal.`
         };
       }
       return await res.json();
     } catch (err: any) {
+      const accId = credentials?.accountId || '';
+      const isDemo = !accId || accId.startsWith('bq_acc_');
+      if (isDemo) {
+        return {
+          success: true,
+          message: 'Mode Demo Standalone: Kredensial BuatQRIS tersimpan (Simulasi Sandbox). Jalankan backend server ("npm run dev") untuk verifikasi live API.',
+          data: {
+            transaction_id: '1000' + Math.floor(10000000 + Math.random() * 90000000).toString(),
+            status: 'pending'
+          }
+        };
+      }
       return {
         success: false,
-        message: `Koneksi gagal: ${err.message}. Pastikan backend server 'npm run server:dev' aktif di http://localhost:5000.`
+        message: `Koneksi ke backend gagal (${err.message}). Pastikan server aktif di port 5000 dengan 'npm run dev'.`
       };
     }
   },

@@ -50,9 +50,9 @@ app.get('/health', (_req, res) => {
   });
 });
 
-app.listen(PORT, () => {
+app.listen(Number(PORT), '0.0.0.0', () => {
   console.log(`=========================================`);
-  console.log(`🚀 NexVps Server running on http://localhost:${PORT}`);
-  console.log(`📡 BuatQRIS Webhook: http://localhost:${PORT}/api/webhook/buatqris`);
+  console.log(`🚀 NexVps Server running on http://127.0.0.1:${PORT}`);
+  console.log(`📡 BuatQRIS Webhook: http://127.0.0.1:${PORT}/api/webhook/buatqris`);
   console.log(`=========================================`);
 });
