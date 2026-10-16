@@ -1,0 +1,156 @@
+import { ChangelogItem } from '../types';
+
+export const INITIAL_CHANGELOG_UPDATES: ChangelogItem[] = [
+  // --- Cycle 1: Version 1.0.0 (Foundation & Engine) ---
+  {
+    id: "upd-1",
+    title: "UpCloud MaxIOPS Integration via API 1.3 with 100K+ IOPS",
+    type: "feature",
+    date: "January 15, 2026",
+    description: "Integrasi menyeluruh dengan infrastruktur storage UpCloud MaxIOPS berkecepatan tinggi hingga **100.000+ IOPS** melalui REST API 1.3.",
+  },
+  {
+    id: "upd-2",
+    title: "BuatQRIS Dynamic QRIS payment gateway with instant webhook",
+    type: "feature",
+    date: "January 15, 2026",
+    description: "Implementasi gateway pembayaran QRIS otomatis real-time via BuatQRIS dengan verifikasi webhook instan.",
+  },
+  {
+    id: "upd-3",
+    title: "Interactive VPS Configurator with live hourly/monthly pricing",
+    type: "feature",
+    date: "January 15, 2026",
+    description: "Kalkulator pemilihan spesifikasi CPU, RAM, Storage, dan Lokasi Data Center interaktif dengan estimasi tagihan otomatis.",
+  },
+  {
+    id: "upd-4",
+    title: "Real-time system telemetry and IOPS performance metrics charts",
+    type: "improvement",
+    date: "January 15, 2026",
+    description: "Dashboard pemantauan telemetri real-time untuk CPU, RAM, disk I/O, dan latensi jaringan.",
+  },
+  {
+    id: "upd-5",
+    title: "Multi-datacenter low latency edge routing across 8 global zones",
+    type: "improvement",
+    date: "January 15, 2026",
+    description: "Perutean edge berlatensi rendah melintasi 8 zona global: Singapura, Helsinki, Frankfurt, London, New York, San Jose, Sydney, dan Tokyo.",
+  },
+  {
+    id: "upd-6",
+    title: "Corrected currency conversion formatting between IDR and USD",
+    type: "fix",
+    date: "January 15, 2026",
+    description: "Perbaikan pembulatan kurs konversi antara Rupiah (IDR) dan Dolar AS (USD) pada ringkasan pesanan.",
+  },
+  {
+    id: "upd-7",
+    title: "Fixed OpenSSH public key textarea multi-line validation",
+    type: "fix",
+    date: "January 15, 2026",
+    description: "Validasi format public key OpenSSH multi-line agar mendukung RSA, ECDSA, dan Ed25519.",
+  },
+
+  // --- Cycle 2: Version 1.2.0 (Resilience, Safety & UX) ---
+  {
+    id: "upd-8",
+    title: "Multi-token UpCloud API Token Failover Manager with priority failover",
+    type: "feature",
+    date: "March 2, 2026",
+    description: "Manajemen multi-token API UpCloud dengan rotasi token otomatis saat terjadi rate limiting atau quota limit.",
+  },
+  {
+    id: "upd-9",
+    title: "UIable Destructive Alert Dialogs for server power management",
+    type: "feature",
+    date: "March 2, 2026",
+    description: "Modal konfirmasi aman untuk aksi kritis seperti Shut Down, Force Stop, Restart, dan Delete VPS.",
+  },
+  {
+    id: "upd-10",
+    title: "Smooth Skeleton Loading Screen with perceived latency buffer",
+    type: "feature",
+    date: "March 2, 2026",
+    description: "Animasi skeleton loader modern saat memuat daftar server dan telemetri untuk pengalaman pengguna yang mulus.",
+  },
+  {
+    id: "upd-11",
+    title: "Celestial animated Day/Night switch with sky & stars animation",
+    type: "improvement",
+    date: "March 2, 2026",
+    description: "Sakelar tema Light/Dark interaktif dengan efek visual langit siang dan taburan bintang malam.",
+  },
+  {
+    id: "upd-12",
+    title: "Collapsible Timeline progress stepper for server provisioning",
+    type: "improvement",
+    date: "March 2, 2026",
+    description: "Visualisasi tahapan pembuatan instans VPS secara bertahap mulai dari verifikasi pembayaran hingga aktivasi SSH.",
+  },
+  {
+    id: "upd-13",
+    title: "Sanitized dummy keys in README and types to pass GitHub Push Protection",
+    type: "fix",
+    date: "March 2, 2026",
+    description: "Pembersihan contoh kunci rahasia pada dokumentasi agar lolos GitHub Secret Scanning Protection.",
+  },
+  {
+    id: "upd-14",
+    title: "Resolved isolated demo data persistence across browser tabs",
+    type: "fix",
+    date: "March 2, 2026",
+    description: "Penyelarasan state antar tab browser saat berjalan dalam mode demonstrasi terisolasi.",
+  },
+
+  // --- Cycle 3: Version 2.0.0 (Realtime User Isolation & Cloud Deployment) ---
+  {
+    id: "upd-15",
+    title: "Realtime user-scoped popup notifications with SwipeToast gesture support",
+    type: "feature",
+    date: "April 15, 2026",
+    description: "Notifikasi popup real-time khusus akun pengguna dengan dukungan gestur geser (swipe-to-dismiss).",
+  },
+  {
+    id: "upd-16",
+    title: "Synthetic Web Audio API multi-tone chime (D5/A5) for instant notification audio",
+    type: "feature",
+    date: "April 15, 2026",
+    description: "Suara lonceng audio sintetis via Web Audio API tanpa perlu aset audio eksternal.",
+  },
+  {
+    id: "upd-17",
+    title: "Automated GitHub Pages CI/CD deployment with relative base path bundling",
+    type: "feature",
+    date: "April 15, 2026",
+    description: "Pipeline CI/CD otomatis untuk pengujian build dan bundling static asset Vite.",
+  },
+  {
+    id: "upd-18",
+    title: "Isolated per-user notification store preventing cross-user data leakage",
+    type: "improvement",
+    date: "April 15, 2026",
+    description: "Pemisahan ketat penyimpanan notifikasi per-user untuk mencegah kebocoran data antar sesi akun.",
+  },
+  {
+    id: "upd-19",
+    title: "Realtime 6-second background watcher for server state transitions and orders",
+    type: "improvement",
+    date: "April 15, 2026",
+    description: "Watcher latar belakang dengan interval 6 detik untuk mendeteksi perubahan status server dan order.",
+  },
+  {
+    id: "upd-20",
+    title: "Fixed cross-account server visibility in local demo fallback",
+    type: "fix",
+    date: "April 15, 2026",
+    description: "Memastikan server hanya dapat dilihat oleh pemilik akun yang bersangkutan saat offline mode.",
+  },
+  {
+    id: "upd-21",
+    title: "Prevented redundant payment polling once order status reaches PAID",
+    type: "fix",
+    date: "April 15, 2026",
+    description: "Menghentikan request polling pembayaran secara otomatis segera setelah transaksi berstatus Lunas (PAID).",
+  },
+];

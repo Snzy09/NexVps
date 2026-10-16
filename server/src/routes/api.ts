@@ -591,4 +591,106 @@ router.delete('/admin/plans/:id', requireAdmin, (req: Request, res: Response) =>
   res.json({ success: true, message: 'Paket berhasil dihapus' });
 });
 
+// ==========================================
+// 6. CHANGELOG MANAGEMENT
+// ==========================================
+
+// Public read changelog
+router.get('/changelog', (_req: Request, res: Response) => {
+  try {
+    const changelogs = store.getChangelogs();
+    res.json({ success: true, data: changelogs });
+  } catch (err: any) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+// Admin add changelog item
+router.post('/admin/changelog', requireAdmin, (req: Request, res: Response) => {
+  try {
+    const { title, type, date, description } = req.body;
+    if (!title || !title.trim()) {
+      return res.status(400).json({ success: false, message: 'Judul catatan rilis wajib diisi.' });
+    }
+
+    const todayStr = date || new Intl.DateTimeFormat('en-US', {
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric'
+    }).format(new Date());
+
+    const newItem = store.addChangelog({
+      id: req.body.id || `upd-${Date.now()}`,
+      title: title.trim(),
+      type: type || 'feature',
+      date: todayStr,
+      description: description ? description.trim() : undefined
+    });
+
+    res.json({
+      success: true,
+      message: 'Catatan changelog berhasil ditambahkan!',
+      data: newItem
+    });
+  } catch (err: any) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+// Admin update changelog item
+router.put('/admin/changelog/:id', requireAdmin, (req: Request, res: Response) => {
+  try {
+    const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+    const { title, type, date, description } = req.body;
+
+    const updates: any = {};
+    if (title !== undefined) updates.title = title.trim();
+    if (type !== undefined) updates.type = type;
+    if (date !== undefined) updates.date = date;
+    if (description !== undefined) updates.description = description ? description.trim() : '';
+
+    const updated = store.updateChangelog(id, updates);
+    if (!updated) {
+      return res.status(404).json({ success: false, message: 'Catatan changelog tidak ditemukan' });
+    }
+
+    res.json({
+      success: true,
+      message: 'Catatan changelog berhasil diperbarui!',
+      data: updated
+    });
+  } catch (err: any) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+// Admin delete changelog item
+router.delete('/admin/changelog/:id', requireAdmin, (req: Request, res: Response) => {
+  try {
+    const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+    const ok = store.deleteChangelog(id);
+    if (!ok) {
+      return res.status(404).json({ success: false, message: 'Catatan changelog tidak ditemukan' });
+    }
+    res.json({ success: true, message: 'Catatan changelog berhasil dihapus!' });
+  } catch (err: any) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+// Admin reset changelog items to default
+router.post('/admin/changelog/reset', requireAdmin, (_req: Request, res: Response) => {
+  try {
+    const defaultItems = store.resetChangelogs();
+    res.json({
+      success: true,
+      message: 'Changelog berhasil direset ke setelan awal!',
+      data: defaultItems
+    });
+  } catch (err: any) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
 export default router;
+

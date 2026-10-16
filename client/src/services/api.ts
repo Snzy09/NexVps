@@ -1,4 +1,5 @@
-import type { CatalogData, Order, AdminMetrics, AdminSettings, VpsPlan } from '../types';
+import type { CatalogData, Order, AdminMetrics, AdminSettings, VpsPlan, ChangelogItem } from '../types';
+import { INITIAL_CHANGELOG_UPDATES } from '../data/initialChangelog';
 
 const API_BASE = '/api';
 
@@ -834,5 +835,130 @@ export const api = {
         message: `Koneksi gagal: ${err.message}. Pastikan backend server 'npm run server:dev' aktif di http://localhost:5000.`
       };
     }
+  },
+
+  async getChangelogs(): Promise<ChangelogItem[]> {
+    try {
+      const res = await fetch(`${API_BASE}/changelog`, {
+        headers: getHeaders()
+      });
+      if (res.ok) {
+        const json = await res.json();
+        if (json.success && Array.isArray(json.data) && json.data.length > 0) {
+          localStorage.setItem('nexvps_custom_changelog_updates', JSON.stringify(json.data));
+          return json.data;
+        }
+      }
+    } catch (err) {
+      console.warn('Backend getChangelogs unavailable, reading from local storage:', err);
+    }
+    return this.getLocalChangelogs();
+  },
+
+  async createChangelogItem(item: Omit<ChangelogItem, 'id'> & { id?: string }): Promise<ChangelogItem> {
+    const newItem: ChangelogItem = {
+      id: item.id || `upd-${Date.now()}`,
+      title: item.title,
+      type: item.type,
+      date: item.date,
+      description: item.description
+    };
+    try {
+      const res = await fetch(`${API_BASE}/admin/changelog`, {
+        method: 'POST',
+        headers: getHeaders({ 'Content-Type': 'application/json' }),
+        body: JSON.stringify(newItem)
+      });
+      if (res.ok) {
+        const json = await res.json();
+        if (json.success && json.data) {
+          const list = this.getLocalChangelogs();
+          list.push(json.data);
+          localStorage.setItem('nexvps_custom_changelog_updates', JSON.stringify(list));
+          return json.data;
+        }
+      }
+    } catch (err) {
+      console.warn('Backend createChangelogItem unavailable, saving locally:', err);
+    }
+    const list = this.getLocalChangelogs();
+    list.push(newItem);
+    localStorage.setItem('nexvps_custom_changelog_updates', JSON.stringify(list));
+    return newItem;
+  },
+
+  async updateChangelogItem(id: string, updates: Partial<ChangelogItem>): Promise<ChangelogItem> {
+    try {
+      const res = await fetch(`${API_BASE}/admin/changelog/${encodeURIComponent(id)}`, {
+        method: 'PUT',
+        headers: getHeaders({ 'Content-Type': 'application/json' }),
+        body: JSON.stringify(updates)
+      });
+      if (res.ok) {
+        const json = await res.json();
+        if (json.success && json.data) {
+          const list = this.getLocalChangelogs();
+          const idx = list.findIndex(c => c.id === id);
+          if (idx !== -1) {
+            list[idx] = json.data;
+            localStorage.setItem('nexvps_custom_changelog_updates', JSON.stringify(list));
+          }
+          return json.data;
+        }
+      }
+    } catch (err) {
+      console.warn('Backend updateChangelogItem unavailable, updating locally:', err);
+    }
+    const list = this.getLocalChangelogs();
+    const idx = list.findIndex(c => c.id === id);
+    if (idx !== -1) {
+      list[idx] = { ...list[idx], ...updates };
+      localStorage.setItem('nexvps_custom_changelog_updates', JSON.stringify(list));
+      return list[idx];
+    }
+    throw new Error('Catatan rilis tidak ditemukan.');
+  },
+
+  async deleteChangelogItem(id: string): Promise<boolean> {
+    try {
+      await fetch(`${API_BASE}/admin/changelog/${encodeURIComponent(id)}`, {
+        method: 'DELETE',
+        headers: getHeaders()
+      });
+    } catch (err) {
+      console.warn('Backend deleteChangelogItem unavailable, deleting locally:', err);
+    }
+    const list = this.getLocalChangelogs().filter(c => c.id !== id);
+    localStorage.setItem('nexvps_custom_changelog_updates', JSON.stringify(list));
+    return true;
+  },
+
+  async resetChangelogs(): Promise<ChangelogItem[]> {
+    try {
+      const res = await fetch(`${API_BASE}/admin/changelog/reset`, {
+        method: 'POST',
+        headers: getHeaders()
+      });
+      if (res.ok) {
+        const json = await res.json();
+        if (json.success && Array.isArray(json.data)) {
+          localStorage.setItem('nexvps_custom_changelog_updates', JSON.stringify(json.data));
+          return json.data;
+        }
+      }
+    } catch (err) {
+      console.warn('Backend resetChangelogs unavailable, resetting locally:', err);
+    }
+    localStorage.removeItem('nexvps_custom_changelog_updates');
+    return [...INITIAL_CHANGELOG_UPDATES];
+  },
+
+  getLocalChangelogs(): ChangelogItem[] {
+    try {
+      const saved = localStorage.getItem('nexvps_custom_changelog_updates');
+      if (saved) return JSON.parse(saved);
+    } catch {}
+    return [...INITIAL_CHANGELOG_UPDATES];
   }
 };
+

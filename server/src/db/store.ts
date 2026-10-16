@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
-import { Order, AppSettings, VpsPlan, VpsZone, VpsTemplate } from '../types';
+import { Order, AppSettings, VpsPlan, VpsZone, VpsTemplate, ChangelogItem } from '../types';
+import { INITIAL_CHANGELOG_UPDATES } from './initialChangelog';
 
 const DATA_DIR = path.join(__dirname, '../../data');
 const STORE_FILE = path.join(DATA_DIR, 'store.json');
@@ -639,6 +640,7 @@ interface StoreSchema {
   zones: VpsZone[];
   templates: VpsTemplate[];
   orders: Order[];
+  changelogs?: ChangelogItem[];
 }
 
 class Store {
@@ -780,10 +782,13 @@ class Store {
           plans: parsed.plans || DEFAULT_PLANS,
           zones: parsed.zones || DEFAULT_ZONES,
           templates: mergedTemplates,
-          orders: parsed.orders || []
+          orders: parsed.orders || [],
+          changelogs: (Array.isArray(parsed.changelogs) && parsed.changelogs.length > 0)
+            ? parsed.changelogs
+            : [...INITIAL_CHANGELOG_UPDATES]
         };
 
-        if (templatesUpdated) {
+        if (templatesUpdated || !parsed.changelogs) {
           this.save(result);
         }
 
@@ -797,7 +802,8 @@ class Store {
       plans: DEFAULT_PLANS,
       zones: DEFAULT_ZONES,
       templates: DEFAULT_TEMPLATES,
-      orders: []
+      orders: [],
+      changelogs: [...INITIAL_CHANGELOG_UPDATES]
     };
     this.save(initial);
     return initial;
@@ -892,6 +898,48 @@ class Store {
     };
     this.save();
     return this.data.orders[idx];
+  }
+
+  getChangelogs(): ChangelogItem[] {
+    if (!this.data.changelogs || this.data.changelogs.length === 0) {
+      this.data.changelogs = [...INITIAL_CHANGELOG_UPDATES];
+      this.save();
+    }
+    return this.data.changelogs;
+  }
+
+  addChangelog(item: ChangelogItem): ChangelogItem {
+    if (!this.data.changelogs) this.data.changelogs = [];
+    this.data.changelogs.push(item);
+    this.save();
+    return item;
+  }
+
+  updateChangelog(id: string, updates: Partial<ChangelogItem>): ChangelogItem | undefined {
+    if (!this.data.changelogs) return undefined;
+    const idx = this.data.changelogs.findIndex(c => c.id === id);
+    if (idx === -1) return undefined;
+    this.data.changelogs[idx] = {
+      ...this.data.changelogs[idx],
+      ...updates
+    };
+    this.save();
+    return this.data.changelogs[idx];
+  }
+
+  deleteChangelog(id: string): boolean {
+    if (!this.data.changelogs) return false;
+    const idx = this.data.changelogs.findIndex(c => c.id === id);
+    if (idx === -1) return false;
+    this.data.changelogs.splice(idx, 1);
+    this.save();
+    return true;
+  }
+
+  resetChangelogs(): ChangelogItem[] {
+    this.data.changelogs = [...INITIAL_CHANGELOG_UPDATES];
+    this.save();
+    return this.data.changelogs;
   }
 }
 

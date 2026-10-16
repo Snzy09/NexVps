@@ -154,3 +154,12 @@ export interface AuthUser {
   photoURL?: string;
   isAdmin: boolean;
 }
+
+export interface ChangelogItem {
+  id: string;
+  title: string;
+  type: 'feature' | 'improvement' | 'fix';
+  date: string;
+  description?: string;
+}
+

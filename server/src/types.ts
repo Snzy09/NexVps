@@ -112,3 +112,11 @@ export interface AppSettings {
   // Admin and Auth
   adminEmails: string[];
 }
+
+export interface ChangelogItem {
+  id: string;
+  title: string;
+  type: 'feature' | 'improvement' | 'fix';
+  date: string;
+  description?: string;
+}

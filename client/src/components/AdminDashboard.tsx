@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import type { AdminMetrics, AdminSettings, Order, VpsPlan } from '../types';
+import type { AdminMetrics, AdminSettings, Order, VpsPlan, ChangelogItem } from '../types';
 import { api } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 import { useToast } from '../contexts/ToastContext';
@@ -8,6 +8,8 @@ import GlideSelect from './GlideSelect';
 import HoldButton from './HoldButton';
 import { AdminMetricsCharts } from './AdminMetricsCharts';
 import { EnvEditor, type EnvItem } from './ballmac/env-editor';
+import { ChangelogMarkdownEditor } from './ChangelogMarkdownEditor';
+import { FormattedMarkdown } from './FormattedMarkdown';
 import { 
   Sliders, 
   DollarSign, 
@@ -38,7 +40,11 @@ import {
   Eye,
   EyeOff,
   Zap,
-  AlertTriangle
+  AlertTriangle,
+  Search,
+  RotateCcw,
+  FileText,
+  Bug
 } from 'lucide-react';
 
 interface AdminDashboardProps {
@@ -75,7 +81,26 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
   const [plans, setPlans] = useState<VpsPlan[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [saving, setSaving] = useState<boolean>(false);
-  const [activeTab, setActiveTab] = useState<'settings' | 'plans' | 'metrics' | 'orders'>('plans');
+  const [activeTab, setActiveTab] = useState<'settings' | 'plans' | 'metrics' | 'orders' | 'changelog'>('plans');
+
+  // Changelog management state
+  const [changelogItems, setChangelogItems] = useState<ChangelogItem[]>([]);
+  const [editingChangelogId, setEditingChangelogId] = useState<string | null>(null);
+  const [changelogForm, setChangelogForm] = useState<{
+    title: string;
+    type: 'feature' | 'improvement' | 'fix';
+    date: string;
+    description: string;
+  }>({
+    title: '',
+    type: 'feature',
+    date: new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric', year: 'numeric' }).format(new Date()),
+    description: ''
+  });
+  const [showChangelogForm, setShowChangelogForm] = useState<boolean>(true);
+  const [changelogSearch, setChangelogSearch] = useState<string>('');
+  const [changelogCategoryFilter, setChangelogCategoryFilter] = useState<'all' | 'feature' | 'improvement' | 'fix'>('all');
+  const [savingChangelog, setSavingChangelog] = useState<boolean>(false);
 
   // Plan editing state
   const [editingPlanId, setEditingPlanId] = useState<string | null>(null);
@@ -105,11 +130,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
   const loadData = async () => {
     setLoading(true);
     try {
-      const [m, s, ord, p] = await Promise.all([
+      const [m, s, ord, p, cl] = await Promise.all([
         api.getAdminMetrics(),
         api.getAdminSettings(),
         api.getAdminOrders(),
-        api.getAdminPlans()
+        api.getAdminPlans(),
+        api.getChangelogs()
       ]);
       setMetrics(m);
       setSettings(s);
@@ -122,6 +148,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
       });
       setOrders(ord);
       setPlans(p);
+      setChangelogItems(cl);
       if (p && Array.isArray(p)) {
         onPlansUpdated?.(p);
       }
@@ -336,6 +363,104 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
     setTimeout(() => setCopiedWebhook(false), 2000);
   };
 
+  const handleSaveChangelog = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!changelogForm.title.trim()) {
+      toast.error('Judul Diperlukan', 'Masukkan judul atau ringkasan rilis.');
+      return;
+    }
+
+    setSavingChangelog(true);
+    try {
+      if (editingChangelogId) {
+        await api.updateChangelogItem(editingChangelogId, {
+          title: changelogForm.title.trim(),
+          type: changelogForm.type,
+          date: changelogForm.date.trim(),
+          description: changelogForm.description.trim()
+        });
+        toast.success('Catatan Rilis Diperbarui', `Item "${changelogForm.title}" berhasil disimpan.`);
+        setEditingChangelogId(null);
+      } else {
+        await api.createChangelogItem({
+          title: changelogForm.title.trim(),
+          type: changelogForm.type,
+          date: changelogForm.date.trim(),
+          description: changelogForm.description.trim()
+        });
+        toast.success('Catatan Rilis Ditambahkan', `Item baru [${changelogForm.type.toUpperCase()}] berhasil ditambahkan.`);
+      }
+
+      setChangelogForm({
+        title: '',
+        type: 'feature',
+        date: new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric', year: 'numeric' }).format(new Date()),
+        description: ''
+      });
+
+      const updated = await api.getChangelogs();
+      setChangelogItems(updated);
+    } catch (err: any) {
+      toast.error('Gagal Menyimpan Catatan', err.message);
+    } finally {
+      setSavingChangelog(false);
+    }
+  };
+
+  const handleEditChangelog = (item: ChangelogItem) => {
+    setEditingChangelogId(item.id);
+    setChangelogForm({
+      title: item.title,
+      type: item.type,
+      date: item.date,
+      description: item.description || ''
+    });
+    setShowChangelogForm(true);
+
+    const el = document.getElementById('changelog-editor-section');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const handleCancelEditChangelog = () => {
+    setEditingChangelogId(null);
+    setChangelogForm({
+      title: '',
+      type: 'feature',
+      date: new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric', year: 'numeric' }).format(new Date()),
+      description: ''
+    });
+  };
+
+  const handleDeleteChangelog = async (id: string, title: string) => {
+    if (!confirm(`Hapus catatan rilis "${title}"?`)) return;
+    try {
+      await api.deleteChangelogItem(id);
+      toast.success('Catatan Dihapus', `Catatan "${title}" telah dihapus.`);
+      const updated = await api.getChangelogs();
+      setChangelogItems(updated);
+      if (editingChangelogId === id) {
+        handleCancelEditChangelog();
+      }
+    } catch (err: any) {
+      toast.error('Gagal Menghapus Catatan', err.message);
+    }
+  };
+
+  const handleResetChangelogs = async () => {
+    if (!confirm('Kembalikan changelog ke catatan default versi 1.0.0, 1.2.0, dan 2.0.0?')) return;
+    try {
+      const reset = await api.resetChangelogs();
+      setChangelogItems(reset);
+      handleCancelEditChangelog();
+      toast.info('Changelog Direset', 'Daftar rilis telah dikembalikan ke setelan default.');
+    } catch (err: any) {
+      toast.error('Gagal Mereset Changelog', err.message);
+    }
+  };
+
+
   return (
     <div className="space-y-8 max-w-6xl mx-auto">
       {/* Top Header Card */}
@@ -408,6 +533,18 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
           >
             <ShoppingBag className="w-3.5 h-3.5" />
             <span>Pesanan ({orders.length})</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab('changelog')}
+            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+              activeTab === 'changelog'
+                ? 'bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/20 font-bold'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-slate-800/60'
+            }`}
+          >
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>Changelog ({changelogItems.length})</span>
           </button>
         </div>
       </div>
@@ -1412,6 +1549,408 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
                   </table>
                 </div>
               )}
+            </div>
+          )}
+
+          {/* TAB 5: MANAJEMEN CATATAN RILIS & CHANGELOG */}
+          {activeTab === 'changelog' && (
+            <div className="space-y-6 animate-in fade-in duration-200">
+              {/* Header Card */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 sm:p-7 rounded-3xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-sm dark:shadow-xl transition-all">
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <span className="p-2 rounded-xl bg-cyan-500/10 text-cyan-600 dark:text-cyan-400">
+                      <Sparkles className="w-5 h-5" />
+                    </span>
+                    <div>
+                      <h3 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
+                        Manajemen Catatan Rilis & Changelog
+                      </h3>
+                      <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 max-w-xl">
+                        Kelola riwayat pembaruan sistem dan roadmap. Setiap siklus (3 fitur baru atau 2 bug fix atau 2 improvement) otomatis mengevaluasi versi di halaman Changelog publik.
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Summary Metric Pills */}
+                  <div className="flex flex-wrap items-center gap-2 pt-1 text-xs font-mono">
+                    <span className="px-2.5 py-1 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-semibold border border-slate-200 dark:border-slate-700/60">
+                      Total: {changelogItems.length}
+                    </span>
+                    <span className="px-2.5 py-1 rounded-xl bg-cyan-500/10 text-cyan-700 dark:text-cyan-400 font-semibold border border-cyan-500/30">
+                      + Feature: {changelogItems.filter(c => c.type === 'feature').length}
+                    </span>
+                    <span className="px-2.5 py-1 rounded-xl bg-blue-500/10 text-blue-700 dark:text-blue-400 font-semibold border border-blue-500/30">
+                      ⚡ Improvement: {changelogItems.filter(c => c.type === 'improvement').length}
+                    </span>
+                    <span className="px-2.5 py-1 rounded-xl bg-rose-500/10 text-rose-700 dark:text-rose-400 font-semibold border border-rose-500/30">
+                      🐛 Bug Fix: {changelogItems.filter(c => c.type === 'fix').length}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 self-start sm:self-center shrink-0">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      handleCancelEditChangelog();
+                      setShowChangelogForm(true);
+                      const el = document.getElementById('changelog-editor-section');
+                      if (el) el.scrollIntoView({ behavior: 'smooth' });
+                    }}
+                    className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold text-xs flex items-center justify-center gap-2 shadow-md shadow-cyan-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer"
+                  >
+                    <Plus className="w-4 h-4 stroke-[3]" />
+                    <span>Tambah Catatan Baru</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleResetChangelogs}
+                    className="p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-500 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                    title="Reset data changelog ke setelan awal default"
+                  >
+                    <RotateCcw className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Editor & Form Section (Text Editor with Formatter and Live Preview) */}
+              {showChangelogForm && (
+                <div
+                  id="changelog-editor-section"
+                  className="p-6 sm:p-7 rounded-3xl bg-white dark:bg-slate-900/80 border border-cyan-500/30 shadow-xl space-y-5 animate-in fade-in"
+                >
+                  <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800 flex-wrap gap-2">
+                    <div className="flex items-center gap-2.5">
+                      <span className="p-1.5 rounded-xl bg-cyan-500/10 text-cyan-600 dark:text-cyan-400">
+                        {editingChangelogId ? <Edit3 className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
+                      </span>
+                      <h4 className="text-base font-bold text-slate-900 dark:text-white">
+                        {editingChangelogId ? 'Edit Catatan Rilis' : 'Tambah Catatan Rilis Baru'}
+                      </h4>
+                    </div>
+
+                    {editingChangelogId && (
+                      <div className="flex items-center gap-2">
+                        <span className="px-2.5 py-0.5 rounded-full text-xs font-mono font-semibold bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/30">
+                          Sedang Mengedit: {editingChangelogId}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={handleCancelEditChangelog}
+                          className="text-xs text-slate-500 hover:text-slate-800 dark:hover:text-white cursor-pointer px-2 py-0.5 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                        >
+                          Batal Edit
+                        </button>
+                      </div>
+                    )}
+                  </div>
+
+                  <form onSubmit={handleSaveChangelog} className="space-y-4">
+                    {/* Judul Catatan */}
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                        Deskripsi / Judul Update <span className="text-rose-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        value={changelogForm.title}
+                        onChange={(e) => setChangelogForm(f => ({ ...f, title: e.target.value }))}
+                        placeholder="Contoh: Multi-token UpCloud API Token Failover Manager..."
+                        className="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all shadow-inner"
+                        required
+                      />
+                    </div>
+
+                    {/* Kategori & Tanggal */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      {/* Kategori */}
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                          Kategori Perubahan
+                        </label>
+                        <div className="grid grid-cols-3 gap-2">
+                          <button
+                            type="button"
+                            onClick={() => setChangelogForm(f => ({ ...f, type: 'feature' }))}
+                            className={`py-2 px-2.5 rounded-xl text-xs font-semibold border transition-all cursor-pointer text-center ${
+                              changelogForm.type === 'feature'
+                                ? 'bg-cyan-500/15 border-cyan-500 text-cyan-700 dark:text-cyan-400 shadow-sm font-bold'
+                                : 'bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-700'
+                            }`}
+                          >
+                            + New Feature
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setChangelogForm(f => ({ ...f, type: 'improvement' }))}
+                            className={`py-2 px-2.5 rounded-xl text-xs font-semibold border transition-all cursor-pointer text-center ${
+                              changelogForm.type === 'improvement'
+                                ? 'bg-blue-500/15 border-blue-500 text-blue-700 dark:text-blue-400 shadow-sm font-bold'
+                                : 'bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-700'
+                            }`}
+                          >
+                            ⚡ Improvement
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setChangelogForm(f => ({ ...f, type: 'fix' }))}
+                            className={`py-2 px-2.5 rounded-xl text-xs font-semibold border transition-all cursor-pointer text-center ${
+                              changelogForm.type === 'fix'
+                                ? 'bg-rose-500/15 border-rose-500 text-rose-700 dark:text-rose-400 shadow-sm font-bold'
+                                : 'bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-700'
+                            }`}
+                          >
+                            🐛 Bug Fix
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Tanggal */}
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                          Tanggal Rilis
+                        </label>
+                        <div className="relative">
+                          <input
+                            type="text"
+                            value={changelogForm.date}
+                            onChange={(e) => setChangelogForm(f => ({ ...f, date: e.target.value }))}
+                            placeholder="Contoh: April 16, 2026"
+                            className="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all shadow-inner font-mono"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Markdown Editor dengan Formatter & Pratinjau Tab */}
+                    <div className="space-y-1.5 pt-1">
+                      <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 flex items-center justify-between">
+                        <span>Rincian & Deskripsi Lengkap Pembaruan</span>
+                        <span className="text-[11px] text-slate-400 font-normal">Dukungan format teks Markdown</span>
+                      </label>
+                      <ChangelogMarkdownEditor
+                        value={changelogForm.description}
+                        onChange={(val) => setChangelogForm(f => ({ ...f, description: val }))}
+                        previewTitle={changelogForm.title}
+                        previewType={changelogForm.type}
+                        previewDate={changelogForm.date}
+                      />
+                    </div>
+
+                    {/* Submit Actions */}
+                    <div className="flex items-center justify-end gap-2.5 pt-2">
+                      {editingChangelogId && (
+                        <button
+                          type="button"
+                          onClick={handleCancelEditChangelog}
+                          className="px-4 py-2 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                        >
+                          Batal Edit
+                        </button>
+                      )}
+                      <button
+                        type="submit"
+                        disabled={savingChangelog}
+                        className="px-5 py-2.5 text-xs font-bold rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 transition-all cursor-pointer shadow-lg shadow-cyan-500/20 hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50"
+                      >
+                        {savingChangelog ? 'Menyimpan...' : (editingChangelogId ? 'Simpan Perubahan Catatan' : 'Simpan & Evaluasi Versi')}
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              )}
+
+              {/* List / Table of Existing Changelog Items */}
+              <div className="bg-white dark:bg-slate-900/80 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm dark:shadow-xl p-6 sm:p-7 space-y-4">
+                {/* Search & Filter Header */}
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pb-3 border-b border-slate-200 dark:border-slate-800">
+                  <div className="flex items-center gap-2">
+                    <span className="p-1.5 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400">
+                      <FileText className="w-4 h-4" />
+                    </span>
+                    <h4 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white">
+                      Daftar Riwayat Catatan Rilis ({changelogItems.length})
+                    </h4>
+                  </div>
+
+                  {/* Filter & Search Bar */}
+                  <div className="flex flex-wrap items-center gap-2">
+                    {/* Category Filter Pills */}
+                    <div className="flex items-center gap-1 p-0.5 rounded-xl bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs">
+                      <button
+                        type="button"
+                        onClick={() => setChangelogCategoryFilter('all')}
+                        className={`px-2.5 py-1 rounded-lg font-medium transition-all cursor-pointer ${
+                          changelogCategoryFilter === 'all'
+                            ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm font-bold'
+                            : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                        }`}
+                      >
+                        Semua
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setChangelogCategoryFilter('feature')}
+                        className={`px-2.5 py-1 rounded-lg font-medium transition-all cursor-pointer ${
+                          changelogCategoryFilter === 'feature'
+                            ? 'bg-cyan-500/15 text-cyan-700 dark:text-cyan-400 font-bold'
+                            : 'text-slate-500 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400'
+                        }`}
+                      >
+                        Feature
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setChangelogCategoryFilter('improvement')}
+                        className={`px-2.5 py-1 rounded-lg font-medium transition-all cursor-pointer ${
+                          changelogCategoryFilter === 'improvement'
+                            ? 'bg-blue-500/15 text-blue-700 dark:text-blue-400 font-bold'
+                            : 'text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400'
+                        }`}
+                      >
+                        Improvement
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setChangelogCategoryFilter('fix')}
+                        className={`px-2.5 py-1 rounded-lg font-medium transition-all cursor-pointer ${
+                          changelogCategoryFilter === 'fix'
+                            ? 'bg-rose-500/15 text-rose-700 dark:text-rose-400 font-bold'
+                            : 'text-slate-500 dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-400'
+                        }`}
+                      >
+                        Fix
+                      </button>
+                    </div>
+
+                    {/* Search Input */}
+                    <div className="relative">
+                      <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                      <input
+                        type="text"
+                        value={changelogSearch}
+                        onChange={(e) => setChangelogSearch(e.target.value)}
+                        placeholder="Cari catatan..."
+                        className="pl-8 pr-3 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-cyan-500 w-40 sm:w-52"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Filtered Items */}
+                {(() => {
+                  const filtered = changelogItems
+                    .filter((item) => {
+                      if (changelogCategoryFilter !== 'all' && item.type !== changelogCategoryFilter) {
+                        return false;
+                      }
+                      if (changelogSearch.trim()) {
+                        const q = changelogSearch.toLowerCase();
+                        const matchTitle = item.title.toLowerCase().includes(q);
+                        const matchDesc = item.description?.toLowerCase().includes(q);
+                        const matchDate = item.date.toLowerCase().includes(q);
+                        return matchTitle || matchDesc || matchDate;
+                      }
+                      return true;
+                    })
+                    .slice()
+                    .reverse(); // Newest first
+
+                  if (filtered.length === 0) {
+                    return (
+                      <div className="py-12 text-center space-y-2">
+                        <FileText className="w-8 h-8 text-slate-400 mx-auto opacity-50" />
+                        <p className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+                          Tidak ada catatan rilis yang cocok
+                        </p>
+                        <p className="text-xs text-slate-500 dark:text-slate-400">
+                          Coba gunakan kata kunci lain atau ubah filter kategori.
+                        </p>
+                      </div>
+                    );
+                  }
+
+                  return (
+                    <div className="space-y-3">
+                      {filtered.map((item) => {
+                        const isBeingEdited = editingChangelogId === item.id;
+
+                        return (
+                          <div
+                            key={item.id}
+                            className={`p-4 sm:p-5 rounded-2xl border transition-all ${
+                              isBeingEdited
+                                ? 'bg-cyan-50/50 dark:bg-slate-950 border-cyan-500 ring-1 ring-cyan-500/30'
+                                : 'bg-slate-50/70 dark:bg-slate-950/70 border-slate-200 dark:border-slate-800/80 hover:border-slate-300 dark:hover:border-slate-700'
+                            }`}
+                          >
+                            <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+                              <div className="space-y-1.5 flex-1 min-w-0">
+                                {/* Category Badge & Date */}
+                                <div className="flex items-center gap-2 flex-wrap">
+                                  <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${
+                                    item.type === 'feature'
+                                      ? 'bg-cyan-500/10 text-cyan-700 dark:text-cyan-400 border border-cyan-500/30'
+                                      : item.type === 'improvement'
+                                      ? 'bg-blue-500/10 text-blue-700 dark:text-blue-400 border border-blue-500/30'
+                                      : 'bg-rose-500/10 text-rose-700 dark:text-rose-400 border border-rose-500/30'
+                                  }`}>
+                                    {item.type === 'feature' ? '+ Feature' : item.type === 'improvement' ? '⚡ Improvement' : '🐛 Bug Fix'}
+                                  </span>
+
+                                  <span className="text-xs text-slate-500 dark:text-slate-400 font-mono flex items-center gap-1">
+                                    <Clock className="size-3" />
+                                    <span>{item.date}</span>
+                                  </span>
+
+                                  <span className="text-[10px] text-slate-400 font-mono">
+                                    ID: {item.id}
+                                  </span>
+                                </div>
+
+                                {/* Title */}
+                                <h5 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white leading-snug">
+                                  {item.title}
+                                </h5>
+
+                                {/* Description (Formatted Markdown) */}
+                                {item.description && (
+                                  <div className="pt-1.5 text-xs text-slate-600 dark:text-slate-400 border-t border-slate-200/60 dark:border-slate-800/60 mt-1">
+                                    <FormattedMarkdown content={item.description} />
+                                  </div>
+                                )}
+                              </div>
+
+                              {/* Action Buttons: Edit & Delete */}
+                              <div className="flex items-center gap-1.5 self-end sm:self-start shrink-0 pt-1">
+                                <button
+                                  type="button"
+                                  onClick={() => handleEditChangelog(item)}
+                                  className="p-2 rounded-xl text-cyan-600 dark:text-cyan-400 hover:bg-cyan-500/10 hover:text-cyan-700 dark:hover:text-cyan-300 border border-slate-200 dark:border-slate-800 transition-colors cursor-pointer"
+                                  title="Edit catatan rilis ini"
+                                >
+                                  <Edit3 className="size-4" />
+                                </button>
+
+                                <button
+                                  type="button"
+                                  onClick={() => handleDeleteChangelog(item.id, item.title)}
+                                  className="p-2 rounded-xl text-rose-500 hover:bg-rose-500/10 hover:text-rose-600 dark:hover:text-rose-400 border border-slate-200 dark:border-slate-800 transition-colors cursor-pointer"
+                                  title="Hapus catatan rilis ini"
+                                >
+                                  <Trash2 className="size-4" />
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  );
+                })()}
+              </div>
             </div>
           )}
         </>
