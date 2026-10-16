@@ -110,7 +110,22 @@ router.post('/orders/:id/check-payment', async (req: Request, res: Response) => 
     res.status(500).json({ success: false, message: err.message });
   }
 });
-
+router.post('/orders/:id/simulate-payment', async (req: Request, res: Response) => {
+  try {
+    const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+    const updated = await orderManager.simulatePayment(id);
+    if (!updated) {
+      return res.status(404).json({ success: false, message: 'Pesanan tidak ditemukan' });
+    }
+    res.json({
+      success: true,
+      message: 'Pembayaran disimulasikan berhasil! Memulai proses pembuatan VPS UpCloud.',
+      data: updated
+    });
+  } catch (err: any) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
 
 router.post('/orders/:id/retry-provision', async (req: Request, res: Response) => {
   try {

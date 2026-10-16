@@ -62,21 +62,11 @@ export class BuatQrisService {
 
       return {
         success: true,
-        message: 'Koneksi ke BuatQRIS API Berhasil!',
+        message: `Koneksi ke BuatQRIS API Berhasil! ID Transaksi: ${res.transaction_id} (Metode: ${res.qris_method})`,
         data: res
       };
     } catch (err: any) {
       const errMsg = err.message || '';
-      if (errMsg.includes('challenge_unsolved')) {
-        return {
-          success: true,
-          message: 'Kredensial BuatQRIS tersimpan (Format Valid). Gateway BuatQRIS mengaktifkan proteksi bot untuk koneksi langsung; Mode Sandbox aktif untuk simulasi QRIS lokal.',
-          data: {
-            transaction_id: 'SANDBOX-' + Date.now().toString(36).toUpperCase(),
-            status: 'pending'
-          }
-        };
-      }
       return {
         success: false,
         message: `Gagal terhubung ke BuatQRIS: ${errMsg}`
@@ -151,11 +141,7 @@ export class BuatQrisService {
     try {
       const response = await axios.post(this.baseUrl, form.toString(), {
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-          'Accept': 'application/json, text/plain, */*',
-          'X-App-Name': 'NexVps',
-          'X-App-Version': '1.0.0'
+          'Content-Type': 'application/x-www-form-urlencoded'
         },
         timeout: 20000
       });
@@ -169,8 +155,8 @@ export class BuatQrisService {
     } catch (err: any) {
       const errMsg = err.response?.data?.message || err.message;
       console.error('BuatQRIS create transaction error:', errMsg);
-      if (settings.isSandbox || String(errMsg).includes('challenge_unsolved')) {
-        console.warn('⚠️ BuatQRIS live endpoint challenge / unreachable. Falling back to sandbox simulated QR.');
+      if (!isConfigured) {
+        console.warn('⚠️ BuatQRIS not configured. Falling back to sandbox simulated QR.');
         return this.generateSimulatedQris(params, settings);
       }
       throw new Error(`BuatQRIS Error: ${errMsg}`);

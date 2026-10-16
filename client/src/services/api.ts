@@ -330,40 +330,45 @@ export const api = {
         body: JSON.stringify(payload)
       });
       const json = await res.json();
-      if (!json.success) throw new Error(json.message);
+      if (!json.success) throw new Error(json.message || 'Gagal memproses pesanan di server');
       return json.data;
-    } catch {
-      // Local fallback simulation for static hosting demo
-      const simulatedOrder: Order = {
-        id: `demo-${Date.now()}`,
-        orderNumber: `NEX-${Math.floor(100000 + Math.random() * 900000)}`,
-        userId: payload.userId,
-        customerName: payload.customerName || 'Pelanggan NexVps',
-        customerEmail: payload.customerEmail || 'user@example.com',
-        customerPhone: payload.customerPhone || '081234567890',
-        planId: payload.planId || 'developer',
-        zoneCode: payload.zoneCode || 'sg-sin1',
-        templateUuid: payload.templateUuid,
-        templateName: payload.templateName || 'Ubuntu Server 24.04 LTS',
-        hostname: payload.hostname || 'server.nexvps.cloud',
-        rootPassword: payload.rootPassword || 'P@ssword123!',
-        sshKey: payload.sshKey,
-        billingCycle: payload.billingCycle || 'monthly',
-        baseAmountIdr: payload.planId === 'starter' ? 75000 : payload.planId === 'business' ? 300000 : payload.planId === 'enterprise' ? 600000 : 150000,
-        totalAmountIdr: payload.planId === 'starter' ? 75000 : payload.planId === 'business' ? 300000 : payload.planId === 'enterprise' ? 600000 : 150000,
-        adminFee: 0,
-        paymentStatus: 'PENDING',
-        vpsStatus: 'PENDING_PAYMENT',
-        qrisImage: 'https://api.qrserver.com/v1/create-qr-code/?size=280x280&data=00020101021226670016ID.CO.BUATQRIS01189360091800000000000214NEXVPSCLOUD5204581253033605802ID5912NEXVPS+CLOUD6007JAKARTA62070703A016304ABCD',
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
-      };
-      try {
-        const orders: Order[] = JSON.parse(localStorage.getItem('nexvps_demo_orders') || '[]');
-        orders.unshift(simulatedOrder);
-        localStorage.setItem('nexvps_demo_orders', JSON.stringify(orders));
-      } catch {}
-      return simulatedOrder;
+    } catch (err: any) {
+      // Only fallback to simulated order if backend server is completely unreachable
+      const isNetworkError = err instanceof TypeError || err.message?.includes('Failed to fetch') || err.message?.includes('NetworkError');
+      if (isNetworkError) {
+        console.warn('Backend server unreachable, creating local demo order:', err);
+        const simulatedOrder: Order = {
+          id: `demo-${Date.now()}`,
+          orderNumber: `NEX-${Math.floor(100000 + Math.random() * 900000)}`,
+          userId: payload.userId,
+          customerName: payload.customerName || 'Pelanggan NexVps',
+          customerEmail: payload.customerEmail || 'user@example.com',
+          customerPhone: payload.customerPhone || '081234567890',
+          planId: payload.planId || 'developer',
+          zoneCode: payload.zoneCode || 'sg-sin1',
+          templateUuid: payload.templateUuid,
+          templateName: payload.templateName || 'Ubuntu Server 24.04 LTS',
+          hostname: payload.hostname || 'server.nexvps.cloud',
+          rootPassword: payload.rootPassword || 'P@ssword123!',
+          sshKey: payload.sshKey,
+          billingCycle: payload.billingCycle || 'monthly',
+          baseAmountIdr: payload.planId === 'starter' ? 75000 : payload.planId === 'business' ? 300000 : payload.planId === 'enterprise' ? 600000 : 150000,
+          totalAmountIdr: payload.planId === 'starter' ? 75000 : payload.planId === 'business' ? 300000 : payload.planId === 'enterprise' ? 600000 : 150000,
+          adminFee: 0,
+          paymentStatus: 'PENDING',
+          vpsStatus: 'PENDING_PAYMENT',
+          qrisImage: 'https://api.qrserver.com/v1/create-qr-code/?size=280x280&data=00020101021226670016ID.CO.BUATQRIS01189360091800000000000214NEXVPSCLOUD5204581253033605802ID5912NEXVPS+CLOUD6007JAKARTA62070703A016304ABCD',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        };
+        try {
+          const orders: Order[] = JSON.parse(localStorage.getItem('nexvps_demo_orders') || '[]');
+          orders.unshift(simulatedOrder);
+          localStorage.setItem('nexvps_demo_orders', JSON.stringify(orders));
+        } catch {}
+        return simulatedOrder;
+      }
+      throw err;
     }
   },
 
@@ -412,64 +417,45 @@ export const api = {
         headers: getHeaders()
       });
       const json = await res.json();
-      if (!json.success) throw new Error(json.message);
+      if (!json.success) throw new Error(json.message || 'Gagal mengecek status pembayaran');
       return json.data;
-    } catch {
-      try {
-        const orders: Order[] = JSON.parse(localStorage.getItem('nexvps_demo_orders') || '[]');
-        const found = orders.find(o => o.id === id);
-        if (found) {
-          found.paymentStatus = 'PAID';
-          if (found.vpsStatus === 'PENDING_PAYMENT') {
+    } catch (err: any) {
+      const isNetworkError = err instanceof TypeError || err.message?.includes('Failed to fetch') || err.message?.includes('NetworkError');
+      if (isNetworkError || id.startsWith('demo-')) {
+        try {
+          const orders: Order[] = JSON.parse(localStorage.getItem('nexvps_demo_orders') || '[]');
+          const found = orders.find(o => o.id === id);
+          if (found) return found;
+        } catch {}
+      }
+      throw err;
+    }
+  },
+
+  async simulatePayment(id: string): Promise<Order> {
+    try {
+      const res = await fetch(`${API_BASE}/orders/${id}/simulate-payment`, {
+        method: 'POST',
+        headers: getHeaders()
+      });
+      const json = await res.json();
+      if (!json.success) throw new Error(json.message || 'Gagal simulasi pembayaran');
+      return json.data;
+    } catch (err: any) {
+      const isNetworkError = err instanceof TypeError || err.message?.includes('Failed to fetch') || err.message?.includes('NetworkError');
+      if (isNetworkError || id.startsWith('demo-')) {
+        try {
+          const orders: Order[] = JSON.parse(localStorage.getItem('nexvps_demo_orders') || '[]');
+          const found = orders.find(o => o.id === id);
+          if (found) {
+            found.paymentStatus = 'PAID';
             found.vpsStatus = 'PROVISIONING';
+            localStorage.setItem('nexvps_demo_orders', JSON.stringify(orders));
+            return found;
           }
-
-          // Advance to ACTIVE with real IP
-          const elapsed = Date.now() - new Date(found.createdAt).getTime();
-          if (elapsed >= 3000 && found.vpsStatus !== 'ACTIVE') {
-            found.vpsStatus = 'ACTIVE';
-            found.serverState = 'started';
-            found.serverIp = `94.237.70.${Math.floor(Math.random() * 180) + 20}`;
-            found.serverUuid = `00${Math.floor(100000 + Math.random() * 900000)}-8ac8-4f74-b28d-ece7eb1542c9`;
-
-            // Insert into user servers
-            const servers: Order[] = JSON.parse(localStorage.getItem('nexvps_demo_servers') || JSON.stringify(INITIAL_SERVERS));
-            const existingIdx = servers.findIndex(s => s.id === found.id);
-            if (existingIdx >= 0) {
-              servers[existingIdx] = found;
-            } else {
-              servers.unshift(found);
-            }
-            localStorage.setItem('nexvps_demo_servers', JSON.stringify(servers));
-          }
-
-          localStorage.setItem('nexvps_demo_orders', JSON.stringify(orders));
-          return found;
-        }
-      } catch {}
-      return {
-        id,
-        orderNumber: 'NEX-882194',
-        customerName: 'Admin Sanzzy',
-        customerEmail: 'sanzzydev@gmail.com',
-        customerPhone: '081234567890',
-        planId: 'developer',
-        zoneCode: 'sg-sin1',
-        templateUuid: '01000000-0000-4000-8000-000030240200',
-        templateName: 'Ubuntu Server 24.04 LTS',
-        hostname: 'server.nexvps.cloud',
-        rootPassword: '••••••••••••••••',
-        billingCycle: 'monthly',
-        baseAmountIdr: 150000,
-        totalAmountIdr: 150000,
-        paymentStatus: 'PAID',
-        vpsStatus: 'ACTIVE',
-        serverUuid: '00612376-8ac8-4f74-b28d-ece7eb1542c9',
-        serverIp: '94.237.70.40',
-        serverState: 'started',
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
-      };
+        } catch {}
+      }
+      throw err;
     }
   },
 

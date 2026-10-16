@@ -165,6 +165,27 @@ export const QrisCheckoutModal: React.FC<QrisCheckoutModalProps> = ({
     }
   };
 
+  const handleSimulatePayment = async () => {
+    if (!currentOrder) return;
+    setIsChecking(true);
+    try {
+      const updated = await api.simulatePayment(currentOrder.id);
+      setCurrentOrder(updated);
+      triggerConfetti();
+      toast.success('Pembayaran Disimulasikan Sukses!', 'Memulai pembuatan VPS UpCloud otomatis.');
+      notify({
+        title: 'Pembayaran Diverifikasi! ⚡',
+        desc: `Pesanan #${updated.orderNumber || updated.id} sukses dibayar. Menghubungi UpCloud API...`,
+        category: 'payment',
+        status: 'success'
+      });
+    } catch (err: any) {
+      toast.error('Gagal Simulasi Pembayaran', err.message);
+    } finally {
+      setIsChecking(false);
+    }
+  };
+
   if (!currentOrder) return null;
 
   const isPaid = currentOrder.paymentStatus === 'PAID';
@@ -208,9 +229,9 @@ export const QrisCheckoutModal: React.FC<QrisCheckoutModalProps> = ({
               {/* QR Code Container */}
               <div className="flex flex-col items-center">
                 <div className="p-4 bg-white rounded-3xl shadow-2xl border-4 border-cyan-500/30 relative group">
-                  {currentOrder.qrUrl || currentOrder.qrisImage ? (
+                  {currentOrder.qrisImage || currentOrder.qrUrl ? (
                     <img
-                      src={currentOrder.qrUrl || currentOrder.qrisImage}
+                      src={currentOrder.qrisImage || currentOrder.qrUrl}
                       alt="QRIS Code"
                       className="w-56 h-56 sm:w-64 sm:h-64 object-contain rounded-xl"
                     />
@@ -286,6 +307,18 @@ export const QrisCheckoutModal: React.FC<QrisCheckoutModalProps> = ({
                   </span>
                   <span className="font-semibold text-[11px]">Memantau pembayaran real-time (otomatis deteksi setelah dibayar)</span>
                 </div>
+
+                {/* Dev Mode Instant Simulation Button */}
+                <button
+                  type="button"
+                  onClick={handleSimulatePayment}
+                  disabled={isChecking}
+                  className="w-full py-2.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-600 dark:text-amber-400 font-semibold text-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
+                  title="Simulasikan pembayaran lunas untuk menguji provisioning UpCloud VPS langsung"
+                >
+                  <Zap className="w-3.5 h-3.5" />
+                  <span>Simulasikan Pembayaran Berhasil (Tes UpCloud Realtime)</span>
+                </button>
 
                 {currentOrder.paymentUrl && (
                   <div className="text-center">
