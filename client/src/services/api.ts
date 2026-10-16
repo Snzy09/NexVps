@@ -834,35 +834,12 @@ export const api = {
 
   async testUpCloud(tokens?: { key: string; value: string }[]): Promise<{ success: boolean; message: string; data?: any; totalTokens?: number; activeToken?: string; results?: import('../types').UpCloudTokenTestResult[] }> {
     try {
-      const res = await fetch(`${API_BASE}/admin/test-upcloud`, { 
+      const json = await safeFetchJson('/admin/test-upcloud', { 
         method: 'POST',
         headers: getHeaders({ 'Content-Type': 'application/json' }),
         body: JSON.stringify({ tokens })
       });
-      const contentType = res.headers.get('content-type') || '';
-      if (!contentType.includes('application/json')) {
-        const isDemo = !tokens || tokens.length === 0 || tokens.some(t => t.value.includes('demo') || t.value.includes('sample'));
-        if (isDemo) {
-          return {
-            success: true,
-            totalTokens: tokens?.length || 1,
-            activeToken: tokens?.[0]?.key || 'UPCLOUD_API_TOKEN_PRIMARY',
-            message: 'Mode Demo Standalone: Token UpCloud tersimpan (Simulasi MaxIOPS). Jalankan backend server ("npm run dev") untuk koneksi langsung ke UpCloud API.',
-            results: (tokens || [{ key: 'UPCLOUD_API_TOKEN_PRIMARY', value: 'demo' }]).map((t) => ({
-              key: t.key,
-              maskedToken: '••••demo',
-              status: 'valid' as const,
-              credits: 250
-            }))
-          };
-        }
-        return {
-          success: false,
-          totalTokens: tokens?.length || 0,
-          message: `Backend server (port 5000) belum berjalan atau tidak terjangkau (HTTP ${res.status}). Pastikan Anda menjalankan perintah 'npm run dev' di terminal.`
-        };
-      }
-      return await res.json();
+      return json;
     } catch (err: any) {
       const isDemo = !tokens || tokens.length === 0 || tokens.some(t => t.value.includes('demo') || t.value.includes('sample'));
       if (isDemo) {
@@ -889,32 +866,12 @@ export const api = {
 
   async testBuatQris(credentials?: { accountId?: string; secretToken?: string }): Promise<{ success: boolean; message: string; data?: any }> {
     try {
-      const res = await fetch(`${API_BASE}/admin/test-buatqris`, { 
+      const json = await safeFetchJson('/admin/test-buatqris', { 
         method: 'POST',
         headers: getHeaders({ 'Content-Type': 'application/json' }),
         body: JSON.stringify(credentials || {})
       });
-      const contentType = res.headers.get('content-type') || '';
-      if (!contentType.includes('application/json')) {
-        const accId = credentials?.accountId || '';
-        const secTok = credentials?.secretToken || '';
-        const isDemo = !accId || accId.startsWith('bq_acc_') || secTok.includes('••••') || secTok.startsWith('bq_sec_');
-        if (isDemo) {
-          return {
-            success: true,
-            message: 'Mode Demo Standalone: Kredensial BuatQRIS tersimpan (Simulasi Sandbox). Jalankan backend server ("npm run dev") untuk verifikasi live API.',
-            data: {
-              transaction_id: '1000' + Math.floor(10000000 + Math.random() * 90000000).toString(),
-              status: 'pending'
-            }
-          };
-        }
-        return {
-          success: false,
-          message: `Backend server (port 5000) belum berjalan atau tidak terjangkau (HTTP ${res.status}). Pastikan Anda menjalankan perintah 'npm run dev' di terminal.`
-        };
-      }
-      return await res.json();
+      return json;
     } catch (err: any) {
       const accId = credentials?.accountId || '';
       const isDemo = !accId || accId.startsWith('bq_acc_');

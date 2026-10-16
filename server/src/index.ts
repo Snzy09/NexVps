@@ -58,18 +58,59 @@ app.get('/health', (_req, res) => {
   });
 });
 
-// Global Express error handler guaranteeing JSON responses
-app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
-  console.error('API Error:', err);
-  res.status(err.status || 500).json({
-    success: false,
-    message: err.message || 'Terjadi kesalahan pada server backend'
-  });
+// Global Express error handler guaranteeing JSON responses for API routes
+app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+  if (req.path.startsWith('/api')) {
+    console.error('API Error:', err);
+    return res.status(err.status || 500).json({
+      success: false,
+      message: err.message || 'Terjadi kesalahan pada server backend'
+    });
+  }
+  next(err);
 });
 
-app.listen(Number(PORT), '0.0.0.0', () => {
-  console.log(`=========================================`);
-  console.log(`🚀 NexVps Server running on http://127.0.0.1:${PORT}`);
-  console.log(`📡 BuatQRIS Webhook: http://127.0.0.1:${PORT}/api/webhook/buatqris`);
-  console.log(`=========================================`);
-});
+// ==========================================
+// UNIFIED FRONTEND INTEGRATION (Vite / Static)
+// ==========================================
+const clientDir = path.resolve(__dirname, '../../client');
+const clientDist = path.resolve(clientDir, 'dist');
+const isProd = process.env.NODE_ENV === 'production';
+
+async function bootstrap() {
+  if (!isProd && fs.existsSync(path.join(clientDir, 'src'))) {
+    try {
+      // Development mode: Mount Vite dev server middleware directly in Express
+      const vitePath = require.resolve('vite', { paths: [clientDir] });
+      const { createServer } = require(vitePath);
+      const vite = await createServer({
+        root: clientDir,
+        server: { middlewareMode: true },
+        appType: 'spa'
+      });
+      app.use(vite.middlewares);
+      console.log('⚡ Vite Dev Middleware mounted into Express (HMR active)');
+    } catch (e: any) {
+      console.warn('Vite dev middleware fallback to static dist:', e.message);
+      if (fs.existsSync(clientDist)) {
+        app.use(express.static(clientDist));
+        app.get('*', (_req, res) => res.sendFile(path.join(clientDist, 'index.html')));
+      }
+    }
+  } else if (fs.existsSync(clientDist)) {
+    // Production mode: Serve pre-built static client files
+    app.use(express.static(clientDist));
+    app.get('*', (_req, res) => res.sendFile(path.join(clientDist, 'index.html')));
+    console.log('📦 Serving production client build from client/dist');
+  }
+
+  app.listen(Number(PORT), '0.0.0.0', () => {
+    console.log(`=========================================`);
+    console.log(`🚀 NexVps Unified Server running on http://localhost:${PORT}`);
+    console.log(`💻 Frontend & 📡 Backend API berjalan bersamaan di port ${PORT}!`);
+    console.log(`📡 BuatQRIS Webhook: http://localhost:${PORT}/api/webhook/buatqris`);
+    console.log(`=========================================`);
+  });
+}
+
+bootstrap();
