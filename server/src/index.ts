@@ -40,6 +40,14 @@ app.use(express.urlencoded({
 // API Routes
 app.use('/api', apiRouter);
 
+// Catch-all 404 for unhandled API endpoints returning JSON
+app.use('/api', (_req, res) => {
+  res.status(404).json({
+    success: false,
+    message: 'Endpoint API tidak ditemukan'
+  });
+});
+
 // Health check
 app.get('/health', (_req, res) => {
   res.json({
@@ -47,6 +55,15 @@ app.get('/health', (_req, res) => {
     app: 'NexVps API',
     version: '1.0.0',
     time: new Date().toISOString()
+  });
+});
+
+// Global Express error handler guaranteeing JSON responses
+app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
+  console.error('API Error:', err);
+  res.status(err.status || 500).json({
+    success: false,
+    message: err.message || 'Terjadi kesalahan pada server backend'
   });
 });
 

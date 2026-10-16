@@ -13,6 +13,49 @@ const getHeaders = (customHeaders: Record<string, string> = {}) => {
   return headers;
 };
 
+const getApiUrl = (endpoint: string): string => {
+  if (endpoint.startsWith('http://') || endpoint.startsWith('https://')) {
+    return endpoint;
+  }
+  const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+  return `${API_BASE}${cleanEndpoint}`;
+};
+
+export async function safeFetchJson<T = any>(endpoint: string, options?: RequestInit): Promise<T> {
+  const primaryUrl = getApiUrl(endpoint);
+
+  const executeFetch = async (url: string): Promise<T> => {
+    const res = await fetch(url, options);
+    const contentType = res.headers.get('content-type') || '';
+    if (!contentType.includes('application/json')) {
+      const text = await res.text();
+      throw new Error(`Non-JSON response (${res.status}): ${text.slice(0, 100)}`);
+    }
+    return await res.json();
+  };
+
+  try {
+    return await executeFetch(primaryUrl);
+  } catch (primaryErr: any) {
+    // If request to '/api' failed or returned non-JSON HTML, try direct connection to backend port 5000
+    if (
+      typeof window !== 'undefined' &&
+      (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') &&
+      window.location.port !== '5000' &&
+      !primaryUrl.startsWith('http://127.0.0.1:5000') &&
+      !primaryUrl.startsWith('http://localhost:5000')
+    ) {
+      const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+      try {
+        return await executeFetch(`http://127.0.0.1:5000/api${cleanEndpoint}`);
+      } catch {
+        // preserve primaryErr
+      }
+    }
+    throw primaryErr;
+  }
+}
+
 export const FALLBACK_CATALOG: CatalogData = {
   plans: [
     {
@@ -302,9 +345,7 @@ export const api = {
 
   async getCatalog(): Promise<CatalogData> {
     try {
-      const res = await fetch(`${API_BASE}/catalog`);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const json = await res.json();
+      const json = await safeFetchJson('/catalog');
       if (!json.success) throw new Error(json.message);
       if (json.data?.plans && Array.isArray(json.data.plans) && json.data.plans.length > 0) {
         try {
@@ -324,19 +365,25 @@ export const api = {
 
   async createOrder(payload: any): Promise<Order> {
     try {
-      const res = await fetch(`${API_BASE}/orders`, {
+      const json = await safeFetchJson('/orders', {
         method: 'POST',
         headers: getHeaders({ 'Content-Type': 'application/json' }),
         body: JSON.stringify(payload)
       });
-      const json = await res.json();
       if (!json.success) throw new Error(json.message || 'Gagal memproses pesanan di server');
       return json.data;
     } catch (err: any) {
-      // Only fallback to simulated order if backend server is completely unreachable
-      const isNetworkError = err instanceof TypeError || err.message?.includes('Failed to fetch') || err.message?.includes('NetworkError');
-      if (isNetworkError) {
-        console.warn('Backend server unreachable, creating local demo order:', err);
+      // Fallback to simulated order if backend is unreachable or returned non-JSON error
+      const isOfflineOrHtml = 
+        err instanceof TypeError || 
+        err.message?.includes('Failed to fetch') || 
+        err.message?.includes('NetworkError') ||
+        err.message?.includes('Non-JSON response') ||
+        err.message?.includes('Unexpected token') ||
+        err.message?.includes('is not valid JSON');
+
+      if (isOfflineOrHtml) {
+        console.warn('Backend server unreachable or returned non-JSON, fallback to demo order:', err);
         const simulatedOrder: Order = {
           id: `demo-${Date.now()}`,
           orderNumber: `NEX-${Math.floor(100000 + Math.random() * 900000)}`,
@@ -374,8 +421,7 @@ export const api = {
 
   async getOrder(id: string): Promise<Order> {
     try {
-      const res = await fetch(`${API_BASE}/orders/${id}`);
-      const json = await res.json();
+      const json = await safeFetchJson(`/orders/${id}`);
       if (!json.success) throw new Error(json.message);
       return json.data;
     } catch {
@@ -412,16 +458,22 @@ export const api = {
 
   async checkPayment(id: string): Promise<Order> {
     try {
-      const res = await fetch(`${API_BASE}/orders/${id}/check-payment`, {
+      const json = await safeFetchJson(`/orders/${id}/check-payment`, {
         method: 'POST',
         headers: getHeaders()
       });
-      const json = await res.json();
       if (!json.success) throw new Error(json.message || 'Gagal mengecek status pembayaran');
       return json.data;
     } catch (err: any) {
-      const isNetworkError = err instanceof TypeError || err.message?.includes('Failed to fetch') || err.message?.includes('NetworkError');
-      if (isNetworkError || id.startsWith('demo-')) {
+      const isOfflineOrHtml = 
+        err instanceof TypeError || 
+        err.message?.includes('Failed to fetch') || 
+        err.message?.includes('NetworkError') ||
+        err.message?.includes('Non-JSON response') ||
+        err.message?.includes('Unexpected token') ||
+        err.message?.includes('is not valid JSON');
+
+      if (isOfflineOrHtml || id.startsWith('demo-')) {
         try {
           const orders: Order[] = JSON.parse(localStorage.getItem('nexvps_demo_orders') || '[]');
           const found = orders.find(o => o.id === id);
@@ -434,16 +486,22 @@ export const api = {
 
   async simulatePayment(id: string): Promise<Order> {
     try {
-      const res = await fetch(`${API_BASE}/orders/${id}/simulate-payment`, {
+      const json = await safeFetchJson(`/orders/${id}/simulate-payment`, {
         method: 'POST',
         headers: getHeaders()
       });
-      const json = await res.json();
       if (!json.success) throw new Error(json.message || 'Gagal simulasi pembayaran');
       return json.data;
     } catch (err: any) {
-      const isNetworkError = err instanceof TypeError || err.message?.includes('Failed to fetch') || err.message?.includes('NetworkError');
-      if (isNetworkError || id.startsWith('demo-')) {
+      const isOfflineOrHtml = 
+        err instanceof TypeError || 
+        err.message?.includes('Failed to fetch') || 
+        err.message?.includes('NetworkError') ||
+        err.message?.includes('Non-JSON response') ||
+        err.message?.includes('Unexpected token') ||
+        err.message?.includes('is not valid JSON');
+
+      if (isOfflineOrHtml || id.startsWith('demo-')) {
         try {
           const orders: Order[] = JSON.parse(localStorage.getItem('nexvps_demo_orders') || '[]');
           const found = orders.find(o => o.id === id);
@@ -461,11 +519,10 @@ export const api = {
 
   async retryProvision(id: string): Promise<Order> {
     try {
-      const res = await fetch(`${API_BASE}/orders/${id}/retry-provision`, {
+      const json = await safeFetchJson(`/orders/${id}/retry-provision`, {
         method: 'POST',
         headers: getHeaders()
       });
-      const json = await res.json();
       if (!json.success) throw new Error(json.message);
       return json.data;
     } catch {

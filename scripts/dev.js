@@ -4,7 +4,7 @@ const path = require('path');
 console.log('=========================================');
 console.log('🚀 Starting NexVps Fullstack Development');
 console.log('📡 Backend (Express): http://localhost:5000');
-console.log('💻 Frontend (Vite):   http://localhost:3000');
+console.log('💻 Frontend (Vite):   http://localhost:5173');
 console.log('=========================================');
 
 const isWindows = process.platform === 'win32';
