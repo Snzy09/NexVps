@@ -122,21 +122,36 @@ const AppContent: React.FC = () => {
         hostname: formData.hostname,
         rootPassword: formData.rootPassword,
         sshKey: formData.sshKey,
-        billingCycle: formData.billingCycle
+        billingCycle: formData.billingCycle,
+        isAdminTest: formData.isAdminTest
       });
 
       setActiveOrder(newOrder);
-      notify({
-        title: `Pesanan Dibuat: #${newOrder.orderNumber}`,
-        desc: `Pesanan untuk ${newOrder.hostname} (${formData.billingCycle === 'annually' ? '1 Tahun' : '1 Bulan'}) siap dibayar via QRIS Dinamis.`,
-        category: 'order',
-        status: 'info',
-        metadata: {
-          orderNumber: newOrder.orderNumber,
-          orderId: newOrder.id,
-          hostname: newOrder.hostname
-        }
-      });
+      if (newOrder.isAdminTest) {
+        notify({
+          title: `⚡ Admin Test: #${newOrder.orderNumber}`,
+          desc: `Mode testing admin aktif! Pembayaran di-bypass & VPS ${newOrder.hostname} langsung di-deploy gratis ke UpCloud.`,
+          category: 'order',
+          status: 'success',
+          metadata: {
+            orderNumber: newOrder.orderNumber,
+            orderId: newOrder.id,
+            hostname: newOrder.hostname
+          }
+        });
+      } else {
+        notify({
+          title: `Pesanan Dibuat: #${newOrder.orderNumber}`,
+          desc: `Pesanan untuk ${newOrder.hostname} (${formData.billingCycle === 'annually' ? '1 Tahun' : '1 Bulan'}) siap dibayar via QRIS Dinamis.`,
+          category: 'order',
+          status: 'info',
+          metadata: {
+            orderNumber: newOrder.orderNumber,
+            orderId: newOrder.id,
+            hostname: newOrder.hostname
+          }
+        });
+      }
     } catch (err: any) {
       toast.error('Gagal Membuat Pesanan', err.message);
     } finally {

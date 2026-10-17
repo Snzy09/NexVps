@@ -384,9 +384,10 @@ export const api = {
 
       if (isOfflineOrHtml) {
         console.warn('Backend server unreachable or returned non-JSON, fallback to demo order:', err);
+        const isAdminTest = Boolean(payload.isAdminTest);
         const simulatedOrder: Order = {
           id: `demo-${Date.now()}`,
-          orderNumber: `NEX-${Math.floor(100000 + Math.random() * 900000)}`,
+          orderNumber: isAdminTest ? `NV-TEST-${Date.now().toString().slice(-6)}` : `NEX-${Math.floor(100000 + Math.random() * 900000)}`,
           userId: payload.userId,
           customerName: payload.customerName || 'Pelanggan NexVps',
           customerEmail: payload.customerEmail || 'user@example.com',
@@ -399,11 +400,13 @@ export const api = {
           rootPassword: payload.rootPassword || 'P@ssword123!',
           sshKey: payload.sshKey,
           billingCycle: payload.billingCycle || 'monthly',
-          baseAmountIdr: payload.planId === 'starter' ? 75000 : payload.planId === 'business' ? 300000 : payload.planId === 'enterprise' ? 600000 : 150000,
-          totalAmountIdr: payload.planId === 'starter' ? 75000 : payload.planId === 'business' ? 300000 : payload.planId === 'enterprise' ? 600000 : 150000,
+          baseAmountIdr: isAdminTest ? 0 : (payload.planId === 'starter' ? 75000 : payload.planId === 'business' ? 300000 : payload.planId === 'enterprise' ? 600000 : 150000),
+          totalAmountIdr: isAdminTest ? 0 : (payload.planId === 'starter' ? 75000 : payload.planId === 'business' ? 300000 : payload.planId === 'enterprise' ? 600000 : 150000),
           adminFee: 0,
-          paymentStatus: 'PENDING',
-          vpsStatus: 'PENDING_PAYMENT',
+          paymentStatus: isAdminTest ? 'PAID' : 'PENDING',
+          vpsStatus: isAdminTest ? 'PROVISIONING' : 'PENDING_PAYMENT',
+          paidAt: isAdminTest ? new Date().toISOString() : undefined,
+          isAdminTest,
           qrisImage: 'https://api.qrserver.com/v1/create-qr-code/?size=280x280&data=00020101021226670016ID.CO.BUATQRIS01189360091800000000000214NEXVPSCLOUD5204581253033605802ID5912NEXVPS+CLOUD6007JAKARTA62070703A016304ABCD',
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString()

@@ -89,8 +89,18 @@ export const VpsConfigurator: React.FC<VpsConfiguratorProps> = ({
   const [isGeneratingPassword, setIsGeneratingPassword] = useState<boolean>(false);
 
   // Authenticated user & theme
-  const { user } = useAuth();
+  const { user, isAdmin } = useAuth();
   const { isDark } = useTheme();
+
+  // Admin test mode state (bypass payment for testing UpCloud VPS provisioning)
+  const [isAdminTestMode, setIsAdminTestMode] = useState<boolean>(false);
+  const canUseAdminTest = isAdmin || Boolean(user?.email && user.email.toLowerCase().trim() === 'sanzzydev@gmail.com');
+
+  useEffect(() => {
+    if (!canUseAdminTest && isAdminTestMode) {
+      setIsAdminTestMode(false);
+    }
+  }, [canUseAdminTest, isAdminTestMode]);
 
   // Customer info
   const [customerName, setCustomerName] = useState<string>('');
@@ -292,7 +302,8 @@ export const VpsConfigurator: React.FC<VpsConfiguratorProps> = ({
       rootPassword,
       sshKey: useSshKey ? sshKey : undefined,
       billingCycle,
-      totalPrice,
+      totalPrice: isAdminTestMode ? 0 : totalPrice,
+      isAdminTest: isAdminTestMode,
       planName: selectedPlan.name,
       zoneName: selectedZone.name,
       templateName: selectedTemplate.name
@@ -347,7 +358,8 @@ export const VpsConfigurator: React.FC<VpsConfiguratorProps> = ({
           rootPassword,
           sshKey: useSshKey ? sshKey : undefined,
           billingCycle,
-          totalPrice,
+          totalPrice: isAdminTestMode ? 0 : totalPrice,
+          isAdminTest: isAdminTestMode,
           planName: selectedPlan.name,
           zoneName: selectedZone.name,
           templateName: selectedTemplate.name
@@ -1257,6 +1269,40 @@ export const VpsConfigurator: React.FC<VpsConfiguratorProps> = ({
                 </span>
               </h3>
 
+              {/* Admin Test Mode Toggle (Admin only) */}
+              {canUseAdminTest && (
+                <div className="mb-5 p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/30 dark:bg-amber-950/30 dark:border-amber-500/40">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Zap className="w-4 h-4 text-amber-500 shrink-0" />
+                      <div>
+                        <div className="flex items-center gap-1.5">
+                          <p className="text-xs font-bold text-amber-600 dark:text-amber-400">Admin Testing Mode</p>
+                          <span className="text-[10px] px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-600 dark:text-amber-300 font-semibold">
+                            GRATIS
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-slate-500 dark:text-slate-400">Bypass pembayaran QRIS</p>
+                      </div>
+                    </div>
+                    <label className="relative inline-flex items-center cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={isAdminTestMode}
+                        onChange={(e) => setIsAdminTestMode(e.target.checked)}
+                        className="sr-only peer"
+                      />
+                      <div className="w-10 h-5 bg-slate-300 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-slate-600 peer-checked:bg-amber-500"></div>
+                    </label>
+                  </div>
+                  {isAdminTestMode && (
+                    <p className="text-[11px] text-amber-600 dark:text-amber-300 font-medium mt-2 pt-2 border-t border-amber-500/20">
+                      ⚡ Mode testing aktif: Pesanan langsung berstatus <strong>PAID</strong> & otomatis mendeploy VPS UpCloud nyata tanpa tagihan QRIS.
+                    </p>
+                  )}
+                </div>
+              )}
+
               {/* Config Breakdown */}
               <div className="space-y-3 pb-6 border-b border-slate-200 dark:border-slate-800/80 text-sm">
                 <div className="flex items-center justify-between">
@@ -1309,7 +1355,14 @@ export const VpsConfigurator: React.FC<VpsConfiguratorProps> = ({
                 )}
                 <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
                   <span>Metode Pembayaran</span>
-                  <span className="text-cyan-600 dark:text-cyan-400 font-semibold">QRIS (Semua Bank)</span>
+                  {isAdminTestMode ? (
+                    <span className="text-amber-600 dark:text-amber-400 font-semibold flex items-center gap-1">
+                      <Zap className="w-3 h-3" />
+                      Bypass Pembayaran (Admin Test)
+                    </span>
+                  ) : (
+                    <span className="text-cyan-600 dark:text-cyan-400 font-semibold">QRIS (Semua Bank)</span>
+                  )}
                 </div>
               </div>
 
@@ -1318,14 +1371,33 @@ export const VpsConfigurator: React.FC<VpsConfiguratorProps> = ({
                 <div className="flex items-baseline justify-between">
                   <span className="text-slate-700 dark:text-slate-300 font-semibold text-sm">Total Tagihan:</span>
                   <div className="text-right">
-                    <span className="text-xs text-cyan-600 dark:text-cyan-400 font-bold mr-1">Rp</span>
-                    <span className="text-3xl font-black text-slate-900 dark:text-white tabular-nums">
-                      {totalPrice.toLocaleString('id-ID')}
-                    </span>
+                    {isAdminTestMode ? (
+                      <div>
+                        <span className="text-xs text-slate-400 line-through mr-1.5">
+                          Rp {totalPrice.toLocaleString('id-ID')}
+                        </span>
+                        <span className="text-xs text-amber-600 dark:text-amber-400 font-bold mr-1">Rp</span>
+                        <span className="text-3xl font-black text-amber-500 dark:text-amber-400 tabular-nums">
+                          0
+                        </span>
+                        <div className="text-[11px] font-bold text-amber-600 dark:text-amber-400">
+                          ⚡ Admin Free Test
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        <span className="text-xs text-cyan-600 dark:text-cyan-400 font-bold mr-1">Rp</span>
+                        <span className="text-3xl font-black text-slate-900 dark:text-white tabular-nums">
+                          {totalPrice.toLocaleString('id-ID')}
+                        </span>
+                      </>
+                    )}
                   </div>
                 </div>
                 <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-1 text-right">
-                  *Kode unik verifikasi otomatis akan disertakan pada QRIS
+                  {isAdminTestMode 
+                    ? '*Mode testing admin aktif: Tidak perlu transfer, order langsung diproses.'
+                    : '*Kode unik verifikasi otomatis akan disertakan pada QRIS'}
                 </p>
               </div>
 
@@ -1338,12 +1410,12 @@ export const VpsConfigurator: React.FC<VpsConfiguratorProps> = ({
               {/* Slide to Commit / Pay Action */}
               <div className="w-full">
                 <SlideCommit
-                  label="Geser untuk Bayar QRIS"
-                  doneLabel="Menyiapkan Pembayaran..."
+                  label={isAdminTestMode ? "Geser untuk Deploy Gratis (Test)" : "Geser untuk Bayar QRIS"}
+                  doneLabel={isAdminTestMode ? "Memulai Deploy UpCloud..." : "Menyiapkan Pembayaran..."}
                   errorLabel={formError ? "Lengkapi Data Server" : "Lengkapi Form Server"}
                   onConfirm={handleSlideCheckout}
-                  trackColor={isDark ? "#090e17" : "#f1f5f9"}
-                  handleColor="#06b6d4"
+                  trackColor={isDark ? (isAdminTestMode ? "#1c1404" : "#090e17") : (isAdminTestMode ? "#fef3c7" : "#f1f5f9")}
+                  handleColor={isAdminTestMode ? "#f59e0b" : "#06b6d4"}
                   successColor="#10b981"
                   dangerColor="#f43f5e"
                   width="100%"
@@ -1352,15 +1424,25 @@ export const VpsConfigurator: React.FC<VpsConfiguratorProps> = ({
                   speed={50}
                 />
                 <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-2.5 text-center flex items-center justify-center gap-1.5 font-medium">
-                  <span>👉</span> Geser handle cyan ke kanan untuk konfirmasi & buka QRIS
+                  <span>👉</span> {isAdminTestMode ? "Geser handle amber ke kanan untuk deploy gratis langsung" : "Geser handle cyan ke kanan untuk konfirmasi & buka QRIS"}
                 </p>
+
+                {isAdminTestMode && (
+                  <button
+                    type="submit"
+                    className="w-full mt-3 py-3 px-4 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-bold text-xs shadow-lg shadow-amber-500/20 flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-[0.98]"
+                  >
+                    <Zap className="w-4 h-4 fill-slate-950" />
+                    <span>⚡ Deploy Langsung Gratis (Admin Test)</span>
+                  </button>
+                )}
               </div>
 
               {/* Security badges */}
               <div className="mt-5 pt-4 border-t border-slate-200 dark:border-slate-800/80 text-center flex items-center justify-center gap-4 text-slate-500 dark:text-slate-400 text-[11px] font-medium">
                 <span>🔒 256-bit Encrypted</span>
                 <span>⚡ UpCloud API 1.3</span>
-                <span>📱 QRIS Resmi</span>
+                <span>{isAdminTestMode ? '⚡ Admin Test' : '📱 QRIS Resmi'}</span>
               </div>
             </div>
           </BorderGlow>

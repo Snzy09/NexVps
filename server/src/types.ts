@@ -77,6 +77,7 @@ export interface Order {
   serverIpv6?: string;
   serverState?: 'started' | 'stopped' | 'maintenance' | 'error';
   errorMessage?: string;
+  isAdminTest?: boolean;
 
   createdAt: string;
   updatedAt: string;

@@ -54,7 +54,8 @@ router.post('/orders', async (req: Request, res: Response) => {
       hostname,
       rootPassword,
       sshKey,
-      billingCycle
+      billingCycle,
+      isAdminTest
     } = req.body;
 
     if (!customerName || !customerEmail || !planId || !zoneCode || !templateUuid || !hostname || !rootPassword) {
@@ -62,6 +63,26 @@ router.post('/orders', async (req: Request, res: Response) => {
         success: false,
         message: 'Lengkapi semua data yang diperlukan (Nama, Email, Plan, Lokasi, OS, Hostname, Password Root).'
       });
+    }
+
+    // Security check: If isAdminTest is requested, verify caller is an authorized admin
+    let verifiedAdminTest = false;
+    if (isAdminTest) {
+      const adminEmail = ((req.headers['x-admin-email'] as string) || (req.query.adminEmail as string) || '').toLowerCase().trim();
+      const settings = store.getSettings();
+      const adminEmails = (settings.adminEmails || ['sanzzydev@gmail.com']).map(e => e.toLowerCase().trim());
+      const isCallerAdmin = Boolean(
+        (adminEmail && adminEmails.includes(adminEmail)) || 
+        (customerEmail && adminEmails.includes(customerEmail.toLowerCase().trim()))
+      );
+
+      if (!isCallerAdmin) {
+        return res.status(403).json({
+          success: false,
+          message: 'Akses Ditolak: Mode testing deploy gratis hanya dapat digunakan oleh akun Administrator.'
+        });
+      }
+      verifiedAdminTest = true;
     }
 
     const order = await orderManager.createOrder({
@@ -75,12 +96,15 @@ router.post('/orders', async (req: Request, res: Response) => {
       hostname,
       rootPassword,
       sshKey,
-      billingCycle: billingCycle || 'monthly'
+      billingCycle: billingCycle || 'monthly',
+      isAdminTest: verifiedAdminTest
     });
 
     res.json({
       success: true,
-      message: 'Pesanan berhasil dibuat, silakan selesaikan pembayaran QRIS.',
+      message: verifiedAdminTest
+        ? 'Mode testing admin aktif: VPS sedang diproses dan di-deploy gratis ke UpCloud.'
+        : 'Pesanan berhasil dibuat, silakan selesaikan pembayaran QRIS.',
       data: order
     });
   } catch (err: any) {

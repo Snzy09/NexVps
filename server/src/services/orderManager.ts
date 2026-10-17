@@ -16,6 +16,7 @@ export interface CreateOrderDto {
   rootPassword: string;
   sshKey?: string;
   billingCycle?: 'monthly' | 'quarterly' | 'annually';
+  isAdminTest?: boolean;
 }
 
 export class OrderManager {
@@ -42,6 +43,51 @@ export class OrderManager {
     if (cycle === 'annually') basePrice = Math.round(plan.pricePerMonthIdr * 12 * 0.85); // 15% discount
 
     const orderId = uuidv4();
+
+    // ========================================================
+    // MODE TESTING ADMIN: Free VPS deployment without payment
+    // ========================================================
+    if (dto.isAdminTest) {
+      const orderNumber = `NV-TEST-${Date.now().toString().slice(-6)}-${Math.random().toString(36).substring(2, 5).toUpperCase()}`;
+
+      const newOrder: Order = {
+        id: orderId,
+        orderNumber,
+        userId: dto.userId,
+        customerName: dto.customerName,
+        customerEmail: dto.customerEmail,
+        customerPhone: dto.customerPhone,
+        planId: plan.id,
+        zoneCode: zone.code,
+        templateUuid: dto.templateUuid,
+        templateName,
+        hostname: dto.hostname,
+        rootPassword: dto.rootPassword,
+        sshKey: dto.sshKey,
+        billingCycle: cycle,
+        baseAmountIdr: 0,
+        totalAmountIdr: 0,
+        amountUniq: 0,
+        adminFee: 0,
+        paymentStatus: 'PAID',
+        vpsStatus: 'PROVISIONING',
+        paidAt: new Date().toISOString(),
+        isAdminTest: true,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+
+      store.addOrder(newOrder);
+
+      console.log(`⚡ [Admin Free Test] Order ${orderNumber} created without payment. Initiating UpCloud provisioning...`);
+      // Start UpCloud server creation immediately in background
+      this.provisionVps(orderId).catch(err => {
+        console.error(`Error in admin free test provisioning for ${orderNumber}:`, err);
+      });
+
+      return newOrder;
+    }
+
     const orderNumber = `NV-${Date.now().toString().slice(-6)}-${Math.random().toString(36).substring(2, 5).toUpperCase()}`;
 
     // Call BuatQRIS to generate dynamic QR code

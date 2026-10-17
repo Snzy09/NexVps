@@ -203,12 +203,20 @@ export const QrisCheckoutModal: React.FC<QrisCheckoutModalProps> = ({
               <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border border-cyan-500/20 font-mono">
                 {currentOrder.orderNumber}
               </span>
+              {currentOrder.isAdminTest && (
+                <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-500/30 flex items-center gap-1 font-mono">
+                  <Zap className="w-3 h-3" />
+                  Admin Free Test
+                </span>
+              )}
               <span className="text-xs text-slate-500 dark:text-slate-400">
                 {new Date(currentOrder.createdAt).toLocaleTimeString('id-ID')}
               </span>
             </div>
             <h3 className="text-xl font-bold text-slate-900 dark:text-white mt-1">
-              {isPaid ? 'Pembayaran Sukses — VPS Provisioning' : 'Selesaikan Pembayaran QRIS'}
+              {currentOrder.isAdminTest
+                ? '⚡ Admin Test — Auto Provisioning UpCloud'
+                : (isPaid ? 'Pembayaran Sukses — VPS Provisioning' : 'Selesaikan Pembayaran QRIS')}
             </h3>
           </div>
           <button
@@ -393,7 +401,11 @@ export const QrisCheckoutModal: React.FC<QrisCheckoutModalProps> = ({
               <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-3 text-xs">
                 <div className="flex items-center gap-3 text-emerald-600 dark:text-emerald-400">
                   <CheckCircle2 className="w-4 h-4 shrink-0" />
-                  <span>Pembayaran QRIS Terkonfirmasi Lunas</span>
+                  <span>
+                    {currentOrder.isAdminTest 
+                      ? '⚡ Mode Testing Admin: Pembayaran Di-bypass (Gratis Rp 0)' 
+                      : 'Pembayaran QRIS Terkonfirmasi Lunas'}
+                  </span>
                 </div>
                 <div className="flex items-center gap-3 text-emerald-600 dark:text-emerald-400">
                   <CheckCircle2 className="w-4 h-4 shrink-0" />

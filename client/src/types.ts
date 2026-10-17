@@ -81,6 +81,7 @@ export interface Order {
   zoneCountry?: string;
   templateIcon?: string;
   templateDistro?: string;
+  isAdminTest?: boolean;
   createdAt: string;
   updatedAt: string;
 }
