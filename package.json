@@ -10,7 +10,7 @@
     "dev": "node scripts/dev.js",
     "server:dev": "npm run dev --prefix server",
     "client:dev": "npm run dev --prefix client",
-    "build": "npm run build --prefix client && npm run build --prefix server && node scripts/copy-dist.js"
+    "build": "npm run build --prefix client && npm run build --prefix server"
   },
   "keywords": ["vps", "hosting", "webstore", "upcloud", "buatqris", "qris", "cloud"],
   "author": "NexVps Team",

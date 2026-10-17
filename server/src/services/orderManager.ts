@@ -90,12 +90,13 @@ export class OrderManager {
 
     const orderNumber = `NV-${Date.now().toString().slice(-6)}-${Math.random().toString(36).substring(2, 5).toUpperCase()}`;
 
+    const appBaseUrl = process.env.APP_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:5000');
     // Call BuatQRIS to generate dynamic QR code
     const qrisData = await buatqrisService.createQris({
       amount: basePrice,
       description: `NexVps ${plan.name} (${orderNumber})`,
       orderNumber,
-      callbackUrl: `${process.env.APP_URL || 'http://localhost:5000'}/api/webhook/buatqris`
+      callbackUrl: `${appBaseUrl}/api/webhook/buatqris`
     });
 
     const newOrder: Order = {
