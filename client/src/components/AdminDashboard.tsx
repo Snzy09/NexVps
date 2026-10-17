@@ -163,12 +163,16 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
     if (!upcloudTestStatus.result?.results) return undefined;
     const badges: Record<number, { text: string; variant?: 'success' | 'warning' | 'error' | 'neutral' }> = {};
     upcloudTestStatus.result.results.forEach((res: any, idx: number) => {
-      if (res.status === 'valid') {
+      if (res.success || res.status === 'valid') {
         badges[idx] = { text: 'Valid & Siap', variant: 'success' };
-      } else if (res.status === 'rate_limited') {
-        badges[idx] = { text: 'Rate Limited', variant: 'warning' };
+      } else if (res.status === 429 || res.status === 'rate_limited') {
+        badges[idx] = { text: 'Rate Limited (429)', variant: 'warning' };
+      } else if (res.status === 401) {
+        badges[idx] = { text: '401 Unauthorized', variant: 'error' };
+      } else if (res.status === 403) {
+        badges[idx] = { text: '403 Forbidden', variant: 'error' };
       } else {
-        badges[idx] = { text: 'Gagal / Error', variant: 'error' };
+        badges[idx] = { text: res.status ? `Error (${res.status})` : 'Gagal / Error', variant: 'error' };
       }
     });
     return badges;
@@ -1167,27 +1171,27 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
                                 <span>{r.key}</span>
                               </div>
                               <div className="text-[10px] text-slate-500 dark:text-slate-400 font-mono">
-                                {r.maskedToken}
+                                {r.maskedValue || r.maskedToken}
                               </div>
-                              {r.username && (
+                              {(r.data?.username || r.username) && (
                                 <div className="text-[10px] text-slate-600 dark:text-slate-300">
-                                  User: <span className="text-slate-900 dark:text-white font-medium">{r.username}</span> • Saldo: <span className="text-emerald-600 dark:text-emerald-400 font-semibold">{r.credits !== undefined ? `${r.credits}` : 'OK'}</span>
+                                  User: <span className="text-slate-900 dark:text-white font-medium">{r.data?.username || r.username}</span> • Saldo: <span className="text-emerald-600 dark:text-emerald-400 font-semibold">{r.data?.credits !== undefined ? `${r.data.credits}` : (r.credits !== undefined ? `${r.credits}` : 'OK')}</span>
                                 </div>
                               )}
-                              {r.error && (
-                                <div className="text-[10px] text-rose-600 dark:text-rose-400 truncate max-w-[200px]" title={r.error}>
-                                  {r.error}
+                              {(r.message || r.error) && !r.success && (
+                                <div className="text-[10px] text-rose-600 dark:text-rose-400 max-w-[280px]" title={r.message || r.error}>
+                                  {r.status ? `[HTTP ${r.status}] ` : ''}{r.message || r.error}
                                 </div>
                               )}
                             </div>
                             <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider shrink-0 ${
-                              r.status === 'valid'
+                              r.success || r.status === 'valid'
                                 ? 'bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30'
-                                : r.status === 'rate_limited'
+                                : r.status === 429 || r.status === 'rate_limited'
                                 ? 'bg-amber-500/10 dark:bg-amber-500/20 text-amber-700 dark:text-amber-400 border border-amber-500/30'
                                 : 'bg-rose-500/10 dark:bg-rose-500/20 text-rose-700 dark:text-rose-400 border border-rose-500/30'
                             }`}>
-                              {r.status === 'valid' ? 'Valid' : r.status === 'rate_limited' ? 'Rate Limit' : 'Error'}
+                              {r.success || r.status === 'valid' ? 'Valid' : r.status === 429 || r.status === 'rate_limited' ? 'Rate Limit' : r.status ? `Error ${r.status}` : 'Error'}
                             </span>
                           </div>
                         ))}

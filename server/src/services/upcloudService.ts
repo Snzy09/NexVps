@@ -109,6 +109,7 @@ export class UpCloudService {
           timeout: 30000,
           headers: {
             'Content-Type': 'application/json',
+            'Accept': 'application/json',
             Authorization: `Bearer ${tokenInfo.value}`
           }
         });
@@ -134,7 +135,30 @@ export class UpCloudService {
         }
       }
 
-      // If all tokens failed
+      // Try basic auth fallback before throwing if configured
+      const username = settings.upcloudUsername?.trim();
+      const password = settings.upcloudPassword?.trim();
+      if (username && password) {
+        try {
+          console.log(`🔄 [UpCloud Failover] Semua token gagal, mencoba fallback ke Basic Auth (${username})...`);
+          const basic = Buffer.from(`${username}:${password}`).toString('base64');
+          const client = axios.create({
+            baseURL: 'https://api.upcloud.com/1.3',
+            timeout: 30000,
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+              Authorization: `Basic ${basic}`
+            }
+          });
+          return await operation(client, { key: 'BASIC_AUTH', value: username });
+        } catch (basicErr: any) {
+          const bMsg = basicErr.response?.data?.error?.error_message || basicErr.message;
+          errorReports.push({ key: 'BASIC_AUTH', status: basicErr.response?.status, message: bMsg });
+        }
+      }
+
+      // If all tokens (and fallback) failed
       const summary = errorReports
         .map(e => `[${e.key}: HTTP ${e.status || 'ERR'} - ${e.message}]`)
         .join('; ');
@@ -151,6 +175,7 @@ export class UpCloudService {
         timeout: 30000,
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
           Authorization: `Basic ${basic}`
         }
       });
@@ -173,6 +198,7 @@ export class UpCloudService {
   }> {
     const existingTokens = this.getAllTokens();
     let tokens: { key: string; value: string }[] = [];
+    const results: UpCloudTokenTestResult[] = [];
 
     if (Array.isArray(customTokens) && customTokens.length > 0) {
       for (let i = 0; i < customTokens.length; i++) {
@@ -181,20 +207,34 @@ export class UpCloudService {
         let val = item.value?.trim() || '';
         if (val.includes('••••')) {
           const matched = existingTokens.find(e => e.key === key) || existingTokens[i];
-          if (matched) val = matched.value;
+          if (matched?.value && !matched.value.includes('••••')) {
+            val = matched.value;
+          } else if (process.env[key] && !process.env[key]!.includes('••••')) {
+            val = process.env[key]!;
+          } else if (i === 0 && process.env.UPCLOUD_API_TOKEN && !process.env.UPCLOUD_API_TOKEN.includes('••••')) {
+            val = process.env.UPCLOUD_API_TOKEN;
+          }
         }
-        if (val && !val.includes('••••')) {
-          tokens.push({ key, value: val });
+        if (val.includes('••••') || !val) {
+          results.push({
+            key,
+            maskedValue: val || '••••••••',
+            success: false,
+            message: val ? 'Token ter-masking (••••). Masukkan ulang token lengkap untuk menguji token baru.' : 'Nilai token kosong.',
+            status: 400
+          });
+          continue;
         }
+        tokens.push({ key, value: val });
       }
     }
 
-    if (tokens.length === 0) {
+    if (tokens.length === 0 && results.length === 0) {
       tokens = existingTokens;
     }
     const settings = store.getSettings();
 
-    if (tokens.length === 0) {
+    if (tokens.length === 0 && results.length === 0) {
       const username = settings.upcloudUsername?.trim();
       const password = settings.upcloudPassword?.trim();
       if (username && password) {
@@ -204,7 +244,11 @@ export class UpCloudService {
           const client = axios.create({
             baseURL: 'https://api.upcloud.com/1.3',
             timeout: 15000,
-            headers: { Authorization: `Basic ${basic}` }
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+              Authorization: `Basic ${basic}`
+            }
           });
           const res = await client.get('/account');
           return {
@@ -217,12 +261,17 @@ export class UpCloudService {
               key: 'BASIC_AUTH',
               maskedValue: `${username}:••••••••`,
               success: true,
+              status: 200,
               message: 'Akun Aktif',
               data: res.data?.account || res.data
             }]
           };
         } catch (err: any) {
-          const msg = err.response?.data?.error?.error_message || err.message;
+          const status = err.response?.status;
+          let msg = err.response?.data?.error?.error_message || err.message;
+          if (status === 401) {
+            msg = '401 Unauthorized: Username atau password UpCloud salah.';
+          }
           return {
             success: false,
             totalTokens: 1,
@@ -232,7 +281,7 @@ export class UpCloudService {
               maskedValue: `${username}:••••••••`,
               success: false,
               message: msg,
-              status: err.response?.status
+              status
             }]
           };
         }
@@ -246,7 +295,6 @@ export class UpCloudService {
       };
     }
 
-    const results: UpCloudTokenTestResult[] = [];
     let firstWorkingToken: { key: string; data: any } | null = null;
 
     for (const item of tokens) {
@@ -259,6 +307,7 @@ export class UpCloudService {
         timeout: 15000,
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
           Authorization: `Bearer ${item.value}`
         }
       });
@@ -270,6 +319,7 @@ export class UpCloudService {
           key: item.key,
           maskedValue: masked,
           success: true,
+          status: 200,
           message: `Koneksi Berhasil (${acct?.username || 'Valid'})`,
           data: acct
         });
@@ -279,7 +329,14 @@ export class UpCloudService {
         }
       } catch (err: any) {
         const status = err.response?.status;
-        const msg = err.response?.data?.error?.error_message || err.message;
+        let msg = err.response?.data?.error?.error_message || err.response?.data?.message || err.message;
+        if (status === 401) {
+          msg = '401 Unauthorized: Token tidak valid, kedaluwarsa, dicabut, atau IP dibatasi (Allowed IP) di panel UpCloud.';
+        } else if (status === 403) {
+          msg = '403 Forbidden: Token tidak memiliki izin akses.';
+        } else if (status === 429) {
+          msg = '429 Rate Limit: Batas kuota request UpCloud API terlampaui.';
+        }
         results.push({
           key: item.key,
           maskedValue: masked,
@@ -292,17 +349,18 @@ export class UpCloudService {
 
     const workingCount = results.filter(r => r.success).length;
     const overallSuccess = workingCount > 0;
+    const totalCount = results.length;
 
     let summaryMessage = '';
     if (overallSuccess) {
-      summaryMessage = `Koneksi UpCloud OK! ${workingCount} dari ${tokens.length} token aktif (Prioritas aktif: ${firstWorkingToken?.key}).`;
+      summaryMessage = `Koneksi UpCloud OK! ${workingCount} dari ${totalCount} token aktif (Prioritas aktif: ${firstWorkingToken?.key}).`;
     } else {
-      summaryMessage = `Semua (${tokens.length}) token UpCloud gagal terkoneksi.`;
+      summaryMessage = `Semua (${totalCount}) token UpCloud gagal terkoneksi.`;
     }
 
     return {
       success: overallSuccess,
-      totalTokens: tokens.length,
+      totalTokens: totalCount,
       activeToken: firstWorkingToken?.key,
       message: summaryMessage,
       data: firstWorkingToken?.data,

@@ -535,13 +535,17 @@ router.post('/admin/settings', requireAdmin, (req: Request, res: Response) => {
 
         let val = submitted.value?.trim() || '';
         if (val.includes('••••')) {
-          // Find matching existing token by key or index
+          // Find matching existing token by key or index, then check process.env
           const matched = existingTokens.find(e => e.key === key) || existingTokens[i];
-          if (matched && matched.value) {
+          if (matched?.value && !matched.value.includes('••••')) {
             val = matched.value;
+          } else if (process.env[key] && !process.env[key]!.includes('••••')) {
+            val = process.env[key]!;
+          } else if (i === 0 && process.env.UPCLOUD_API_TOKEN && !process.env.UPCLOUD_API_TOKEN.includes('••••')) {
+            val = process.env.UPCLOUD_API_TOKEN;
           }
         }
-        if (val) {
+        if (val && !val.includes('••••')) {
           resolvedTokens.push({ key, value: val });
         }
       }
