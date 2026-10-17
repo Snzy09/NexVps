@@ -6,6 +6,15 @@ import { buatqrisService } from '../services/buatqrisService';
 
 const router = Router();
 
+// Helper to get date string formatted YYYY-MM-DD in Asia/Jakarta (WIB, UTC+7) timezone
+const getJakartaDate = (d: string | Date = new Date()): string => {
+  try {
+    return new Date(d).toLocaleDateString('en-CA', { timeZone: 'Asia/Jakarta' });
+  } catch {
+    return new Date().toISOString().slice(0, 10);
+  }
+};
+
 // ==========================================
 // 1. VPS CATALOG & CONFIGURATOR
 // ==========================================
@@ -83,16 +92,16 @@ router.post('/orders', async (req: Request, res: Response) => {
         });
       }
 
-      // Security check: Daily test limit to prevent excessive accidental UpCloud resource charges
+      // Security check: Daily test limit (resets daily at 00:00 WIB / Asia/Jakarta)
       const dailyLimit = typeof settings.adminDailyTestLimit === 'number' ? settings.adminDailyTestLimit : 5;
-      const todayStr = new Date().toISOString().slice(0, 10);
+      const todayWib = getJakartaDate();
       const orders = store.getOrders();
-      const testOrdersToday = orders.filter(o => o.isAdminTest && (o.createdAt || '').slice(0, 10) === todayStr);
+      const testOrdersToday = orders.filter(o => o.isAdminTest && getJakartaDate(o.createdAt) === todayWib);
 
       if (testOrdersToday.length >= dailyLimit) {
         return res.status(429).json({
           success: false,
-          message: `Batas Keamanan Tercapai: Kuota test VPS gratis telah mencapai limit harian (${testOrdersToday.length}/${dailyLimit} server hari ini). Silakan coba lagi besok atau gunakan mode normal.`
+          message: `Batas Keamanan Tercapai: Kuota test VPS gratis telah mencapai limit harian (${testOrdersToday.length}/${dailyLimit} server hari ini, reset pukul 00:00 WIB). Silakan coba lagi besok atau gunakan mode normal.`
         });
       }
 
@@ -434,8 +443,8 @@ router.get('/auth/admin-check', (req: Request, res: Response) => {
   const isAdmin = Boolean(email && adminEmails.includes(email));
 
   const dailyLimit = typeof settings.adminDailyTestLimit === 'number' ? settings.adminDailyTestLimit : 5;
-  const todayStr = new Date().toISOString().slice(0, 10);
-  const testOrdersToday = store.getOrders().filter(o => o.isAdminTest && (o.createdAt || '').slice(0, 10) === todayStr).length;
+  const todayWib = getJakartaDate();
+  const testOrdersToday = store.getOrders().filter(o => o.isAdminTest && getJakartaDate(o.createdAt) === todayWib).length;
 
   res.json({
     success: true,
@@ -445,7 +454,8 @@ router.get('/auth/admin-check', (req: Request, res: Response) => {
       adminEmails: isAdmin ? adminEmails : [],
       dailyTestLimit: dailyLimit,
       testOrdersToday,
-      remainingDailyTests: Math.max(0, dailyLimit - testOrdersToday)
+      remainingDailyTests: Math.max(0, dailyLimit - testOrdersToday),
+      timezone: 'Asia/Jakarta (WIB)'
     }
   });
 });

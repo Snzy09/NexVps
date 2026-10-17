@@ -308,7 +308,7 @@ export const VpsConfigurator: React.FC<VpsConfiguratorProps> = ({
     }
 
     if (isAdminTestMode && dailyTestInfo && dailyTestInfo.remaining <= 0) {
-      setFormError(`Batas keamanan tercapai: Kuota test gratis hari ini sudah habis (${dailyTestInfo.used}/${dailyTestInfo.limit}).`);
+      setFormError(`Batas keamanan tercapai: Kuota test gratis hari ini sudah habis (${dailyTestInfo.used}/${dailyTestInfo.limit}, reset pukul 00:00 WIB).`);
       return;
     }
 
@@ -365,7 +365,7 @@ export const VpsConfigurator: React.FC<VpsConfiguratorProps> = ({
       }
 
       if (isAdminTestMode && dailyTestInfo && dailyTestInfo.remaining <= 0) {
-        const err = `Batas keamanan tercapai: Kuota test gratis hari ini sudah habis (${dailyTestInfo.used}/${dailyTestInfo.limit}).`;
+        const err = `Batas keamanan tercapai: Kuota test gratis hari ini sudah habis (${dailyTestInfo.used}/${dailyTestInfo.limit}, reset pukul 00:00 WIB).`;
         setFormError(err);
         reject(new Error(err));
         return;
@@ -1320,7 +1320,7 @@ export const VpsConfigurator: React.FC<VpsConfiguratorProps> = ({
                           )}
                         </div>
                         <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                          Bypass pembayaran QRIS • Maks {dailyTestInfo?.limit ?? 5}/hari
+                          Bypass pembayaran QRIS • Maks {dailyTestInfo?.limit ?? 5}/hari (reset 00:00 WIB)
                         </p>
                       </div>
                     </div>

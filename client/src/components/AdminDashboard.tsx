@@ -1076,7 +1076,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore, o
                       className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none focus:border-purple-500 text-sm font-mono transition-all"
                     />
                     <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
-                      Maksimal jumlah deploy VPS gratis mode testing per hari untuk mencegah saldo akun UpCloud terpakai berlebih tanpa disengaja.
+                      Maksimal jumlah deploy VPS gratis mode testing per hari (reset otomatis setiap pukul 00:00 WIB / Asia/Jakarta) untuk mencegah saldo akun UpCloud terpakai berlebih tanpa disengaja.
                     </p>
                   </div>
 
