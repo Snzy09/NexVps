@@ -653,9 +653,11 @@ class Store {
   }
 
   private ensureDir() {
-    if (!fs.existsSync(DATA_DIR)) {
-      fs.mkdirSync(DATA_DIR, { recursive: true });
-    }
+    try {
+      if (!fs.existsSync(DATA_DIR)) {
+        fs.mkdirSync(DATA_DIR, { recursive: true });
+      }
+    } catch {}
   }
 
   private syncToEnv(settings: AppSettings) {
@@ -811,9 +813,13 @@ class Store {
   }
 
   private save(data?: StoreSchema) {
-    this.ensureDir();
-    const toSave = data || this.data;
-    fs.writeFileSync(STORE_FILE, JSON.stringify(toSave, null, 2), 'utf-8');
+    try {
+      this.ensureDir();
+      const toSave = data || this.data;
+      fs.writeFileSync(STORE_FILE, JSON.stringify(toSave, null, 2), 'utf-8');
+    } catch {
+      // In read-only serverless environments, in-memory store remains active
+    }
   }
 
   getSettings(): AppSettings {

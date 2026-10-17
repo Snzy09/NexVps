@@ -75,42 +75,52 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
 // ==========================================
 const clientDir = path.resolve(__dirname, '../../client');
 const clientDist = path.resolve(clientDir, 'dist');
-const isProd = process.env.NODE_ENV === 'production';
+const isProd = process.env.NODE_ENV === 'production' || Boolean(process.env.VERCEL);
 
 async function bootstrap() {
-  if (!isProd && fs.existsSync(path.join(clientDir, 'src'))) {
-    try {
-      // Development mode: Mount Vite dev server middleware directly in Express
-      const vitePath = require.resolve('vite', { paths: [clientDir] });
-      const { createServer } = require(vitePath);
-      const vite = await createServer({
-        root: clientDir,
-        server: { middlewareMode: true },
-        appType: 'spa'
-      });
-      app.use(vite.middlewares);
-      console.log('⚡ Vite Dev Middleware mounted into Express (HMR active)');
-    } catch (e: any) {
-      console.warn('Vite dev middleware fallback to static dist:', e.message);
-      if (fs.existsSync(clientDist)) {
-        app.use(express.static(clientDist));
-        app.get('*', (_req, res) => res.sendFile(path.join(clientDist, 'index.html')));
+  if (!isProd) {
+    const clientSrc = path.join(clientDir, 'src');
+    if (fs.existsSync(clientSrc)) {
+      try {
+        // Development mode: Mount Vite dev server middleware directly in Express
+        // Dynamic require ensures static AST analyzers (@vercel/nft) ignore Vite & client sources
+        const dynamicReq = eval('require');
+        const vitePath = dynamicReq.resolve('vite', { paths: [clientDir] });
+        const { createServer } = dynamicReq(vitePath);
+        const vite = await createServer({
+          root: clientDir,
+          server: { middlewareMode: true },
+          appType: 'spa'
+        });
+        app.use(vite.middlewares);
+        console.log('⚡ Vite Dev Middleware mounted into Express (HMR active)');
+      } catch (e: any) {
+        console.warn('Vite dev middleware fallback to static dist:', e.message);
+        if (fs.existsSync(clientDist)) {
+          app.use(express.static(clientDist));
+          app.get('*', (_req, res) => res.sendFile(path.join(clientDist, 'index.html')));
+        }
       }
     }
-  } else if (fs.existsSync(clientDist)) {
-    // Production mode: Serve pre-built static client files
+  } else if (!process.env.VERCEL && fs.existsSync(clientDist)) {
+    // Production standalone mode: Serve pre-built static client files
     app.use(express.static(clientDist));
     app.get('*', (_req, res) => res.sendFile(path.join(clientDist, 'index.html')));
     console.log('📦 Serving production client build from client/dist');
   }
 
-  app.listen(Number(PORT), '0.0.0.0', () => {
-    console.log(`=========================================`);
-    console.log(`🚀 NexVps Unified Server running on http://localhost:${PORT}`);
-    console.log(`💻 Frontend & 📡 Backend API berjalan bersamaan di port ${PORT}!`);
-    console.log(`📡 BuatQRIS Webhook: http://localhost:${PORT}/api/webhook/buatqris`);
-    console.log(`=========================================`);
-  });
+  // Guard app.listen so Vercel Serverless Functions manage port binding dynamically
+  if (!process.env.VERCEL) {
+    app.listen(Number(PORT), '0.0.0.0', () => {
+      console.log(`=========================================`);
+      console.log(`🚀 NexVps Unified Server running on http://localhost:${PORT}`);
+      console.log(`💻 Frontend & 📡 Backend API berjalan bersamaan di port ${PORT}!`);
+      console.log(`📡 BuatQRIS Webhook: http://localhost:${PORT}/api/webhook/buatqris`);
+      console.log(`=========================================`);
+    });
+  }
 }
 
 bootstrap();
+
+export default app;

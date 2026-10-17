@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "strict": false,
+    "skipLibCheck": true,
+    "jsx": "react-jsx"
+  },
+  "include": ["api/**/*"],
+  "exclude": ["node_modules", "client", "server"]
+}
