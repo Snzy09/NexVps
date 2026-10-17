@@ -331,15 +331,27 @@ export const api = {
     activeAdminEmail = email;
   },
 
-  async checkAdmin(email: string): Promise<{ isAdmin: boolean; adminEmails: string[] }> {
+  async checkAdmin(email: string): Promise<{ 
+    isAdmin: boolean; 
+    adminEmails: string[]; 
+    dailyTestLimit?: number;
+    testOrdersToday?: number;
+    remainingDailyTests?: number;
+  }> {
     try {
       const res = await fetch(`${API_BASE}/auth/admin-check?email=${encodeURIComponent(email)}`, {
         headers: getHeaders()
       });
       const json = await res.json();
-      return json.data || { isAdmin: false, adminEmails: [] };
+      return json.data || { isAdmin: false, adminEmails: [], dailyTestLimit: 5, testOrdersToday: 0, remainingDailyTests: 5 };
     } catch {
-      return { isAdmin: email.toLowerCase() === 'sanzzydev@gmail.com', adminEmails: ['sanzzydev@gmail.com'] };
+      return { 
+        isAdmin: email.toLowerCase() === 'sanzzydev@gmail.com', 
+        adminEmails: ['sanzzydev@gmail.com'],
+        dailyTestLimit: 5,
+        testOrdersToday: 0,
+        remainingDailyTests: 5
+      };
     }
   },
 

@@ -141,6 +141,7 @@ export interface AdminSettings {
   supportEmail: string;
   supportWhatsapp: string;
   adminEmails: string[];
+  adminDailyTestLimit?: number;
 }
 
 export interface AuthUser {

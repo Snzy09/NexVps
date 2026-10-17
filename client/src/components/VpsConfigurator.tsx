@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
+import { api } from '../services/api';
 import type { 
   VpsPlan, 
   VpsZone, 
@@ -94,6 +95,7 @@ export const VpsConfigurator: React.FC<VpsConfiguratorProps> = ({
 
   // Admin test mode state (bypass payment for testing UpCloud VPS provisioning)
   const [isAdminTestMode, setIsAdminTestMode] = useState<boolean>(false);
+  const [dailyTestInfo, setDailyTestInfo] = useState<{ limit: number; used: number; remaining: number } | null>(null);
   const canUseAdminTest = isAdmin || Boolean(user?.email && user.email.toLowerCase().trim() === 'sanzzydev@gmail.com');
 
   useEffect(() => {
@@ -101,6 +103,20 @@ export const VpsConfigurator: React.FC<VpsConfiguratorProps> = ({
       setIsAdminTestMode(false);
     }
   }, [canUseAdminTest, isAdminTestMode]);
+
+  useEffect(() => {
+    if (user?.email && canUseAdminTest) {
+      api.checkAdmin(user.email).then(res => {
+        if (res && typeof res.dailyTestLimit === 'number') {
+          setDailyTestInfo({
+            limit: res.dailyTestLimit,
+            used: res.testOrdersToday ?? 0,
+            remaining: res.remainingDailyTests ?? Math.max(0, res.dailyTestLimit - (res.testOrdersToday ?? 0))
+          });
+        }
+      }).catch(() => {});
+    }
+  }, [user?.email, canUseAdminTest]);
 
   // Customer info
   const [customerName, setCustomerName] = useState<string>('');
@@ -291,6 +307,11 @@ export const VpsConfigurator: React.FC<VpsConfiguratorProps> = ({
       return;
     }
 
+    if (isAdminTestMode && dailyTestInfo && dailyTestInfo.remaining <= 0) {
+      setFormError(`Batas keamanan tercapai: Kuota test gratis hari ini sudah habis (${dailyTestInfo.used}/${dailyTestInfo.limit}).`);
+      return;
+    }
+
     onProceedToCheckout({
       customerName,
       customerEmail,
@@ -339,6 +360,13 @@ export const VpsConfigurator: React.FC<VpsConfiguratorProps> = ({
         const err = 'Password root minimal 8 karakter.';
         setFormError(err);
         document.getElementById('step-server-access')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        reject(new Error(err));
+        return;
+      }
+
+      if (isAdminTestMode && dailyTestInfo && dailyTestInfo.remaining <= 0) {
+        const err = `Batas keamanan tercapai: Kuota test gratis hari ini sudah habis (${dailyTestInfo.used}/${dailyTestInfo.limit}).`;
+        setFormError(err);
         reject(new Error(err));
         return;
       }
@@ -1276,26 +1304,46 @@ export const VpsConfigurator: React.FC<VpsConfiguratorProps> = ({
                     <div className="flex items-center gap-2">
                       <Zap className="w-4 h-4 text-amber-500 shrink-0" />
                       <div>
-                        <div className="flex items-center gap-1.5">
+                        <div className="flex items-center gap-1.5 flex-wrap">
                           <p className="text-xs font-bold text-amber-600 dark:text-amber-400">Admin Testing Mode</p>
                           <span className="text-[10px] px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-600 dark:text-amber-300 font-semibold">
                             GRATIS
                           </span>
+                          {dailyTestInfo && (
+                            <span className={`text-[10px] px-1.5 py-0.2 rounded font-mono font-bold ${
+                              dailyTestInfo.remaining <= 0
+                                ? 'bg-rose-500/20 text-rose-600 dark:text-rose-400'
+                                : 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-400'
+                            }`}>
+                              {dailyTestInfo.remaining <= 0 ? 'Limit Habis' : `${dailyTestInfo.remaining}/${dailyTestInfo.limit} Sisa`}
+                            </span>
+                          )}
                         </div>
-                        <p className="text-[11px] text-slate-500 dark:text-slate-400">Bypass pembayaran QRIS</p>
+                        <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                          Bypass pembayaran QRIS • Maks {dailyTestInfo?.limit ?? 5}/hari
+                        </p>
                       </div>
                     </div>
-                    <label className="relative inline-flex items-center cursor-pointer">
+                    <label className={`relative inline-flex items-center ${dailyTestInfo && dailyTestInfo.remaining <= 0 ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}>
                       <input
                         type="checkbox"
                         checked={isAdminTestMode}
-                        onChange={(e) => setIsAdminTestMode(e.target.checked)}
+                        disabled={Boolean(dailyTestInfo && dailyTestInfo.remaining <= 0)}
+                        onChange={(e) => {
+                          if (dailyTestInfo && dailyTestInfo.remaining <= 0) return;
+                          setIsAdminTestMode(e.target.checked);
+                        }}
                         className="sr-only peer"
                       />
                       <div className="w-10 h-5 bg-slate-300 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-slate-600 peer-checked:bg-amber-500"></div>
                     </label>
                   </div>
-                  {isAdminTestMode && (
+
+                  {dailyTestInfo && dailyTestInfo.remaining <= 0 ? (
+                    <p className="text-[11px] text-rose-600 dark:text-rose-400 font-medium mt-2 pt-2 border-t border-rose-500/20 flex items-center gap-1">
+                      <span>🛡️</span> Batas limit keamanan tercapai ({dailyTestInfo.used}/{dailyTestInfo.limit} hari ini). Deploy gratis dibatasi untuk mencegah pembengkakan tagihan UpCloud.
+                    </p>
+                  ) : isAdminTestMode && (
                     <p className="text-[11px] text-amber-600 dark:text-amber-300 font-medium mt-2 pt-2 border-t border-amber-500/20">
                       ⚡ Mode testing aktif: Pesanan langsung berstatus <strong>PAID</strong> & otomatis mendeploy VPS UpCloud nyata tanpa tagihan QRIS.
                     </p>

@@ -82,6 +82,20 @@ router.post('/orders', async (req: Request, res: Response) => {
           message: 'Akses Ditolak: Mode testing deploy gratis hanya dapat digunakan oleh akun Administrator.'
         });
       }
+
+      // Security check: Daily test limit to prevent excessive accidental UpCloud resource charges
+      const dailyLimit = typeof settings.adminDailyTestLimit === 'number' ? settings.adminDailyTestLimit : 5;
+      const todayStr = new Date().toISOString().slice(0, 10);
+      const orders = store.getOrders();
+      const testOrdersToday = orders.filter(o => o.isAdminTest && (o.createdAt || '').slice(0, 10) === todayStr);
+
+      if (testOrdersToday.length >= dailyLimit) {
+        return res.status(429).json({
+          success: false,
+          message: `Batas Keamanan Tercapai: Kuota test VPS gratis telah mencapai limit harian (${testOrdersToday.length}/${dailyLimit} server hari ini). Silakan coba lagi besok atau gunakan mode normal.`
+        });
+      }
+
       verifiedAdminTest = true;
     }
 
@@ -419,12 +433,19 @@ router.get('/auth/admin-check', (req: Request, res: Response) => {
   const adminEmails = (settings.adminEmails || ['sanzzydev@gmail.com']).map(e => e.toLowerCase().trim());
   const isAdmin = Boolean(email && adminEmails.includes(email));
 
+  const dailyLimit = typeof settings.adminDailyTestLimit === 'number' ? settings.adminDailyTestLimit : 5;
+  const todayStr = new Date().toISOString().slice(0, 10);
+  const testOrdersToday = store.getOrders().filter(o => o.isAdminTest && (o.createdAt || '').slice(0, 10) === todayStr).length;
+
   res.json({
     success: true,
     data: {
       email,
       isAdmin,
-      adminEmails: isAdmin ? adminEmails : []
+      adminEmails: isAdmin ? adminEmails : [],
+      dailyTestLimit: dailyLimit,
+      testOrdersToday,
+      remainingDailyTests: Math.max(0, dailyLimit - testOrdersToday)
     }
   });
 });

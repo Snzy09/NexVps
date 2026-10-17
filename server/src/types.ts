@@ -112,6 +112,7 @@ export interface AppSettings {
 
   // Admin and Auth
   adminEmails: string[];
+  adminDailyTestLimit?: number;
 }
 
 export interface ChangelogItem {

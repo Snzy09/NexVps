@@ -631,7 +631,8 @@ export const DEFAULT_SETTINGS: AppSettings = {
   storeTagline: 'Ultra-Fast Cloud VPS with Instant QRIS Activation',
   supportEmail: 'support@nexvps.cloud',
   supportWhatsapp: '6281234567890',
-  adminEmails: ['sanzzydev@gmail.com']
+  adminEmails: ['sanzzydev@gmail.com'],
+  adminDailyTestLimit: 5
 };
 
 interface StoreSchema {
